@@ -1,0 +1,101 @@
+// src/assets/styles/_common.scss
+@import './_variables.scss'; // Import your variables
+// @import './_mixins.scss'; // Import your mixins if you create them
+
+/* Global styles, resets, and common utilities */
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: $font-family-base;
+  font-size: $font-size-base;
+  line-height: $line-height-base;
+  color: $color-text-dark;
+  background-color: $color-bg-white;
+}
+
+#app {
+  font-family: 'PT Sans', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Common card styles */
+.card {
+  background-color: $color-bg-white;
+  border: 1px solid $color-border-medium;
+  border-radius: $border-radius-md;
+  box-shadow: $box-shadow-sm;
+  padding: $spacing-md;
+  margin-bottom: $spacing-md;
+}
+
+/* Button styles */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-sm $spacing-md;
+  border-radius: $border-radius-sm;
+  font-size: $font-size-base;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+
+  &-primary {
+    background-color: $color-primary-blue;
+    color: $color-bg-white;
+    &:hover {
+      background-color: $color-primary-blue-darker;
+    }
+  }
+
+  &-secondary {
+    background-color: $color-secondary-grey;
+    color: $color-bg-white;
+    &:hover {
+      background-color: $color-secondary-grey-darker;
+    }
+  }
+
+  &-success {
+    background-color: $color-confirm-green;
+    color: $color-bg-white;
+    &:hover {
+      background-color: $color-confirm-green-darker;
+    }
+  }
+}
+
+/* Form control styles */
+.form-group {
+  margin-bottom: $spacing-md;
+}
+
+.form-control {
+  width: 100%;
+  padding: $spacing-sm;
+  border: 1px solid $color-border-light;
+  border-radius: $border-radius-sm;
+  font-family: $font-family-base;
+  font-size: $font-size-base;
+  box-sizing: border-box; /* Include padding and border in the element's total width and height */
+
+  &:focus {
+    outline: none;
+    border-color: $color-primary-blue;
+    box-shadow: 0 0 0 0.2rem rgba($color-primary-blue, 0.25);
+  }
+
+  &[disabled] {
+    background-color: $color-bg-light-grey-alt;
+    cursor: not-allowed;
+  }
+}
+
+/* Icons within text/buttons */
+.icon {
+  margin-right: $spacing-xs;
+}

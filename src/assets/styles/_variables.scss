@@ -1,0 +1,53 @@
+// src/assets/styles/_variables.scss
+
+// --- Colors ---
+$color-primary-blue: #469efc;
+$color-primary-blue-darker: #0056b3; // For hover states
+$color-secondary-grey: #6c757d;
+$color-secondary-grey-darker: #5a6268; // For hover states
+$color-confirm-green: #28a745;
+$color-confirm-green-darker: #218838; // For hover states
+$color-text-dark: #333;
+$color-text-medium-grey: #666;
+$color-text-light-grey: #888; // For policy text
+$color-text-disabled: #bbb;
+$color-error: #e74c3c;
+$color-info: #3498db;
+
+// Backgrounds / Borders
+$color-bg-light: #f9f9f9; // Common light background for cards
+$color-bg-white: #ffffff;
+$color-bg-light-grey-alt: #e0e0e0; // For progress bar track / disabled inputs
+$color-border-light: #ddd;
+$color-border-medium: #e0e0e0; // For card borders
+$color-border-darker: #ccc; // For separators
+
+// --- Typography ---
+$font-family-base: 'PT Sans', sans-serif;
+$font-size-base: 1rem; // 16px
+$line-height-base: 1.6;
+
+// --- Spacing ---
+$spacing-xs: 0.25rem; // 4px
+$spacing-sm: 0.5rem;  // 8px
+$spacing-md: 1rem;   // 16px
+$spacing-lg: 1.5rem;  // 24px
+$spacing-xl: 2rem;   // 32px
+
+// --- Border Radius ---
+$border-radius-sm: 4px;
+$border-radius-md: 8px;
+$border-radius-lg: 12px;
+
+// --- Shadows ---
+$box-shadow-sm: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+$box-shadow-md: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+
+// --- Z-index ---
+$z-index-dropdown: 1000;
+$z-index-sticky: 1020;
+$z-index-fixed: 1030;
+$z-index-modal-backdrop: 1040;
+$z-index-modal: 1050;
+$z-index-popover: 1060;
+$z-index-tooltip: 1070;
