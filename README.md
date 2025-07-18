@@ -20,7 +20,7 @@ Before you begin, ensure you have met the following requirements:
 
 1.  **Clone the repository:**
     ```bash
-    git clone [https://github.com/YourUsername/your-clinic-portal-frontend.git](https://github.com/YourUsername/your-clinic-portal-frontend.git)
+    git clone https://github.com/adrianpanaga/ClinicManagementSolutionStaffPortal.git
     cd your-clinic-portal-frontend
     ```
 2.  **Install dependencies:**
@@ -43,8 +43,6 @@ Before you begin, ensure you have met the following requirements:
     The application will typically run on `http://localhost:5173`.
 
 ### Installation (Backend - ASP.NET Core API)
-
-*(Assuming your API is in a separate repository or folder)*
 
 1.  **Clone the API repository:**
     ```bash
