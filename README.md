@@ -46,7 +46,7 @@ Before you begin, ensure you have met the following requirements:
 
 1.  **Clone the API repository:**
     ```bash
-    git clone [https://github.com/YourUsername/your-clinic-portal-api.git](https://github.com/YourUsername/your-clinic-portal-api.git)
+    git clone [https://github.com/adrianpanaga/ClinicManagementSolution.git](https://github.com/adrianpanaga/ClinicManagementSolution.git)
     cd your-clinic-portal-api
     ```
 2.  **Restore NuGet packages:**
