@@ -20,7 +20,7 @@ Before you begin, ensure you have met the following requirements:
 
 1.  **Clone the repository:**
     ```bash
-    git clone [https://github.com/YourUsername/your-clinic-portal-frontend.git](https://github.com/YourUsername/your-clinic-portal-frontend.git)
+    git clone https://github.com/adrianpanaga/ClinicManagementSolutionStaffPortal.git
     cd your-clinic-portal-frontend
     ```
 2.  **Install dependencies:**
@@ -44,11 +44,9 @@ Before you begin, ensure you have met the following requirements:
 
 ### Installation (Backend - ASP.NET Core API)
 
-*(Assuming your API is in a separate repository or folder)*
-
 1.  **Clone the API repository:**
     ```bash
-    git clone [https://github.com/YourUsername/your-clinic-portal-api.git](https://github.com/YourUsername/your-clinic-portal-api.git)
+    git clone [https://github.com/adrianpanaga/ClinicManagementSolution.git](https://github.com/adrianpanaga/ClinicManagementSolution.git)
     cd your-clinic-portal-api
     ```
 2.  **Restore NuGet packages:**
