@@ -8,6 +8,6 @@
 //
 </script>
 <style lang="scss" scoped>
-@import '../assets/styles/_variables.scss';
+@import '../assets/styles/_common.scss';
 .page-container { padding: $spacing-lg; }
 </style>

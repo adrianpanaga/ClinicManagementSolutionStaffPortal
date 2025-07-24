@@ -22,11 +22,18 @@ export const authStore = reactive({
     console.log("authStore setAuth called. isAuthenticated:", this.isAuthenticated, "Roles:", this.userRoles);
   },
 
+  setUserProfile(email) {
+    this.userEmail = email;
+    localStorage.setItem('userEmail', email); // Store email in local storage
+    console.log("authStore.setUserProfile: Email updated:", email);
+  },
+
   clearAuth() {
     localStorage.removeItem('jwtToken');
     localStorage.removeItem('userId');
     localStorage.removeItem('username');
     localStorage.removeItem('userRoles');
+     localStorage.removeItem('userEmail'); // Clear email on logout
 
     this.isAuthenticated = false;
     this.userId = null;
@@ -39,6 +46,8 @@ export const authStore = reactive({
     const storedUserId = localStorage.getItem('userId');
     const storedUsername = localStorage.getItem('username');
     const storedRoles = localStorage.getItem('userRoles'); // Get the string from localStorage
+    const storedUserEmail = localStorage.getItem('userEmail'); // Retrieve email
+
 
     console.log("authStore.initAuth: Raw storedRoles from localStorage:", storedRoles); // ADD THIS LOG
 
@@ -46,6 +55,7 @@ export const authStore = reactive({
       this.isAuthenticated = true;
       this.userId = storedUserId;
       this.username = storedUsername;
+      this.userEmail = storedUserEmail || null; // Set email, default to null if not found
       try {
         // Parse, but if storedRoles is null/undefined/invalid, default to empty array
         this.userRoles = storedRoles ? JSON.parse(storedRoles) : [];

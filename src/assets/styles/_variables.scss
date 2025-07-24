@@ -11,8 +11,13 @@ $color-text-dark: #333;
 $color-text-medium-grey: #666;
 $color-text-light-grey: #888; // For policy text
 $color-text-disabled: #bbb;
+
+// Define other common colors
 $color-error: #e74c3c;
 $color-info: #3498db;
+$color-warning: #f39c12;
+$color-success: #2ecc71;
+$color-danger: #e74c3c;
 
 // Backgrounds / Borders
 $color-bg-light: #f9f9f9; // Common light background for cards
@@ -23,7 +28,7 @@ $color-border-medium: #e0e0e0; // For card borders
 $color-border-darker: #ccc; // For separators
 
 // --- Typography ---
-$font-family-base: 'PT Sans', sans-serif;
+$font-family-base: 'Inter', sans-serif;
 $font-size-base: 1rem; // 16px
 $line-height-base: 1.6;
 

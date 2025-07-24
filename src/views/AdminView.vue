@@ -138,7 +138,7 @@ onMounted(async () => {
 </script>
 
 <style lang="scss" scoped>
-@import '../assets/styles/_variables.scss';
+@import '../assets/styles/_common.scss';
 
 .admin-view {
   padding: $spacing-lg;

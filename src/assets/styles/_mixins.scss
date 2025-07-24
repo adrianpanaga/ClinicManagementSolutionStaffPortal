@@ -1,0 +1,65 @@
+// src/assets/styles/_mixins.scss
+@mixin primary-button {
+  background-color: $color-primary-blue;
+  color: $color-bg-white;
+  padding: $spacing-md $spacing-xl; // 10px 25px
+  border: none;
+  border-radius: $border-radius-sm; // Using your variable for 4px, assuming this is correct for 5px
+  font-size: $font-size-base; // Using your variable for 1rem
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover:not(:disabled) {
+    background-color: $color-primary-blue-darker;
+  }
+  &:disabled {
+    background-color: $color-bg-light-grey-alt;
+    cursor: not-allowed;
+  }
+}
+
+// Mixin for secondary action button (e.g., Back, View All)
+@mixin secondary-button {
+  background-color: $color-secondary-grey;
+  color: $color-bg-white;
+  padding: $spacing-md $spacing-xl;
+  border: none;
+  border-radius: $border-radius-sm; // Using your variable
+  font-size: $font-size-base; // Using your variable
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover:not(:disabled) {
+    background-color: $color-secondary-grey-darker;
+  }
+  &:disabled {
+    background-color: $color-bg-light-grey-alt;
+    color: $color-text-light-grey;
+    cursor: not-allowed;
+  }
+}
+
+@mixin modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+@mixin modal-content {
+  background-color: white;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  max-width: 90%;
+  min-width: 300px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+}

@@ -1,128 +1,189 @@
 // src/router/index.js
 import { createRouter, createWebHistory } from 'vue-router';
-import LoginView from '../views/LoginView.vue';
-import DashboardView from '../views/DashboardView.vue';
-import PatientHistoryView from '../views/PatientHistoryView.vue'; // Import the new view
-import ClinicVisitHistoryView from '../views/ClinicVisitHistoryView.vue';
-
-import AppointmentsListView from '../views/AppointmentsListView.vue'; // Create this simple view
-import PatientsListView from '../views/PatientsListView.vue'; // Create this simple view
-import TasksView from '../views/TasksView.vue'; // Create this simple view
-import TriageRecordsView from '../views/TriageRecordsView.vue'; // Import the new view
-import LabResultsView from '../views/LabResultsView.vue'; // Import the new view
-import PatientDocumentsView from '../views/PatientDocumentsView.vue'; // Import the new view for patient documents
-
-import MedicalRecordCreateView from '../views/MedicalRecordCreateView.vue'; // *** NEW IMPORT ***
-
-import ReceptionistView from '../views/ReceptionistView.vue';
-import NurseView from '../views/NurseView.vue';
-import DoctorView from '../views/DoctorView.vue';
-import LabTechView from '../views/LabTechView.vue'; // Import the new Lab Tech view
-import AdminView from '../views/AdminView.vue';
-
 import { authStore } from '../stores/auth.js'; // Import the auth store
 
+// Import all views
+import LoginView from '../views/LoginView.vue';
+import AdminDashboard from '../views/AdminView.vue'; // Import the Admin Dashboard view';
+import ReceptionistDashboard from '../views/ReceptionistView.vue';
+import NurseDashboard from '../views/NurseView.vue';
+import DoctorDashboard from '../views/DoctorView.vue';
+import LabTechnicianDashboard from '../views/LabTechView.vue';
+import InventoryManagerView from '../views/InventoryManagerView.vue'; // Your dashboard view
+
+import InventoryItemsList from '../views/Inventory/InventoryItemsList.vue';
+import AddEditInventoryItem from '../views/Inventory/AddEditInventoryItem.vue';
+import StockTransactionsLog from '../views/Inventory/ReorderRequests.vue'; // Reusing your ReorderRequests component here, renamed for clarity
+
+// Placeholder for other patient-related views if they exist
+// import PatientMedicalHistory from '../views/Patient/PatientMedicalHistory.vue';
+// import PatientVisitHistory from '../views/Patient/PatientVisitHistory.vue';
+// import PatientTriageRecords from '../views/Patient/PatientTriageRecords.vue';
+// import PatientLabResults from '../views/Patient/PatientLabResults.vue';
+// import PatientDocuments from '../views/Patient/PatientDocuments.vue';
+
 const routes = [
-  {
-    path: '/login',
-    name: 'login',
-    component: LoginView,
-    meta: { public: true, onlyWhenLoggedOut: true }
+  { 
+    path: '/login', 
+    name: 'Login', 
+    component: LoginView 
   },
   {
-    path: '/dashboard',
-    name: 'dashboard',
-    component: DashboardView,
+    path: '/',
+    name: 'Home', // A generic home route that will redirect based on role
+    redirect: '/dashboard', // Redirect to a dashboard path that will then handle role-based routing
     meta: { requiresAuth: true }
   },
   {
-    path: '/admin', // NEW: Dedicated Admin Dashboard Route
-    name: 'admin-dashboard',
-    component: AdminView,
-    meta: { requiresAuth: true, roles: ['Admin'] } // Only Admin can access
+    path: '/dashboard', // This path will be the entry point after login
+    name: 'DashboardRouter', // A dummy component or a simple redirector if needed
+    component: 
+    { 
+      template: '<div></div>' 
+    }, // Minimal component, actual view determined by redirect
+    meta: { requiresAuth: true }
+  },
+  // Role-specific dashboards
+  {
+    path: '/admin',
+    name: 'AdminDashboard',
+    component: AdminDashboard,
+    meta: { requiresAuth: true, roles: ['Admin'] }
   },
   {
     path: '/receptionist',
-    name: 'receptionist-dashboard',
-    component: ReceptionistView,
+    name: 'ReceptionistDashboard',
+    component: ReceptionistDashboard,
     meta: { requiresAuth: true, roles: ['Receptionist'] }
   },
   {
     path: '/nurse',
-    name: 'nurse-dashboard',
-    component: NurseView,
+    name: 'NurseDashboard',
+    component: NurseDashboard,
     meta: { requiresAuth: true, roles: ['Nurse'] }
   },
   {
-    path: '/doctor', // New route for Doctor Dashboard
-    name: 'doctor-dashboard',
-    component: DoctorView,
-    meta: { requiresAuth: true, roles: ['Doctor'] } // Only Admin or Doctor can access
+    path: '/doctor',
+    name: 'DoctorDashboard',
+    component: DoctorDashboard,
+    meta: { requiresAuth: true, roles: ['Doctor'] }
   },
   {
-    path: '/lab-tech', // New route for Lab Tech Dashboard
-    name: 'labtech-dashboard',
-    component: LabTechView,
-    meta: { requiresAuth: true, roles: ['LabTech'] } // Only Admin or LabTech can access
+    path: '/lab-tech',
+    name: 'LabTechnicianDashboard',
+    component: LabTechnicianDashboard,
+    meta: { requiresAuth: true, roles: ['LabTechnician'] }
   },
+
+  // Inventory Manager routes
+  {
+    path: '/inventory',
+    name: 'InventoryDashboard',
+    component: InventoryManagerView,
+    meta: { requiresAuth: true, roles: ['Admin', 'InventoryManager'] }
+  },
+  {
+    path: '/inventory/items',
+    name: 'InventoryItemsList',
+    component: InventoryItemsList,
+    meta: {
+      requiresAuth: true,
+      roles: ['Admin', 'InventoryManager']
+    }
+  },
+  {
+    path: '/inventory/items/add',
+    name: 'AddInventoryItem',
+    component: AddEditInventoryItem,
+    meta: {
+      requiresAuth: true,
+      roles: ['Admin', 'InventoryManager']
+    }
+  },
+  {
+    path: '/inventory/items/edit/:id',
+    name: 'EditInventoryItem',
+    component: AddEditInventoryItem,
+    props: true, // Pass ID as prop
+    meta: {
+      requiresAuth: true,
+      roles: ['Admin', 'InventoryManager']
+    }
+  },
+  {
+    path: '/inventory/transactions', // Renamed for clarity as per API
+    name: 'StockTransactionsLog',
+    component: StockTransactionsLog,
+    meta: {
+      requiresAuth: true,
+      roles: ['Admin', 'InventoryManager']
+    }
+  },
+  // Placeholder for a generic patients list view
+  {
+    path: '/patients',
+    name: 'PatientsList',
+    component: { template: '<div>Patients List View (Implement this)</div>' }, // Replace with your actual PatientsList component
+    meta: { requiresAuth: true, roles: ['Admin', 'Receptionist', 'Doctor', 'Nurse', 'LabTechnician'] }
+  },
+  // Placeholder for user management view
+  {
+    path: '/users',
+    name: 'UserManagement',
+    component: { template: '<div>User Management View (Implement this)</div>' }, // Replace with your actual UserManagement component
+    meta: { requiresAuth: true, roles: ['Admin'] }
+  },
+
+  // Patient Data Management Views (example paths, uncomment and adjust as needed)
+  /*
   {
     path: '/patients/:patientId/medical-history',
-    name: 'patient-history',
-    component: PatientHistoryView,
-    meta: { requiresAuth: true }
+    name: 'PatientMedicalHistory',
+    component: PatientMedicalHistory,
+    props: true,
+    meta: { requiresAuth: true, roles: ['Admin', 'Doctor', 'Nurse'] }
   },
   {
     path: '/patients/:patientId/visits',
-    name: 'clinic-visits',
-    component: ClinicVisitHistoryView,
-    meta: { requiresAuth: true }
+    name: 'PatientVisitHistory',
+    component: PatientVisitHistory,
+    props: true,
+    meta: { requiresAuth: true, roles: ['Admin', 'Receptionist', 'Doctor', 'Nurse'] }
   },
   {
     path: '/patients/:patientId/triage',
-    name: 'triage-records',
-    component: TriageRecordsView,
-    meta: { requiresAuth: true }
+    name: 'PatientTriageRecords',
+    component: PatientTriageRecords,
+    props: true,
+    meta: { requiresAuth: true, roles: ['Admin', 'Nurse'] }
   },
   {
     path: '/patients/:patientId/lab-results',
-    name: 'lab-results',
-    component: LabResultsView,
-    meta: { requiresAuth: true }
+    name: 'PatientLabResults',
+    component: PatientLabResults,
+    props: true,
+    meta: { requiresAuth: true, roles: ['Admin', 'Doctor', 'Nurse', 'LabTechnician'] }
   },
   {
     path: '/patients/:patientId/documents',
-    name: 'patient-documents',
-    component: PatientDocumentsView,
-    meta: { requiresAuth: true }
+    name: 'PatientDocuments',
+    component: PatientDocuments,
+    props: true,
+    meta: { requiresAuth: true, roles: ['Admin', 'Receptionist', 'Doctor', 'Nurse'] }
   },
-  {
-    path: '/patients/:patientId/medical-records/create/:appointmentId?', // appointmentId is optional
-    name: 'medical-record-create',
-    component: MedicalRecordCreateView,
-    meta: { requiresAuth: true, roles: ['Admin', 'Doctor', 'Nurse'] } // Doctors/Nurses/Admins can create
-  },
-  { path: '/users', name: 'user-management', component: () => import('../views/PlaceholderView.vue'), meta: { requiresAuth: true, roles: ['Admin'] } },
-  { path: '/roles', name: 'role-management', component: () => import('../views/PlaceholderView.vue'), meta: { requiresAuth: true, roles: ['Admin'] } },
-  { path: '/appointments/all', name: 'all-appointments', component: () => import('../views/PlaceholderView.vue'), meta: { requiresAuth: true, roles: ['Admin'] } },
-  { path: '/medical-records/all', name: 'all-medical-records', component: () => import('../views/PlaceholderView.vue'), meta: { requiresAuth: true, roles: ['Admin'] } },
-  { path: '/inventory', name: 'inventory-management', component: () => import('../views/PlaceholderView.vue'), meta: { requiresAuth: true, roles: ['Admin'] } },
-  { path: '/clinic-settings', name: 'clinic-settings', component: () => import('../views/PlaceholderView.vue'), meta: { requiresAuth: true, roles: ['Admin'] } },
-  { path: '/system-logs', name: 'system-logs', component: () => import('../views/PlaceholderView.vue'), meta: { requiresAuth: true, roles: ['Admin'] } },
-  { path: '/users', name: 'user-management', component: () => import('../views/PlaceholderView.vue'), meta: { requiresAuth: true, roles: ['Admin'] } },
-  { path: '/roles', name: 'role-management', component: () => import('../views/PlaceholderView.vue'), meta: { requiresAuth: true, roles: ['Admin'] } },
-  { path: '/appointments/all', name: 'all-appointments', component: () => import('../views/PlaceholderView.vue'), meta: { requiresAuth: true, roles: ['Admin'] } },
-  { path: '/medical-records/all', name: 'all-medical-records', component: () => import('../views/PlaceholderView.vue'), meta: { requiresAuth: true, roles: ['Admin'] } },
-  { path: '/inventory', name: 'inventory-management', component: () => import('../views/PlaceholderView.vue'), meta: { requiresAuth: true, roles: ['Admin'] } },
-  { path: '/clinic-settings', name: 'clinic-settings', component: () => import('../views/PlaceholderView.vue'), meta: { requiresAuth: true, roles: ['Admin'] } },
-  { path: '/system-logs', name: 'system-logs', component: () => import('../views/PlaceholderView.vue'), meta: { requiresAuth: true, roles: ['Admin'] } },
-  {
-    path: '/',
-    redirect: { name: 'dashboard' }
-  },
+  */
+
+  // Catch-all route for 404 - redirect to dashboard if authenticated, or login if not
   {
     path: '/:pathMatch(.*)*',
     name: 'NotFound',
-    redirect: { name: 'dashboard' }
+    redirect: to => {
+      if (authStore.isAuthenticated) {
+        return '/dashboard'; // Redirect to their main dashboard if authenticated
+      } else {
+        return '/login'; // Redirect to login if not authenticated
+      }
+    }
   }
 ];
 
@@ -131,31 +192,58 @@ const router = createRouter({
   routes,
 });
 
-// Navigation Guard to protect authenticated routes
+// Function to handle role-based redirection
+// This prioritizes roles to ensure a user with multiple roles lands on their highest-priority dashboard
+function redirectBasedOnRole(roles, next) {
+  if (roles.includes('Admin')) {
+    next('/admin');
+  } else if (roles.includes('InventoryManager')) {
+    next('/inventory');
+  } else if (roles.includes('Doctor')) {
+    next('/doctor');
+  } else if (roles.includes('Nurse')) {
+    next('/nurse');
+  } else if (roles.includes('Receptionist')) {
+    next('/receptionist');
+  } else if (roles.includes('LabTechnician')) {
+    next('/lab-tech');
+  } else {
+    // Fallback for any authenticated user without a specific role dashboard
+    // You might want a generic "Staff Dashboard" here
+    next('/dashboard');
+  }
+}
+
 router.beforeEach((to, from, next) => {
-  // Use the reactive state from authStore
+  //const authStore = useAuthStore();
   const isAuthenticated = authStore.isAuthenticated;
+  const userRoles = authStore.userRoles;
 
-  const userRoles = authStore.userRoles || [];
+  // If trying to access login page while authenticated, redirect to appropriate dashboard
+  if (to.path === '/login' && isAuthenticated) {
+    redirectBasedOnRole(userRoles, next);
+    return; // Stop further navigation
+  }
 
-  // Case 1: Route requires authentication and user is NOT authenticated
-  if (to.meta.requiresAuth && !isAuthenticated) {
-    console.log("Navigation Guard: Protected route access denied. Redirecting to login.");
-    next({ name: 'login' });
-  }
-  // Case 2: Route is the login page AND user IS authenticated
-  else if (to.meta.onlyWhenLoggedOut && isAuthenticated) {
-    console.log("Navigation Guard: Logged in user trying to access login. Redirecting to dashboard.");
-    next({ name: 'dashboard' });
-  } else if (to.meta.roles && !to.meta.roles.some(role => userRoles.includes(role))) {
-    // If route has specific role requirements and user doesn't have any of them
-    console.log(`Navigation Guard: Access denied for route ${to.name}. Required roles: ${to.meta.roles.join(', ')}. User roles: ${userRoles.join(', ')}.`);
-    alert("Access Denied: You do not have the required permissions to view this page.");
-    next({ name: 'dashboard' }); // Redirect to main dashboard or a specific unauthorized page
-  }
-  else {
-    console.log("Navigation Guard: Allowing navigation.");
-    next();
+  // If route requires authentication
+  if (to.meta.requiresAuth) {
+    if (!isAuthenticated) {
+      next('/login'); // Not authenticated, redirect to login
+    } else {
+      // Authenticated, check roles if the route has specific roles defined
+      if (to.meta.roles && !to.meta.roles.some(role => userRoles.includes(role))) {
+        alert('Access Denied: You do not have permission to view this page.');
+        redirectBasedOnRole(userRoles, next); // Redirect to their allowed dashboard
+      } else if (to.name === 'DashboardRouter') {
+        // This is the generic /dashboard route, redirect based on role
+        redirectBasedOnRole(userRoles, next);
+      } else {
+        next(); // Has access, proceed to route
+      }
+    }
+  } else {
+    next(); // Route does not require auth (e.g., login page itself), proceed
   }
 });
+
 export default router;

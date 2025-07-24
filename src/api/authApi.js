@@ -4,7 +4,7 @@ import { authStore } from '../stores/auth.js'; // Import authStore for logout on
 import router from '../router/index.js'; // Import router for redirection
 
 const apiClient = axios.create({
-  baseURL: 'https://localhost:7215/api', // !!! ADJUST THIS TO YOUR BACKEND API BASE URL !!!
+  baseURL: 'https://localhost:7215', // !!! ADJUST THIS TO YOUR BACKEND API BASE URL !!!
   headers: {
     'Content-Type': 'application/json',
   },

@@ -5,6 +5,7 @@ import router from './router'
 // Import auth store
 import { authStore } from './stores/auth.js';
 
+
 // Font Awesome Imports
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
@@ -65,7 +66,12 @@ import {
   faUserTag,          // *** NEW: For Admin Dashboard - Manage Roles icon ***
   faDatabase,         // *** NEW: For Admin Dashboard - Data Access icon ***
   faCog,              // *** NEW: For Admin Dashboard - Clinic Settings icon ***
-  faScroll            // *** NEW: For Admin Dashboard - System Logs icon ***
+  faScroll,            // *** NEW: For Admin Dashboard - System Logs icon ***
+  faBoxes, 
+  faTrashAlt,
+  faExchangeAlt,
+  faTruckLoading,
+  faLaptopMedical
 } from '@fortawesome/free-solid-svg-icons'; // Assuming all are solid icons
 
 // Add the imported icons to the library
@@ -124,7 +130,12 @@ library.add(
   faUserTag,
   faDatabase,
   faCog,
-  faScroll
+  faScroll,
+  faBoxes,
+  faTrashAlt,
+  faExchangeAlt,
+  faTruckLoading,
+  faLaptopMedical
 );
 
 import './assets/styles/_common.scss'; // Import common SCSS file
@@ -132,6 +143,7 @@ import './assets/styles/_common.scss'; // Import common SCSS file
 const app = createApp(App);
 
 app.use(router);
+
 app.component('font-awesome-icon', FontAwesomeIcon); // Register the Font Awesome component globally
 
 app.mount('#app');

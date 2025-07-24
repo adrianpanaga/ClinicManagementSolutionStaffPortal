@@ -1,101 +1,121 @@
 // src/assets/styles/_common.scss
 @import './_variables.scss'; // Import your variables
-// @import './_mixins.scss'; // Import your mixins if you create them
+@import './_mixins.scss'; // Import your mixins if you create them
+@import './_layout.scss'; // Import the new layout specific styles
 
 /* Global styles, resets, and common utilities */
-html, body {
+html, body, #app { /* Ensure #app is included here for global margin/padding reset */
   margin: 0;
   padding: 0;
+  background-color: #f4f7f6; // This is the overall page background
   font-family: $font-family-base;
-  font-size: $font-size-base;
-  line-height: $line-height-base;
-  color: $color-text-dark;
-  background-color: $color-bg-white;
+  color: #333;
 }
 
-#app {
-  font-family: 'PT Sans', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
+// Add any other global styles you use here
+.loading-spinner {
+  text-align: center;
+  padding: 20px;
+  font-size: 1.5em;
+  color: #666;
+}
+.no-data {
+  text-align: center;
+  padding: 20px;
+  font-size: 1.1em;
+  color: #888;
 }
 
-/* Common card styles */
-.card {
-  background-color: $color-bg-white;
-  border: 1px solid $color-border-medium;
-  border-radius: $border-radius-md;
-  box-shadow: $box-shadow-sm;
-  padding: $spacing-md;
-  margin-bottom: $spacing-md;
-}
-
-/* Button styles */
+// Global button styles (adjusted to be a base for all buttons)
 .btn {
+  // Common styles for all buttons before mixins apply specific colors/backgrounds
+  padding: $spacing-md $spacing-xl; // Use spacing variables
+  border-radius: $border-radius-sm; // Use border-radius variable
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease; // Add border-color transition
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: $spacing-sm $spacing-md;
-  border-radius: $border-radius-sm;
-  font-size: $font-size-base;
-  cursor: pointer;
-  border: none;
-  transition: background-color 0.2s ease, transform 0.1s ease;
+  text-decoration: none; // For router-link as button
+  font-size: $font-size-base; // Ensure font size is consistent
+  white-space: nowrap; // Prevent text wrapping in buttons
+  box-sizing: border-sizing; // Ensure padding/border are within width
 
-  &-primary {
-    background-color: $color-primary-blue;
-    color: $color-bg-white;
-    &:hover {
-      background-color: $color-primary-blue-darker;
-    }
-  }
-
-  &-secondary {
-    background-color: $color-secondary-grey;
-    color: $color-bg-white;
-    &:hover {
-      background-color: $color-secondary-grey-darker;
-    }
-  }
-
-  &-success {
-    background-color: $color-confirm-green;
-    color: $color-bg-white;
-    &:hover {
-      background-color: $color-confirm-green-darker;
-    }
-  }
-}
-
-/* Form control styles */
-.form-group {
-  margin-bottom: $spacing-md;
-}
-
-.form-control {
-  width: 100%;
-  padding: $spacing-sm;
-  border: 1px solid $color-border-light;
-  border-radius: $border-radius-sm;
-  font-family: $font-family-base;
-  font-size: $font-size-base;
-  box-sizing: border-box; /* Include padding and border in the element's total width and height */
-
-  &:focus {
-    outline: none;
-    border-color: $color-primary-blue;
-    box-shadow: 0 0 0 0.2rem rgba($color-primary-blue, 0.25);
-  }
-
-  &[disabled] {
-    background-color: $color-bg-light-grey-alt;
+  &:disabled {
+    opacity: 0.7; // General disabled state visual
     cursor: not-allowed;
   }
 }
 
-/* Icons within text/buttons */
-.icon {
-  margin-right: $spacing-xs;
+// Apply mixins to specific button classes
+.btn-primary {
+  @include primary-button;
 }
+
+.btn-secondary {
+  @include secondary-button;
+}
+
+.btn-info {
+  background-color: $color-bg-white;
+  color: $color-primary-blue;
+  border: 1px solid $color-primary-blue;
+  &:hover:not(:disabled) {
+    background-color: $color-primary-blue;
+    color: $color-bg-white;
+  }
+  &:disabled {
+    background-color: $color-bg-light-grey-alt;
+    color: $color-text-light-grey;
+    border-color: $color-text-light-grey;
+  }
+}
+
+.btn-warning {
+  background-color: $color-bg-white;
+  color: $color-warning;
+  border: 1px solid $color-warning;
+  &:hover:not(:disabled) {
+    background-color: $color-warning;
+    color: $color-bg-white;
+  }
+  &:disabled {
+    background-color: $color-bg-light-grey-alt;
+    color: $color-text-light-grey;
+    border-color: $color-text-light-grey;
+  }
+}
+
+.btn-danger {
+  background-color: $color-bg-white;
+  color: $color-danger;
+  border: 1px solid $color-danger;
+  &:hover:not(:disabled) {
+    background-color: $color-danger;
+    color: $color-bg-white;
+  }
+  &:disabled {
+    background-color: $color-bg-light-grey-alt;
+    color: $color-text-light-grey;
+    border-color: $color-text-light-grey;
+  }
+}
+
+.btn-outline-secondary {
+  background-color: transparent;
+  color: $color-secondary-grey;
+  border: 1px solid $color-secondary-grey;
+  &:hover:not(:disabled) {
+    background-color: $color-secondary-grey;
+    color: $color-bg-white;
+  }
+  &:disabled {
+    color: $color-text-disabled;
+    border-color: $color-text-disabled;
+  }
+}
+
+// Utility classes
+.ml-auto { margin-left: auto; }
+.ml-2 { margin-left: 0.5rem; }
