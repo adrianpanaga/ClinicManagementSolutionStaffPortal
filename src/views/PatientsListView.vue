@@ -1,109 +1,297 @@
 <template>
-  <div class="page-container">
-    <h2>Patients List</h2>
-    <p>This page will display all patient records.</p>
-    <div style="margin-top: 20px;">
-      <h3>Quick Test: View a Patient's History</h3>
-      <p>Enter a Patient ID (e.g., from your database) to view their history:</p>
-      <input type="number" v-model="testPatientId" placeholder="Enter Patient ID" class="form-control" style="max-width: 300px; margin-right: 10px;">
-      <button @click="navigateToHistory" class="btn btn-primary">Go to Medical History</button>
-      <button @click="navigateToVisits" class="btn btn-secondary" style="margin-left: 10px;">Go to Visit History</button>
-      <button @click="navigateToTriage" class="btn btn-info" style="margin-left: 10px;">Go to Triage Records</button>
-      <button @click="navigateToLabResults" class="btn btn-success" style="margin-left: 10px;">Go to Lab Results</button>
-      <button @click="navigateToDocuments" class="btn btn-dark" style="margin-left: 10px;">Go to Documents</button>
-      <p style="margin-top: 10px; color: #888;">Example Patient ID: `1` or `2` (replace with real INT ID from your DB)</p>
+  <div class="patients-list-view">
+    <h2 class="section-title">All Patients</h2>
+
+    <div v-if="loading" class="loading-message">
+      <font-awesome-icon :icon="['fas', 'spinner']" spin class="icon" /> Loading patient data...
+    </div>
+    <div v-else-if="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+
+    <div v-else class="content-container">
+      <div class="search-and-actions">
+        <div class="form-group">
+          <input type="text" v-model="searchTerm" @input="debouncePatientSearch" class="form-control search-input" placeholder="Search by name, contact, or email" />
+          <font-awesome-icon :icon="['fas', 'search']" class="search-icon" />
+        </div>
+        </div>
+
+      <div v-if="loadingSearch" class="loading-message-small">Searching...</div>
+      <div v-else-if="filteredPatients.length === 0" class="no-records-message">
+        No patients found.
+      </div>
+      
+      <div v-else class="patients-table-container card">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Full Name</th>
+              <th>Contact Number</th>
+              <th>Email</th>
+              <th>Date of Birth</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="patient in filteredPatients" :key="patient.patientId">
+              <td>{{ patient.patientId }}</td>
+              <td>{{ patient.fullName }}</td>
+              <td>{{ patient.contactNumber }}</td>
+              <td>{{ patient.email }}</td>
+              <td>{{ formatDate(patient.dateOfBirth) }}</td>
+              <td>
+                <router-link :to="{ name: 'patient-history', params: { patientId: patient.patientId } }" class="btn btn-sm btn-info">
+                  <font-awesome-icon :icon="['fas', 'file-medical']" /> History
+                </router-link>
+                <router-link :to="{ name: 'triage-records', params: { patientId: patient.patientId } }" class="btn btn-sm btn-secondary ml-1">
+                  <font-awesome-icon :icon="['fas', 'heartbeat']" /> Triage
+                </router-link>
+                <router-link :to="{ name: 'lab-results', params: { patientId: patient.patientId } }" class="btn btn-sm btn-success ml-1">
+                  <font-awesome-icon :icon="['fas', 'vials']" /> Labs
+                </router-link>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import apiClient from '../api/authApi.js';
 import { useRouter } from 'vue-router';
+import { authStore } from '../stores/auth.js';
 
 const router = useRouter();
-const testPatientId = ref(''); // Keep as string for input binding, parseInt in navigateToHistory if needed
 
-const navigateToHistory = () => {
-  if (testPatientId.value) {
-    // Ensure it's an integer before navigating
-    const patientIdInt = parseInt(testPatientId.value);
-    if (!isNaN(patientIdInt)) {
-      router.push({ name: 'clinic-visits', params: { patientId: patientIdInt } });
-    } else {
-      alert('Please enter a valid numeric Patient ID.');
-    }
-  } else {
-    alert('Please enter a Patient ID.');
+const allPatients = ref([]);
+const filteredPatients = ref([]);
+const loading = ref(true);
+const errorMessage = ref('');
+const searchTerm = ref('');
+const loadingSearch = ref(false);
+let searchTimeout = null;
+
+const fetchAllPatients = async () => {
+  loading.value = true;
+  errorMessage.value = '';
+  try {
+    const response = await apiClient.get('/Patients');
+    allPatients.value = response.data;
+    filteredPatients.value = response.data;
+  } catch (error) {
+    console.error('Failed to fetch all patients:', error);
+    errorMessage.value = `Failed to load patient data: ${error.response?.data?.detail || error.message || error.response?.statusText}`;
+  } finally {
+    loading.value = false;
   }
 };
 
-const navigateToVisits = () => {
-  if (testPatientId.value) {
-    const patientIdInt = parseInt(testPatientId.value);
-    if (!isNaN(patientIdInt)) {
-      router.push({ name: 'clinic-visits', params: { patientId: patientIdInt } });
-    } else {
-      alert('Please enter a valid numeric Patient ID.');
-    }
-  } else {
-    alert('Please enter a Patient ID.');
+const searchPatients = () => {
+  loadingSearch.value = true;
+  if (!searchTerm.value) {
+    filteredPatients.value = allPatients.value;
+    loadingSearch.value = false;
+    return;
   }
+  
+  const lowerCaseSearchTerm = searchTerm.value.toLowerCase();
+  filteredPatients.value = allPatients.value.filter(patient =>
+    (patient.fullName && patient.fullName.toLowerCase().includes(lowerCaseSearchTerm)) ||
+    (patient.contactNumber && patient.contactNumber.toLowerCase().includes(lowerCaseSearchTerm)) ||
+    (patient.email && patient.email.toLowerCase().includes(lowerCaseSearchTerm))
+  );
+  loadingSearch.value = false;
 };
 
-const navigateToTriage = () => { // Ensure this function is here
-  if (testPatientId.value) {
-    const patientIdInt = parseInt(testPatientId.value);
-    if (!isNaN(patientIdInt)) {
-      router.push({ name: 'triage-records', params: { patientId: patientIdInt } });
-    } else {
-      alert('Please enter a valid numeric Patient ID.');
-    }
-  } else {
-    alert('Please enter a Patient ID.');
-  }
+const debouncePatientSearch = () => {
+  clearTimeout(searchTimeout);
+  searchTimeout = setTimeout(searchPatients, 300);
 };
 
-// New function to navigate to lab results
-const navigateToLabResults = () => {
-  if (testPatientId.value) {
-    const patientIdInt = parseInt(testPatientId.value);
-    if (!isNaN(patientIdInt)) {
-      router.push({ name: 'lab-results', params: { patientId: patientIdInt } });
-    } else {
-      alert('Please enter a valid numeric Patient ID.');
-    }
-  } else {
-    alert('Please enter a Patient ID.');
-  }
+const formatDate = (dateString) => {
+  if (!dateString) return 'N/A';
+  const date = new Date(dateString);
+  if (isNaN(date.getTime())) return 'Invalid Date';
+  const options = { year: 'numeric', month: 'long', day: 'numeric' };
+  return date.toLocaleDateString(undefined, options);
 };
 
-// New function to navigate to patient documents
-const navigateToDocuments = () => {
-  if (testPatientId.value) {
-    const patientIdInt = parseInt(testPatientId.value);
-    if (!isNaN(patientIdInt)) {
-      router.push({ name: 'patient-documents', params: { patientId: patientIdInt } });
-    } else {
-      alert('Please enter a valid numeric Patient ID.');
-    }
-  } else {
-    alert('Please enter a Patient ID.');
+onMounted(async () => {
+  const allowedRoles = ['Admin', 'Receptionist', 'Doctor', 'Nurse', 'LabTechnician'];
+  const hasPermission = authStore.userRoles.some(role => allowedRoles.includes(role));
+
+  if (!hasPermission) {
+    errorMessage.value = "Access Denied: You do not have permission to view the patient list.";
+    loading.value = false;
+    return;
   }
-};
+
+  await fetchAllPatients();
+});
 </script>
 
 <style lang="scss" scoped>
 @import '../assets/styles/_variables.scss';
-.page-container {
+
+.patients-list-view {
   padding: $spacing-lg;
 }
-/** 
+
+.section-title {
+  color: $color-primary-blue;
+  margin-bottom: $spacing-lg;
+  text-align: center;
+  font-size: 2rem;
+}
+
+.loading-message, .error-message {
+  text-align: center;
+  padding: $spacing-md;
+  margin-top: $spacing-lg;
+  border-radius: $border-radius-sm;
+  font-weight: bold;
+}
+
+.loading-message-small, .no-records-message {
+  font-size: 0.9em;
+  color: $color-text-medium-grey;
+  text-align: center;
+  padding: $spacing-sm;
+}
+
+.content-container {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.search-and-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: $spacing-md;
+  margin-bottom: $spacing-lg;
+
+  .form-group {
+    position: relative;
+    flex-grow: 1;
+    .search-input {
+      padding-right: 40px; /* Make space for the icon */
+    }
+    .search-icon {
+      position: absolute;
+      right: $spacing-md;
+      top: 50%;
+      transform: translateY(-50%);
+      color: $color-secondary-grey;
+    }
+  }
+}
+
+.patients-table-container {
+  overflow-x: auto;
+  background-color: $color-bg-white;
+  border: 1px solid $color-border-medium;
+  border-radius: $border-radius-md;
+  box-shadow: $box-shadow-sm;
+  padding: $spacing-md;
+
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+
+    th, td {
+      padding: $spacing-sm $spacing-md;
+      text-align: left;
+      border-bottom: 1px solid $color-border-light;
+      white-space: nowrap;
+    }
+
+    th {
+      background-color: $color-bg-light;
+      font-weight: bold;
+      color: $color-text-dark;
+    }
+
+    td {
+      color: $color-text-medium-grey;
+    }
+
+    tr:hover {
+      background-color: $color-bg-light;
+    }
+    .btn {
+      margin-left: $spacing-xs;
+    }
+    .btn-sm {
+      padding: 0.25rem 0.5rem;
+      font-size: 0.8rem;
+    }
+    .ml-1 {
+      margin-left: $spacing-xs;
+    }
+  }
+}
+
 .form-control {
-  // Use the global form-control styles defined in _common.scss
+  width: 100%;
+  padding: $spacing-sm;
+  border: 1px solid $color-border-medium;
+  border-radius: $border-radius-sm;
+  box-sizing: border-box;
+  font-size: 1rem;
+  transition: border-color 0.3s;
+
+  &:focus {
+    outline: none;
+    border-color: $color-primary-blue;
+    box-shadow: 0 0 0 0.2rem rgba($color-primary-blue, 0.25);
+  }
 }
 
 .btn {
-  // Use the global btn styles
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-xs;
+  padding: $spacing-sm $spacing-md;
+  font-size: 1rem;
+  font-weight: bold;
+  text-decoration: none;
+  border-radius: $border-radius-sm;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+  border: 1px solid transparent;
+
+  &.btn-primary {
+    background-color: $color-primary-blue;
+    color: $color-bg-white;
+    &:hover { background-color: $color-primary-blue-darker; }
+  }
+  &.btn-info {
+    background-color: $color-info;
+    color: $color-bg-white;
+    &:hover { background-color: darken($color-info, 10%); }
+  }
+  &.btn-secondary {
+    background-color: $color-secondary-grey;
+    color: $color-bg-white;
+    &:hover { background-color: $color-secondary-grey-darker; }
+  }
+  &.btn-success {
+    background-color: $color-confirm-green;
+    color: $color-bg-white;
+    &:hover { background-color: $color-confirm-green-darker; }
+  }
+  &.btn-danger {
+    background-color: $color-error;
+    color: $color-bg-white;
+    &:hover { background-color: darken($color-error, 10%); }
+  }
 }
-  */
 </style>
