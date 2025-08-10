@@ -107,6 +107,7 @@
   <div v-else class="login-view-container">
     <router-view />
   </div>
+  <app-notification ref="notificationRef"></app-notification>
 </template>
 
 <script setup>
@@ -114,9 +115,11 @@ import { ref, onMounted, onUnmounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { authStore } from './stores/auth'; // Ensure this path is correct based on your file structure
 import { computed } from 'vue';
+import AppNotification from './components/AppNotification.vue';
 
 const router = useRouter();
 const showDropdown = ref(false);
+const notificationRef = ref(null);
 
 // Helper function to check if the user has any of the required roles
 const hasRole = (roles) => {
@@ -147,6 +150,14 @@ const handleClickOutside = (event) => {
     hideDropdown();
   }
 };
+
+// Expose the notification system globally
+const notify = (message, type = 'info', duration) => {
+  if (notificationRef.value) {
+    notificationRef.value.show(message, type, duration);
+  }
+};
+window.notify = notify;
 
 onMounted(() => {
   document.addEventListener('click', handleClickOutside);

@@ -6,15 +6,18 @@
         <p><strong>Date of Birth:</strong> {{ formatDate(patient.dateOfBirth) }}</p>
         <p><strong>Contact:</strong> {{ patient.contactNumber }}</p>
         <p><strong>Email:</strong> {{ patient.email }}</p>
-        <router-link :to="{ name: 'patient-history', params: { patientId: patient.patientId } }" class="btn btn-primary btn-sm mt-3">
-          <font-awesome-icon :icon="['fas', 'file-medical']" class="icon" /> View Medical History
-        </router-link>
-        <router-link :to="{ name: 'clinic-visits', params: { patientId: patient.patientId } }" class="btn btn-secondary btn-sm mt-3 ml-2">
-          <font-awesome-icon :icon="['fas', 'calendar-alt']" class="icon" /> View Visit History
-        </router-link>
-        <router-link :to="{ name: 'triage-records', params: { patientId: patient.patientId } }" class="btn btn-info btn-sm mt-3 ml-2">
-          <font-awesome-icon :icon="['fas', 'heartbeat']" class="icon" /> View Triage Records
-        </router-link>
+        
+        <div class="patient-actions mt-3">
+          <router-link :to="{ name: 'patient-history', params: { patientId: patient.patientId } }" class="btn btn-primary btn-sm">
+            <font-awesome-icon :icon="['fas', 'file-medical']" class="icon" /> View Medical History
+          </router-link>
+          <router-link :to="{ name: 'clinic-visits', params: { patientId: patient.patientId } }" class="btn btn-secondary btn-sm ml-2">
+            <font-awesome-icon :icon="['fas', 'calendar-alt']" class="icon" /> View Visit History
+          </router-link>
+          <router-link :to="{ name: 'triage-records', params: { patientId: patient.patientId } }" class="btn btn-info btn-sm ml-2">
+            <font-awesome-icon :icon="['fas', 'heartbeat']" class="icon" /> View Triage Records
+          </router-link>
+        </div>
       </div>
 
       <h3 class="subsection-title">Recorded Lab Results</h3>
@@ -70,63 +73,65 @@
       {{ patientError }}
     </div>
 
-    <div v-if="showAddForm || editingResult" class="add-edit-form card mt-4">
-      <h3>{{ editingResult ? 'Edit Lab Result' : 'Add New Lab Result' }}</h3>
-      <form @submit.prevent="saveLabResult">
-        <div class="form-group-grid">
-          <div class="form-group">
-            <label for="testName">Test Name:</label>
-            <input type="text" id="testName" v-model="currentLabResult.testName" class="form-control" required />
+    <div v-if="showAddForm || editingResult" class="modal-overlay">
+      <div class="modal-content card">
+        <h3>{{ editingResult ? 'Edit Lab Result' : 'Add New Lab Result' }}</h3>
+        <form @submit.prevent="saveLabResult">
+          <div class="form-group-grid">
+            <div class="form-group">
+              <label for="testName">Test Name:</label>
+              <input type="text" id="testName" v-model="currentLabResult.testName" class="form-control" required />
+            </div>
+            <div class="form-group">
+              <label for="resultValue">Result Value:</label>
+              <input type="text" id="resultValue" v-model="currentLabResult.resultValue" class="form-control" required />
+            </div>
+            <div class="form-group">
+              <label for="unit">Unit:</label>
+              <input type="text" id="unit" v-model="currentLabResult.unit" class="form-control" />
+            </div>
+            <div class="form-group">
+              <label for="referenceRange">Reference Range:</label>
+              <input type="text" id="referenceRange" v-model="currentLabResult.referenceRange" class="form-control" />
+            </div>
+            <div class="form-group">
+              <label for="resultDate">Result Date:</label>
+              <input type="date" id="resultDate" v-model="currentLabResult.resultDate" class="form-control" required />
+            </div>
+            <div class="form-group">
+              <label for="medicalRecordId">Linked Medical Record ID (Optional):</label>
+              <input type="number" id="medicalRecordId" v-model.number="currentLabResult.medicalRecordId" class="form-control" />
+            </div>
+            <div class="form-group">
+              <label for="appointmentId">Linked Appointment ID (Optional):</label>
+              <input type="number" id="appointmentId" v-model.number="currentLabResult.appointmentId" class="form-control" />
+            </div>
+            <div class="form-group">
+              <label for="orderedByStaffId">Ordered By Staff ID (Optional):</label>
+              <input type="number" id="orderedByStaffId" v-model.number="currentLabResult.orderedByStaffId" class="form-control" />
+            </div>
+            <div class="form-group full-width">
+              <label for="interpretation">Interpretation:</label>
+              <textarea id="interpretation" v-model="currentLabResult.interpretation" class="form-control"></textarea>
+            </div>
           </div>
-          <div class="form-group">
-            <label for="resultValue">Result Value:</label>
-            <input type="text" id="resultValue" v-model="currentLabResult.resultValue" class="form-control" required />
+          <div class="form-actions">
+            <button type="submit" class="btn btn-success">
+              <font-awesome-icon :icon="['fas', 'save']" class="icon" /> Save Result
+            </button>
+            <button type="button" @click="cancelForm" class="btn btn-secondary ml-2">
+              <font-awesome-icon :icon="['fas', 'times']" class="icon" /> Cancel
+            </button>
           </div>
-          <div class="form-group">
-            <label for="unit">Unit:</label>
-            <input type="text" id="unit" v-model="currentLabResult.unit" class="form-control" />
-          </div>
-          <div class="form-group">
-            <label for="referenceRange">Reference Range:</label>
-            <input type="text" id="referenceRange" v-model="currentLabResult.referenceRange" class="form-control" />
-          </div>
-          <div class="form-group">
-            <label for="resultDate">Result Date:</label>
-            <input type="date" id="resultDate" v-model="currentLabResult.resultDate" class="form-control" required />
-          </div>
-          <div class="form-group">
-            <label for="medicalRecordId">Linked Medical Record ID (Optional):</label>
-            <input type="number" id="medicalRecordId" v-model.number="currentLabResult.medicalRecordId" class="form-control" />
-          </div>
-          <div class="form-group">
-            <label for="appointmentId">Linked Appointment ID (Optional):</label>
-            <input type="number" id="appointmentId" v-model.number="currentLabResult.appointmentId" class="form-control" />
-          </div>
-          <div class="form-group">
-            <label for="orderedByStaffId">Ordered By Staff ID (Optional):</label>
-            <input type="number" id="orderedByStaffId" v-model.number="currentLabResult.orderedByStaffId" class="form-control" />
-          </div>
-          <div class="form-group full-width">
-            <label for="interpretation">Interpretation:</label>
-            <textarea id="interpretation" v-model="currentLabResult.interpretation" class="form-control"></textarea>
-          </div>
-        </div>
-        <div class="form-actions">
-          <button type="submit" class="btn btn-success">
-            <font-awesome-icon :icon="['fas', 'save']" class="icon" /> Save Result
-          </button>
-          <button type="button" @click="cancelForm" class="btn btn-secondary ml-2">
-            <font-awesome-icon :icon="['fas', 'times']" class="icon" /> Cancel
-          </button>
-        </div>
-        <div v-if="formError" class="error-message mt-3">{{ formError }}</div>
-      </form>
+          <div v-if="formError" class="error-message mt-3">{{ formError }}</div>
+        </form>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, watch, computed } from 'vue';
+import { ref, watch, computed } from 'vue';
 import { useRoute } from 'vue-router';
 import apiClient from '../api/authApi.js';
 import { authStore } from '../stores/auth.js';
@@ -195,9 +200,8 @@ const fetchLabResults = async (id) => {
 
 const openAddForm = () => {
   editingResult.value = null;
-  // Initialize date field correctly for type="date" input
   const today = new Date().toISOString().split('T')[0];
-  currentLabResult.value = { PatientId: patientId.value, ResultDate: today };
+  currentLabResult.value = { patientId: patientId.value, resultDate: today };
   showAddForm.value = true;
   formError.value = '';
 };
@@ -205,11 +209,11 @@ const openAddForm = () => {
 const editResult = (result) => {
   showAddForm.value = false;
   editingResult.value = { ...result };
-  // Convert date string from API (e.g., "YYYY-MM-DDTHH:MM:SS") to "YYYY-MM-DD" for type="date" input
   currentLabResult.value = {
     ...result,
-    ResultDate: result.resultDate ? new Date(result.resultDate).toISOString().split('T')[0] : null
+    resultDate: result.resultDate ? new Date(result.resultDate).toISOString().split('T')[0] : null
   };
+  showAddForm.value = true;
   formError.value = '';
 };
 
@@ -224,10 +228,9 @@ const saveLabResult = async () => {
   formError.value = '';
   try {
     const payload = { ...currentLabResult.value };
-    // Ensure numeric fields are correctly parsed as numbers
-    payload.MedicalRecordId = payload.MedicalRecordId ? parseInt(payload.MedicalRecordId) : null;
-    payload.AppointmentId = payload.AppointmentId ? parseInt(payload.AppointmentId) : null;
-    payload.OrderedByStaffId = payload.OrderedByStaffId ? parseInt(payload.OrderedByStaffId) : null;
+    payload.medicalRecordId = payload.medicalRecordId ? parseInt(payload.medicalRecordId) : null;
+    payload.appointmentId = payload.appointmentId ? parseInt(payload.appointmentId) : null;
+    payload.orderedByStaffId = payload.orderedByStaffId ? parseInt(payload.orderedByStaffId) : null;
 
     if (editingResult.value) {
       await apiClient.put(`/LabResults/${payload.labResultId}`, payload);
@@ -255,7 +258,6 @@ const deleteResult = async (id) => {
 };
 
 
-// Helper functions for date formatting (copied from PatientHistoryView)
 const formatDate = (dateString) => {
   if (!dateString) return 'N/A';
   const date = new Date(dateString);
@@ -272,8 +274,17 @@ const formatDateTime = (dateTimeString) => {
   return date.toLocaleDateString(undefined, options);
 };
 
-// Watch for changes in route.params.patientId
-watch(() => route.params.patientId, (newId) => {
+watch(() => route.params.patientId, async (newId) => {
+  const allowedRoles = ['Admin', 'Doctor', 'Nurse', 'LabTechnician'];
+  const hasPermission = authStore.userRoles.some(role => allowedRoles.includes(role));
+  
+  if (!hasPermission) {
+    resultsError.value = "Access Denied: You do not have permission to view this page.";
+    loadingPatient.value = false;
+    loadingResults.value = false;
+    return;
+  }
+
   if (newId) {
     const parsedId = parseInt(newId);
     if (!isNaN(parsedId)) {
@@ -337,6 +348,13 @@ watch(() => route.params.patientId, (newId) => {
   .ml-2 {
     margin-left: $spacing-sm;
   }
+}
+
+.patient-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-sm;
+  .ml-2 { margin-left: 0; }
 }
 
 .loading-message, .error-message, .no-records-message {
@@ -426,31 +444,43 @@ watch(() => route.params.patientId, (newId) => {
   .result-actions {
     margin-top: $spacing-md;
     text-align: right;
-
-    .btn {
-      margin-left: $spacing-sm; // Space between buttons
-    }
   }
 }
 
 /* Form Styles */
-.add-edit-form {
-  padding: $spacing-lg;
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
   background-color: $color-bg-white;
-  border-radius: $border-radius-lg;
-  box-shadow: $box-shadow-md;
+  padding: $spacing-lg;
+  border-radius: $border-radius-md;
+  box-shadow: $box-shadow-lg;
+  max-width: 700px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
 
   h3 {
-    color: $color-primary-blue;
-    margin-bottom: $spacing-lg;
     text-align: center;
+    color: $color-primary-blue;
+    margin-bottom: $spacing-md;
     border-bottom: 1px solid $color-border-darker;
-    padding-bottom: $spacing-md;
+    padding-bottom: $spacing-sm;
   }
 
   .form-group {
     margin-bottom: $spacing-md;
-    text-align: left;
   }
 
   .form-group-grid {
@@ -458,10 +488,6 @@ watch(() => route.params.patientId, (newId) => {
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: $spacing-md;
     margin-bottom: $spacing-md;
-
-    .full-width {
-      grid-column: 1 / -1;
-    }
   }
 
   label {
@@ -493,13 +519,7 @@ watch(() => route.params.patientId, (newId) => {
   .form-actions {
     text-align: right;
     margin-top: $spacing-lg;
-
-    .btn {
-      min-width: 120px;
-      padding: $spacing-sm $spacing-md;
-      font-size: 1rem;
-      margin-left: $spacing-sm; // Space between action buttons
-    }
   }
 }
+.ml-2 { margin-left: $spacing-sm; }
 </style>

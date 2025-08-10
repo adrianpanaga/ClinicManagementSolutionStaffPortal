@@ -6,12 +6,18 @@
         <p><strong>Date of Birth:</strong> {{ formatDate(patient.dateOfBirth) }}</p>
         <p><strong>Contact:</strong> {{ patient.contactNumber }}</p>
         <p><strong>Email:</strong> {{ patient.email }}</p>
-        <router-link :to="{ name: 'patient-history', params: { patientId: patient.patientId } }" class="btn btn-primary btn-sm mt-3">
-          <font-awesome-icon :icon="['fas', 'file-medical']" class="icon" /> View Full Medical History
-        </router-link>
-        <router-link :to="{ name: 'triage-records', params: { patientId: patient.patientId } }" class="btn btn-info btn-sm mt-3 ml-2">
-          <font-awesome-icon :icon="['fas', 'heartbeat']" class="icon" /> View Triage Records
-        </router-link>
+        
+        <div class="patient-actions mt-3">
+          <router-link :to="{ name: 'patient-history', params: { patientId: patient.patientId } }" class="btn btn-primary btn-sm">
+            <font-awesome-icon :icon="['fas', 'file-medical']" class="icon" /> View Full Medical History
+          </router-link>
+          <router-link :to="{ name: 'triage-records', params: { patientId: patient.patientId } }" class="btn btn-info btn-sm ml-2">
+            <font-awesome-icon :icon="['fas', 'heartbeat']" class="icon" /> View Triage Records
+          </router-link>
+          <router-link :to="{ name: 'lab-results', params: { patientId: patient.patientId } }" class="btn btn-success btn-sm ml-2">
+            <font-awesome-icon :icon="['fas', 'vials']" class="icon" /> View Lab Results
+          </router-link>
+        </div>
       </div>
 
       <h3 class="subsection-title">Appointments (Visits)</h3>
@@ -37,8 +43,9 @@
             <p><strong>Doctor:</strong> {{ appt.doctor?.fullName || 'Any Available' }}</p>
             <p><strong>Reason for Visit:</strong> {{ appt.reasonForVisit || 'N/A' }}</p>
             <p v-if="appt.notes"><strong>Notes:</strong> {{ appt.notes }}</p>
-            <router-link v-if="appt.medicalRecordId" :to="{ name: 'medical-record-detail', params: { recordId: appt.medicalRecordId } }" class="btn btn-info btn-sm">
-              View Medical Record
+            
+            <router-link v-if="appt.medicalRecordId" :to="{ name: 'patient-history', params: { patientId: patientId, medicalRecordId: appt.medicalRecordId } }" class="btn btn-info btn-sm">
+              View Associated Medical Record
             </router-link>
             </div>
         </div>
@@ -55,12 +62,12 @@
 
 <script setup>
 import { ref, onMounted, watch } from 'vue';
-import { useRoute, useRouter } from 'vue-router'; // Import useRouter for navigation
+import { useRoute } from 'vue-router';
 import apiClient from '../api/authApi.js';
+import { authStore } from '../stores/auth.js';
 
 const route = useRoute();
-const router = useRouter(); // Initialize useRouter
-const patientId = ref(null); // Will hold the integer patient ID
+const patientId = ref(null);
 
 const patient = ref(null);
 const appointments = ref([]);
@@ -70,11 +77,29 @@ const loadingAppointments = ref(true);
 const patientError = ref('');
 const appointmentsError = ref('');
 
+// Helper function to format dates
+const formatDate = (dateString) => {
+  if (!dateString) return 'N/A';
+  const date = new Date(dateString);
+  if (isNaN(date.getTime())) return 'Invalid Date';
+  const options = { year: 'numeric', month: 'long', day: 'numeric' };
+  return date.toLocaleDateString(undefined, options);
+};
+
+// Helper function to format date-time
+const formatDateTime = (dateTimeString) => {
+  if (!dateTimeString) return 'N/A';
+  const date = new Date(dateTimeString);
+  if (isNaN(date.getTime())) return 'Invalid Date';
+  const options = { year: 'numeric', month: 'short', day: 'numeric' };
+  return date.toLocaleDateString(undefined, options);
+};
+
 const fetchPatientData = async (id) => {
   loadingPatient.value = true;
   patientError.value = '';
   try {
-    const response = await apiClient.get(`/Patients/${id}`); // Assuming /Patients/{id} exists
+    const response = await apiClient.get(`/Patients/${id}`);
     patient.value = response.data;
   } catch (error) {
     console.error(`Failed to fetch patient with ID ${id}:`, error);
@@ -88,7 +113,6 @@ const fetchAppointments = async (id) => {
   loadingAppointments.value = true;
   appointmentsError.value = '';
   try {
-    // Using your existing ByPatientId endpoint
     const response = await apiClient.get(`/Appointments/ByPatientId/${id}`);
     appointments.value = response.data;
   } catch (error) {
@@ -100,38 +124,31 @@ const fetchAppointments = async (id) => {
     } else {
       appointmentsError.value = `Failed to load appointments. ${error.response?.data?.detail || error.message || error.response?.statusText}`;
     }
-    appointments.value = []; // Clear appointments on error
+    appointments.value = [];
   } finally {
     loadingAppointments.value = false;
   }
 };
 
-// Helper function to format dates
-const formatDate = (dateString) => {
-  if (!dateString) return 'N/A';
-  const date = new Date(dateString);
-  if (isNaN(date.getTime())) return 'Invalid Date';
-  const options = { year: 'numeric', month: 'long', day: 'numeric' };
-  return date.toLocaleDateString(undefined, options);
-};
-
-// Helper function to format date-time (for appointment date only, time will be separate)
-const formatDateTime = (dateTimeString) => {
-  if (!dateTimeString) return 'N/A';
-  const date = new Date(dateTimeString);
-  if (isNaN(date.getTime())) return 'Invalid Date';
-  const options = { year: 'numeric', month: 'short', day: 'numeric' };
-  return date.toLocaleDateString(undefined, options);
-};
-
 // Watch for changes in route.params.id
-watch(() => route.params.patientId, (newId) => {
+watch(() => route.params.patientId, async (newId) => {
+  // Check if the user is authorized to view patient records (Admin, Doctor, Nurse, Receptionist)
+  const allowedRoles = ['Admin', 'Receptionist', 'Doctor', 'Nurse'];
+  const hasPermission = authStore.userRoles.some(role => allowedRoles.includes(role));
+  
+  if (!hasPermission) {
+    appointmentsError.value = "Access Denied: You do not have permission to view this page.";
+    loadingPatient.value = false;
+    loadingAppointments.value = false;
+    return;
+  }
+
   if (newId) {
     const parsedId = parseInt(newId);
     if (!isNaN(parsedId)) {
       patientId.value = parsedId;
-      fetchPatientData(parsedId);
-      fetchAppointments(parsedId);
+      await fetchPatientData(parsedId);
+      await fetchAppointments(parsedId);
     } else {
       console.error("Invalid patient ID received:", newId);
       patientError.value = "Invalid patient ID provided in URL.";
@@ -182,8 +199,14 @@ watch(() => route.params.patientId, (newId) => {
     display: inline-flex;
     align-items: center;
     gap: $spacing-xs;
-    margin-top: $spacing-md;
   }
+}
+
+.patient-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-sm;
+  .ml-2 { margin-left: 0; }
 }
 
 .loading-message, .error-message, .no-records-message {
@@ -252,7 +275,6 @@ watch(() => route.params.patientId, (newId) => {
       &.status-completed { background-color: $color-confirm-green; }
       &.status-cancelled { background-color: $color-error; }
       &.status-pending { background-color: $color-secondary-grey; }
-      // Add more status styles as needed
     }
   }
 
@@ -270,12 +292,9 @@ watch(() => route.params.patientId, (newId) => {
 
     .btn {
       margin-top: $spacing-md;
-      align-self: flex-end; // Push button to the right
+      align-self: flex-end;
     }
   }
 }
-.ml-2 { // Ensure this margin-left class is defined in your SCSS
-  margin-left: $spacing-sm;
-}
-
+.ml-2 { margin-left: $spacing-sm; }
 </style>

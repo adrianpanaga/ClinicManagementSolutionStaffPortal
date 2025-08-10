@@ -9,17 +9,20 @@
         <router-link :to="{ name: 'patient-history', params: { patientId: patient.patientId } }" class="btn btn-primary btn-sm mt-3">
           <font-awesome-icon :icon="['fas', 'file-medical']" class="icon" /> View Medical History
         </router-link>
-        <router-link :to="{ name: 'clinic-visits', params: { patientId: patient.patientId } }" class="btn btn-secondary btn-sm mt-3 ml-2">
-          <font-awesome-icon :icon="['fas', 'calendar-alt']" class="icon" /> View Visit History
+        <router-link :to="{ name: 'lab-results', params: { patientId: patient.patientId } }" class="btn btn-success btn-sm mt-3 ml-2">
+          <font-awesome-icon :icon="['fas', 'vials']" class="icon" /> View Lab Results
+        </router-link>
+        <router-link :to="{ name: 'patient-documents', params: { patientId: patient.patientId } }" class="btn btn-dark btn-sm mt-3 ml-2">
+          <font-awesome-icon :icon="['fas', 'file-alt']" class="icon" /> View Documents
         </router-link>
       </div>
 
-      <h3 class="subsection-title">Recorded Triage Entries</h3>
-      <div v-if="loadingRecords" class="loading-message">
+      <h3 class="subsection-title">Triage Entries</h3>
+      <div v-if="loadingTriage" class="loading-message">
         <font-awesome-icon :icon="['fas', 'spinner']" spin class="icon" /> Loading triage records...
       </div>
-      <div v-else-if="recordsError" class="error-message">
-        {{ recordsError }}
+      <div v-else-if="triageError" class="error-message">
+        {{ triageError }}
       </div>
       <div v-else-if="triageRecords.length === 0" class="no-records-message">
         No triage records found for this patient.
@@ -28,30 +31,41 @@
         </button>
       </div>
       <div v-else class="triage-records-list">
-        <div v-for="record in triageRecords" :key="record.triageRecordId" class="triage-record-card card">
+        <div v-for="record in triageRecords" :key="record.recordId" class="triage-record-card card">
           <div class="record-header">
             <h4><font-awesome-icon :icon="['fas', 'heartbeat']" class="icon" /> Triage Date: {{ formatDateTime(record.createdAt) }}</h4>
-            <span class="record-complaint">{{ record.chiefComplaint || 'No Chief Complaint' }}</span>
           </div>
           <div class="record-details-grid">
-            <div class="detail-item"><strong>Temperature:</strong> {{ record.temperature || 'N/A' }} °C</div>
-            <div class="detail-item"><strong>BP:</strong> {{ record.bloodPressureSystolic || 'N/A' }}/{{ record.bloodPressureDiastolic || 'N/A' }} mmHg</div>
-            <div class="detail-item"><strong>Pulse:</strong> {{ record.pulseRate || 'N/A' }} bpm</div>
-            <div class="detail-item"><strong>Respiration:</strong> {{ record.respiratoryRate || 'N/A' }} rpm</div>
-            <div class="detail-item"><strong>Weight:</strong> {{ record.weight || 'N/A' }} kg</div>
-            <div class="detail-item"><strong>Height:</strong> {{ record.height || 'N/A' }} cm</div>
+            <div class="detail-item">
+              <strong>Temperature:</strong> {{ record.temperature || 'N/A' }} °C
+            </div>
+            <div class="detail-item">
+              <strong>Blood Pressure:</strong> {{ record.bloodPressure || 'N/A' }} mmHg
+            </div>
+            <div class="detail-item">
+              <strong>Pulse Rate:</strong> {{ record.pulseRate || 'N/A' }} bpm
+            </div>
+            <div class="detail-item">
+              <strong>Respiration Rate:</strong> {{ record.respirationRate || 'N/A' }} rpm
+            </div>
+            <div class="detail-item">
+              <strong>Weight:</strong> {{ record.weight || 'N/A' }} kg
+            </div>
+            <div class="detail-item">
+              <strong>Height:</strong> {{ record.height || 'N/A' }} cm
+            </div>
+            <div class="detail-item full-width">
+              <strong>Chief Complaint:</strong> {{ record.chiefComplaint || 'N/A' }}
+            </div>
             <div class="detail-item full-width">
               <strong>Notes:</strong> {{ record.notes || 'No notes.' }}
             </div>
-            <div v-if="record.appointment" class="detail-item full-width">
-              <strong>Linked Appointment:</strong> {{ formatDateTime(record.appointment.appointmentDate) }} {{ record.appointment.appointmentTime }} - {{ record.appointment.reasonForVisit || 'N/A' }}
-            </div>
           </div>
           <div class="record-actions" v-if="canEditTriage">
-            <button @click="editRecord(record)" class="btn btn-info btn-sm">
+            <button @click="editTriageRecord(record)" class="btn btn-info btn-sm">
               <font-awesome-icon :icon="['fas', 'edit']" class="icon" /> Edit
             </button>
-            <button @click="deleteRecord(record.triageRecordId)" class="btn btn-danger btn-sm ml-2">
+            <button @click="deleteTriageRecord(record.recordId)" class="btn btn-danger btn-sm ml-2">
               <font-awesome-icon :icon="['fas', 'trash']" class="icon" /> Delete
             </button>
           </div>
@@ -68,57 +82,55 @@
       {{ patientError }}
     </div>
 
-    <div v-if="showAddForm || editingRecord" class="add-edit-form card mt-4">
-      <h3>{{ editingRecord ? 'Edit Triage Record' : 'Add New Triage Record' }}</h3>
-      <form @submit.prevent="saveTriageRecord">
-        <div class="form-group">
-          <label for="chiefComplaint">Chief Complaint:</label>
-          <input type="text" id="chiefComplaint" v-model="currentTriage.chiefComplaint" class="form-control" />
-        </div>
-        <div class="form-group-grid">
-          <div class="form-group">
-            <label for="temperature">Temperature (°C):</label>
-            <input type="number" step="0.1" id="temperature" v-model.number="currentTriage.temperature" class="form-control" />
+    <div v-if="showAddForm || editingTriage" class="modal-overlay">
+      <div class="modal-content card">
+        <h3>{{ editingTriage ? 'Edit Triage Record' : 'Add New Triage Record' }}</h3>
+        <form @submit.prevent="saveTriageRecord">
+          <div class="form-group-grid">
+            <div class="form-group">
+              <label for="temperature">Temperature (°C):</label>
+              <input type="number" step="0.1" id="temperature" v-model.number="currentTriageRecord.temperature" class="form-control" />
+            </div>
+            <div class="form-group">
+              <label for="bloodPressure">Blood Pressure (mmHg):</label>
+              <input type="text" id="bloodPressure" v-model="currentTriageRecord.bloodPressure" class="form-control" placeholder="e.g., 120/80" />
+            </div>
+            <div class="form-group">
+              <label for="pulseRate">Pulse Rate (bpm):</label>
+              <input type="number" id="pulseRate" v-model.number="currentTriageRecord.pulseRate" class="form-control" />
+            </div>
+            <div class="form-group">
+              <label for="respirationRate">Respiration Rate (rpm):</label>
+              <input type="number" id="respirationRate" v-model.number="currentTriageRecord.respirationRate" class="form-control" />
+            </div>
+            <div class="form-group">
+              <label for="weight">Weight (kg):</label>
+              <input type="number" step="0.1" id="weight" v-model.number="currentTriageRecord.weight" class="form-control" />
+            </div>
+            <div class="form-group">
+              <label for="height">Height (cm):</label>
+              <input type="number" step="0.1" id="height" v-model.number="currentTriageRecord.height" class="form-control" />
+            </div>
+            <div class="form-group full-width">
+              <label for="chiefComplaint">Chief Complaint:</label>
+              <textarea id="chiefComplaint" v-model="currentTriageRecord.chiefComplaint" class="form-control" required></textarea>
+            </div>
+            <div class="form-group full-width">
+              <label for="notes">Notes:</label>
+              <textarea id="notes" v-model="currentTriageRecord.notes" class="form-control"></textarea>
+            </div>
           </div>
-          <div class="form-group">
-            <label for="systolicBp">BP (Systolic):</label>
-            <input type="number" id="systolicBp" v-model.number="currentTriage.bloodPressureSystolic" class="form-control" />
+          <div class="form-actions">
+            <button type="submit" class="btn btn-success">
+              <font-awesome-icon :icon="['fas', 'save']" class="icon" /> Save Record
+            </button>
+            <button type="button" @click="cancelForm" class="btn btn-secondary ml-2">
+              <font-awesome-icon :icon="['fas', 'times']" class="icon" /> Cancel
+            </button>
           </div>
-          <div class="form-group">
-            <label for="diastolicBp">BP (Diastolic):</label>
-            <input type="number" id="diastolicBp" v-model.number="currentTriage.bloodPressureDiastolic" class="form-control" />
-          </div>
-          <div class="form-group">
-            <label for="pulseRate">Pulse Rate (bpm):</label>
-            <input type="number" id="pulseRate" v-model.number="currentTriage.pulseRate" class="form-control" />
-          </div>
-          <div class="form-group">
-            <label for="respiratoryRate">Respiratory Rate (rpm):</label>
-            <input type="number" id="respiratoryRate" v-model.number="currentTriage.respiratoryRate" class="form-control" />
-          </div>
-          <div class="form-group">
-            <label for="weight">Weight (kg):</label>
-            <input type="number" step="0.01" id="weight" v-model.number="currentTriage.weight" class="form-control" />
-          </div>
-          <div class="form-group">
-            <label for="height">Height (cm):</label>
-            <input type="number" step="0.01" id="height" v-model.number="currentTriage.height" class="form-control" />
-          </div>
-          <div class="form-group full-width">
-            <label for="notes">Notes:</label>
-            <textarea id="notes" v-model="currentTriage.notes" class="form-control"></textarea>
-          </div>
-        </div>
-        <div class="form-actions">
-          <button type="submit" class="btn btn-success">
-            <font-awesome-icon :icon="['fas', 'save']" class="icon" /> Save Record
-          </button>
-          <button type="button" @click="cancelForm" class="btn btn-secondary ml-2">
-            <font-awesome-icon :icon="['fas', 'times']" class="icon" /> Cancel
-          </button>
-        </div>
-        <div v-if="formError" class="error-message mt-3">{{ formError }}</div>
-      </form>
+          <div v-if="formError" class="error-message mt-3">{{ formError }}</div>
+        </form>
+      </div>
     </div>
   </div>
 </template>
@@ -127,7 +139,7 @@
 import { ref, onMounted, watch, computed } from 'vue';
 import { useRoute } from 'vue-router';
 import apiClient from '../api/authApi.js';
-import { authStore } from '../stores/auth.js'; // To check user roles
+import { authStore } from '../stores/auth.js';
 
 const route = useRoute();
 const patientId = ref(null);
@@ -136,26 +148,26 @@ const patient = ref(null);
 const triageRecords = ref([]);
 
 const loadingPatient = ref(true);
-const loadingRecords = ref(true);
+const loadingTriage = ref(true);
 const patientError = ref('');
-const recordsError = ref('');
+const triageError = ref('');
 const formError = ref('');
 
 const showAddForm = ref(false);
-const editingRecord = ref(null); // Holds the record being edited
-const currentTriage = ref({}); // Data for the add/edit form
+const editingTriage = ref(null);
+const currentTriageRecord = ref({});
 
-// Computed properties for role-based permissions
+// --- Role-based permissions
 const canAddTriage = computed(() => {
   const roles = authStore.userRoles;
-  return roles.includes('Admin') || roles.includes('Nurse') || roles.includes('Receptionist');
+  return roles.includes('Admin') || roles.includes('Nurse');
 });
-
 const canEditTriage = computed(() => {
   const roles = authStore.userRoles;
-  return roles.includes('Admin') || roles.includes('Nurse') || roles.includes('Doctor');
+  return roles.includes('Admin') || roles.includes('Nurse');
 });
 
+// --- API calls
 const fetchPatientData = async (id) => {
   loadingPatient.value = true;
   patientError.value = '';
@@ -171,70 +183,80 @@ const fetchPatientData = async (id) => {
 };
 
 const fetchTriageRecords = async (id) => {
-  loadingRecords.value = true;
-  recordsError.value = '';
+  loadingTriage.value = true;
+  triageError.value = '';
   try {
     const response = await apiClient.get(`/TriageRecords/patient/${id}`);
     triageRecords.value = response.data;
   } catch (error) {
     console.error(`Failed to fetch triage records for patient ID ${id}:`, error);
     if (error.response && error.response.status === 404) {
-      recordsError.value = 'No triage records found for this patient.';
+      triageError.value = 'No triage records found for this patient.';
     } else if (error.response && error.response.status === 403) {
-      recordsError.value = 'Access Denied: You do not have permission to view these records.';
+      triageError.value = 'Access Denied: You do not have permission to view these records.';
     } else {
-      recordsError.value = `Failed to load triage records. ${error.response?.data?.detail || error.message || error.response?.statusText}`;
+      triageError.value = `Failed to load triage records. ${error.response?.data?.detail || error.message || error.response?.statusText}`;
     }
     triageRecords.value = [];
   } finally {
-    loadingRecords.value = false;
+    loadingTriage.value = false;
   }
 };
 
+// --- Form and Modal Logic
 const openAddForm = () => {
-  editingRecord.value = null;
-  currentTriage.value = { PatientId: patientId.value }; // Pre-fill PatientId
+  editingTriage.value = null;
+  currentTriageRecord.value = { PatientId: patientId.value };
   showAddForm.value = true;
   formError.value = '';
 };
 
-const editRecord = (record) => {
-  showAddForm.value = false; // Hide add form if it was open
-  editingRecord.value = { ...record }; // Create a copy to avoid direct mutation
-  currentTriage.value = { ...record }; // Populate form with existing data
+const editTriageRecord = (record) => {
+  showAddForm.value = false;
+  editingTriage.value = { ...record };
+  currentTriageRecord.value = { ...record };
+  showAddForm.value = true;
   formError.value = '';
 };
 
 const cancelForm = () => {
   showAddForm.value = false;
-  editingRecord.value = null;
-  currentTriage.value = {};
+  editingTriage.value = null;
+  currentTriageRecord.value = {};
   formError.value = '';
 };
 
 const saveTriageRecord = async () => {
   formError.value = '';
   try {
-    if (editingRecord.value) {
-      // Update existing record
-      await apiClient.put(`/TriageRecords/${currentTriage.value.triageRecordId}`, currentTriage.value);
+    const payload = { ...currentTriageRecord.value };
+    payload.PatientId = payload.patientId; // Correct property name
+    
+    // Convert numeric inputs to numbers if they exist
+    ['temperature', 'pulseRate', 'respirationRate', 'weight', 'height'].forEach(field => {
+      if (payload[field] !== null && payload[field] !== undefined) {
+        payload[field] = Number(payload[field]);
+      }
+    });
+
+    if (editingTriage.value) {
+      await apiClient.put(`/TriageRecords/${payload.recordId}`, payload);
     } else {
-      // Create new record
-      await apiClient.post('/TriageRecords', currentTriage.value);
+      await apiClient.post('/TriageRecords', payload);
     }
-    cancelForm(); // Close form
-    fetchTriageRecords(patientId.value); // Refresh list
+    cancelForm();
+    await fetchTriageRecords(patientId.value);
   } catch (error) {
     console.error('Failed to save triage record:', error);
     formError.value = `Failed to save record: ${error.response?.data?.detail || error.message || error.response?.statusText}`;
   }
 };
 
-const deleteRecord = async (id) => {
-  if (confirm('Are you sure you want to delete this triage record?')) {
+const deleteTriageRecord = async (id) => {
+  if (confirm('Are you sure you want to delete this triage record? This action cannot be undone.')) {
     try {
       await apiClient.delete(`/TriageRecords/${id}`);
-      fetchTriageRecords(patientId.value); // Refresh list
+      await fetchTriageRecords(patientId.value);
     } catch (error) {
       console.error('Failed to delete triage record:', error);
       alert(`Failed to delete record: ${error.response?.data?.detail || error.message || error.response?.statusText}`);
@@ -242,8 +264,7 @@ const deleteRecord = async (id) => {
   }
 };
 
-
-// Helper functions for date formatting (copied from PatientHistoryView)
+// --- Helper functions
 const formatDate = (dateString) => {
   if (!dateString) return 'N/A';
   const date = new Date(dateString);
@@ -260,15 +281,15 @@ const formatDateTime = (dateTimeString) => {
   return date.toLocaleDateString(undefined, options);
 };
 
-// Watch for changes in route.params.patientId
-watch(() => route.params.patientId, (newId) => {
+// --- Lifecycle Hook
+watch(() => route.params.patientId, async (newId) => {
   if (newId) {
     const parsedId = parseInt(newId);
     if (!isNaN(parsedId)) {
       patientId.value = parsedId;
-      fetchPatientData(parsedId);
-      fetchTriageRecords(parsedId);
-      cancelForm(); // Close any open forms when patient changes
+      await fetchPatientData(parsedId);
+      await fetchTriageRecords(parsedId);
+      cancelForm();
     } else {
       console.error("Invalid patient ID received:", newId);
       patientError.value = "Invalid patient ID provided in URL.";
@@ -320,10 +341,6 @@ watch(() => route.params.patientId, (newId) => {
     align-items: center;
     gap: $spacing-xs;
     margin-top: $spacing-md;
-  }
-
-  .ml-2 {
-    margin-left: $spacing-sm;
   }
 }
 
@@ -380,17 +397,11 @@ watch(() => route.params.patientId, (newId) => {
         margin-right: $spacing-xs;
       }
     }
-
-    .record-complaint {
-      font-size: 0.95rem;
-      color: $color-text-medium-grey;
-      font-weight: bold;
-    }
   }
 
   .record-details-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     gap: $spacing-sm $spacing-md;
 
     .detail-item {
@@ -414,31 +425,42 @@ watch(() => route.params.patientId, (newId) => {
   .record-actions {
     margin-top: $spacing-md;
     text-align: right;
-
-    .btn {
-      margin-left: $spacing-sm; // Space between buttons
-    }
   }
 }
 
-/* Form Styles */
-.add-edit-form {
-  padding: $spacing-lg;
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
   background-color: $color-bg-white;
-  border-radius: $border-radius-lg;
-  box-shadow: $box-shadow-md;
+  padding: $spacing-lg;
+  border-radius: $border-radius-md;
+  box-shadow: $box-shadow-lg;
+  max-width: 700px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
 
   h3 {
-    color: $color-primary-blue;
-    margin-bottom: $spacing-lg;
     text-align: center;
+    color: $color-primary-blue;
+    margin-bottom: $spacing-md;
     border-bottom: 1px solid $color-border-darker;
-    padding-bottom: $spacing-md;
+    padding-bottom: $spacing-sm;
   }
 
   .form-group {
     margin-bottom: $spacing-md;
-    text-align: left;
   }
 
   .form-group-grid {
@@ -446,10 +468,6 @@ watch(() => route.params.patientId, (newId) => {
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: $spacing-md;
     margin-bottom: $spacing-md;
-
-    .full-width {
-      grid-column: 1 / -1;
-    }
   }
 
   label {
@@ -481,13 +499,8 @@ watch(() => route.params.patientId, (newId) => {
   .form-actions {
     text-align: right;
     margin-top: $spacing-lg;
-
-    .btn {
-      min-width: 120px;
-      padding: $spacing-sm $spacing-md;
-      font-size: 1rem;
-      margin-left: $spacing-sm; // Space between action buttons
-    }
   }
 }
+.ml-2 { margin-left: $spacing-sm; }
+.mt-3 { margin-top: $spacing-md; }
 </style>
