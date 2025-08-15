@@ -181,7 +181,7 @@ const fetchLabResults = async (id) => {
   loadingResults.value = true;
   resultsError.value = '';
   try {
-    const response = await apiClient.get(`/LabResults/patient/${id}`);
+    const response = await apiClient.get(`/api/LabResults/patient/${id}`);
     labResults.value = response.data;
   } catch (error) {
     console.error(`Failed to fetch lab results for patient ID ${id}:`, error);
@@ -233,9 +233,9 @@ const saveLabResult = async () => {
     payload.orderedByStaffId = payload.orderedByStaffId ? parseInt(payload.orderedByStaffId) : null;
 
     if (editingResult.value) {
-      await apiClient.put(`/LabResults/${payload.labResultId}`, payload);
+      await apiClient.put(`/api/LabResults/${payload.labResultId}`, payload);
     } else {
-      await apiClient.post('/LabResults', payload);
+      await apiClient.post('/api/LabResults', payload);
     }
     cancelForm();
     fetchLabResults(patientId.value);
@@ -248,7 +248,7 @@ const saveLabResult = async () => {
 const deleteResult = async (id) => {
   if (confirm('Are you sure you want to delete this lab result?')) {
     try {
-      await apiClient.delete(`/LabResults/${id}`);
+      await apiClient.delete(`/api/LabResults/${id}`);
       fetchLabResults(patientId.value);
     } catch (error) {
       console.error('Failed to delete lab result:', error);

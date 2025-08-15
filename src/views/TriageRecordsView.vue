@@ -186,7 +186,7 @@ const fetchTriageRecords = async (id) => {
   loadingTriage.value = true;
   triageError.value = '';
   try {
-    const response = await apiClient.get(`/TriageRecords/patient/${id}`);
+    const response = await apiClient.get(`/api/TriageRecords/patient/${id}`);
     triageRecords.value = response.data;
   } catch (error) {
     console.error(`Failed to fetch triage records for patient ID ${id}:`, error);
@@ -240,9 +240,9 @@ const saveTriageRecord = async () => {
     });
 
     if (editingTriage.value) {
-      await apiClient.put(`/TriageRecords/${payload.recordId}`, payload);
+      await apiClient.put(`/api/TriageRecords/${payload.recordId}`, payload);
     } else {
-      await apiClient.post('/TriageRecords', payload);
+      await apiClient.post('/api/TriageRecords', payload);
     }
     cancelForm();
     await fetchTriageRecords(patientId.value);
@@ -255,7 +255,7 @@ const saveTriageRecord = async () => {
 const deleteTriageRecord = async (id) => {
   if (confirm('Are you sure you want to delete this triage record? This action cannot be undone.')) {
     try {
-      await apiClient.delete(`/TriageRecords/${id}`);
+      await apiClient.delete(`/api/TriageRecords/${id}`);
       await fetchTriageRecords(patientId.value);
     } catch (error) {
       console.error('Failed to delete triage record:', error);

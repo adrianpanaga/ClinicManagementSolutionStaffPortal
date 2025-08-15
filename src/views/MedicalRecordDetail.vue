@@ -89,7 +89,7 @@ const fetchMedicalRecord = async (id) => {
   loading.value = true;
   errorMessage.value = '';
   try {
-    const response = await apiClient.get(`/MedicalRecords/${id}`);
+    const response = await apiClient.get(`/api/MedicalRecords/${id}`);
     record.value = response.data;
   } catch (error) {
     console.error('Error fetching medical record:', error);
@@ -109,7 +109,7 @@ const editRecord = () => {
 const deleteRecord = async () => {
   if (confirm('Are you sure you want to delete this medical record?')) {
     try {
-      await apiClient.delete(`/MedicalRecords/${medicalRecordId.value}`);
+      await apiClient.delete(`/api/MedicalRecords/${medicalRecordId.value}`);
       window.notify('Medical record deleted successfully!', 'success');
       // Redirect back to the patient's full history
       router.push({ name: 'patient-history', params: { patientId: record.value.patientId } });

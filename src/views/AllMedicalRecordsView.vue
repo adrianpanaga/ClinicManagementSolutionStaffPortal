@@ -84,7 +84,7 @@ const fetchMedicalRecords = async () => {
   loading.value = true;
   errorMessage.value = '';
   try {
-    const response = await apiClient.get('/MedicalRecords');
+    const response = await apiClient.get('/api/MedicalRecords');
     medicalRecords.value = response.data;
     filteredRecords.value = response.data;
   } catch (error) {

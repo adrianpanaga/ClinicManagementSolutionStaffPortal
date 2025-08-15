@@ -113,7 +113,7 @@ const fetchAppointments = async (id) => {
   loadingAppointments.value = true;
   appointmentsError.value = '';
   try {
-    const response = await apiClient.get(`/Appointments/ByPatientId/${id}`);
+    const response = await apiClient.get(`/api/Appointments/ByPatientId/${id}`);
     appointments.value = response.data;
   } catch (error) {
     console.error(`Failed to fetch appointments for patient ID ${id}:`, error);

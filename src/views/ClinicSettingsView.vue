@@ -80,7 +80,7 @@ const fetchSettings = async () => {
   loading.value = true;
   errorMessage.value = '';
   try {
-    const response = await apiClient.get(`/ClinicSettings/${CLINIC_SETTINGS_ID}`);
+    const response = await apiClient.get(`/api/ClinicSettings/${CLINIC_SETTINGS_ID}`);
     settings.value = response.data;
   } catch (error) {
     console.error('Error fetching clinic settings:', error);
@@ -95,7 +95,7 @@ const saveSettings = async () => {
   loadingSave.value = true;
   formMessage.value = '';
   try {
-    await apiClient.put(`/ClinicSettings/${CLINIC_SETTINGS_ID}`, settings.value);
+    await apiClient.put(`/api/ClinicSettings/${CLINIC_SETTINGS_ID}`, settings.value);
     formMessage.value = 'Settings updated successfully!';
     formMessageType.value = 'success';
   } catch (error) {

@@ -122,8 +122,8 @@ const fetchData = async () => {
 
     const [patientRes, servicesRes, staffRes] = await Promise.all([
   apiClient.get(`/api/Patients/${patientId}`),
-      apiClient.get('/Services'),
-      apiClient.get('/StaffDetails/ForBooking') // Only fetch doctors for now
+      apiClient.get('/api/Services'),
+      apiClient.get('/api/StaffDetails/ForBooking') // Only fetch doctors for now
     ]);
 
     patient.value = patientRes.data;
@@ -136,7 +136,7 @@ const fetchData = async () => {
 
     if (recordId) {
       isEditMode.value = true;
-      const recordRes = await apiClient.get(`/MedicalRecords/${recordId}`);
+      const recordRes = await apiClient.get(`/api/MedicalRecords/${recordId}`);
       record.value = { ...record.value, ...recordRes.data };
     }
   } catch (error) {
@@ -155,10 +155,10 @@ const saveRecord = async () => {
     const payload = { ...record.value };
 
     if (isEditMode.value) {
-      await apiClient.put(`/MedicalRecords/${payload.recordId}`, payload);
+      await apiClient.put(`/api/MedicalRecords/${payload.recordId}`, payload);
       window.notify('Medical record updated successfully!', 'success');
     } else {
-      await apiClient.post('/MedicalRecords', payload);
+      await apiClient.post('/api/MedicalRecords', payload);
       window.notify('Medical record created successfully!', 'success');
     }
     // Redirect to patient history after save

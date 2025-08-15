@@ -59,9 +59,9 @@
                 <button v-if="canDeleteUser && !user.isDeleted" @click="softDeleteUser(user.userId)" class="btn btn-sm btn-danger ml-1">
                   <font-awesome-icon :icon="['fas', 'trash-alt']" />
                 </button>
-                <button v-if="canRestoreUser && user.isDeleted" @click="restoreUser(user.userId)" class="btn btn-sm btn-success ml-1">
+                <!-- <button v-if="canRestoreUser && user.isDeleted" @click="restoreUser(user.userId)" class="btn btn-sm btn-success ml-1">
                   <font-awesome-icon :icon="['fas', 'undo']" />
-                </button>
+                </button> -->
               </td>
             </tr>
           </tbody>
@@ -171,10 +171,10 @@ const canDeleteUser = computed(() => {
   return authStore.userRoles.includes('Admin');
 });
 
-const canRestoreUser = computed(() => {
-  // As with deletion, this is an Admin-only function
-  return authStore.userRoles.includes('Admin');
-});
+// const canRestoreUser = computed(() => {
+//   // As with deletion, this is an Admin-only function
+//   return authStore.userRoles.includes('Admin');
+// });
 // --------------------------------------------------
 
 // --- Data Fetching Logic ---
@@ -182,7 +182,7 @@ const fetchUsers = async () => {
   loading.value = true;
   errorMessage.value = '';
   try {
-    const response = await apiClient.get('/Users');
+    const response = await apiClient.get('/api/Users');
     users.value = response.data;
     filteredUsers.value = response.data;
   } catch (error) {
@@ -248,10 +248,10 @@ const saveUser = async () => {
   try {
     if (editingUser.value) {
       // Update existing user via PUT /api/Users/{id}
-      await apiClient.put(`/Users/${editingUser.value.userId}`, currentUser.value);
+      await apiClient.put(`/api/Users/${editingUser.value.userId}`, currentUser.value);
     } else {
       // Create new user via POST /api/Auth/register
-      await apiClient.post('/Auth/register', currentUser.value);
+      await apiClient.post('/api/Auth/register', currentUser.value);
     }
     closeForm();
     await fetchUsers(); // Refresh the user list
@@ -266,7 +266,7 @@ const saveRoles = async () => {
   try {
     if (editingUser.value) {
       // Update roles via PUT /api/Users/{id}/role
-      await apiClient.put(`/Users/${editingUser.value.userId}/role`, { roles: selectedRoles.value });
+      await apiClient.put(`/api/Users/${editingUser.value.userId}/role`, { roles: selectedRoles.value });
     }
     closeForm();
     await fetchUsers(); // Refresh the user list
@@ -280,7 +280,7 @@ const saveRoles = async () => {
 const softDeleteUser = async (userId) => {
   if (confirm('Are you sure you want to deactivate this user? They will not be able to log in.')) {
     try {
-      await apiClient.delete(`/Users/${userId}`);
+      await apiClient.delete(`/api/Users/${userId}`);
       await fetchUsers();
       alert('User deactivated successfully.');
     } catch (error) {
@@ -290,19 +290,19 @@ const softDeleteUser = async (userId) => {
   }
 };
 
-const restoreUser = async (userId) => {
-  if (confirm('Are you sure you want to restore this user?')) {
-    try {
-      // The backend API `POST /api/Users/{id}/restore` is for this.
-      await apiClient.post(`/Users/restore/${userId}`);
-      await fetchUsers();
-      alert('User restored successfully.');
-    } catch (error) {
-      console.error('Failed to restore user:', error);
-      alert(`Failed to restore user: ${error.response?.data?.detail || error.message || error.response?.statusText}`);
-    }
-  }
-};
+// const restoreUser = async (userId) => {
+//   if (confirm('Are you sure you want to restore this user?')) {
+//     try {
+//       // The backend API `POST /api/Users/restore/{id}` is for this.
+//       await apiClient.post(`/api/Users/restore/${userId}`);
+//       await fetchUsers();
+//       alert('User restored successfully.');
+//     } catch (error) {
+//       console.error('Failed to restore user:', error);
+//       alert(`Failed to restore user: ${error.response?.data?.detail || error.message || error.response?.statusText}`);
+//     }
+//   }
+// };
 
 // --- Lifecycle Hook ---
 onMounted(async () => {

@@ -198,7 +198,7 @@ const debouncedFetchItems = debounce(() => {
 const fetchItems = async () => {
   loading.value = true;
   try {
-    const response = await apiClient.get('/InventoryItems', {
+    const response = await apiClient.get('/api/InventoryItems', {
       params: {
         searchTerm: searchQuery.value,
         category: filterCategory.value || null,
@@ -216,7 +216,7 @@ const fetchItems = async () => {
 
 const fetchVendors = async () => {
   try {
-    const response = await apiClient.get('/Vendors');
+    const response = await apiClient.get('/api/Vendors');
     vendors.value = response.data;
   } catch (error) {
     console.error('Error fetching vendors:', error);
@@ -226,7 +226,7 @@ const fetchVendors = async () => {
 
 const fetchItemBatches = async (itemId) => {
   try {
-    const response = await apiClient.get('/ItemBatches', { params: { itemId: itemId } });
+    const response = await apiClient.get('/api/ItemBatches', { params: { itemId: itemId } });
     itemBatches.value = response.data.filter(b => b.quantity > 0 && (!b.expirationDate || new Date(b.expirationDate) > new Date()));
     const totalStock = itemBatches.value.reduce((sum, batch) => sum + batch.quantity, 0);
     selectedItem.value.currentStockCalculated = totalStock;
@@ -297,7 +297,7 @@ const submitStockAdjustment = async () => {
         costPerUnit: newBatch.value.costPerUnit || null,
         vendorId: newBatch.value.vendorId || null
       };
-      const createdBatch = await apiClient.post('/ItemBatches', newBatchPayload);
+      const createdBatch = await apiClient.post('/api/ItemBatches', newBatchPayload);
       transactionPayload.batchId = createdBatch.data.batchId;
     } else {
       if (!selectedBatchId.value) {
@@ -313,7 +313,7 @@ const submitStockAdjustment = async () => {
       transactionPayload.batchId = selectedBatchId.value;
     }
 
-    await apiClient.post('/StockTransactions', transactionPayload);
+    await apiClient.post('/api/StockTransactions', transactionPayload);
     window.notify('Stock adjusted successfully!', 'success');
     closeStockAdjustmentModal();
     fetchItems();
@@ -332,7 +332,7 @@ const editItem = (id) => {
 const confirmDelete = async (id) => {
   if (confirm('Are you sure you want to delete this item? This will soft delete it.')) {
     try {
-      await apiClient.delete(`/InventoryItems/${id}`);
+      await apiClient.delete(`/api/InventoryItems/${id}`);
       fetchItems();
       window.notify('Item deleted successfully!', 'success');
     } catch (error) {

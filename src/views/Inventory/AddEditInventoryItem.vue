@@ -105,7 +105,7 @@ const hasPermission = computed(() => {
 
 const fetchVendors = async () => {
   try {
-    const response = await apiClient.get('/Vendors');
+    const response = await apiClient.get('/api/Vendors');
     vendors.value = response.data;
   } catch (error) {
     console.error('Error fetching vendors:', error);
@@ -114,7 +114,7 @@ const fetchVendors = async () => {
 
 const fetchItemDetails = async (id) => {
   try {
-    const response = await apiClient.get(`/InventoryItems/${id}`);
+    const response = await apiClient.get(`/api/InventoryItems/${id}`);
     item.value = { ...response.data };
   } catch (error) {
     console.error('Error fetching item details:', error);
@@ -127,10 +127,10 @@ const saveItem = async () => {
   formError.value = '';
   try {
     if (isEditMode.value) {
-      await apiClient.put(`/InventoryItems/${item.value.itemId}`, item.value);
+      await apiClient.put(`/api/InventoryItems/${item.value.itemId}`, item.value);
       window.notify('Inventory item updated successfully!');
     } else {
-      await apiClient.post('/InventoryItems', item.value);
+      await apiClient.post('/api/InventoryItems', item.value);
       window.notify('Inventory item added successfully!');
     }
     router.push('/inventory/items');

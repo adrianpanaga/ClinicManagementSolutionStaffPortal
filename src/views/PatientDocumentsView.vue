@@ -165,7 +165,7 @@ const fetchPatientDocuments = async (id) => {
   loadingDocuments.value = true;
   documentsError.value = '';
   try {
-    const response = await apiClient.get(`/PatientDocuments/patient/${id}`);
+    const response = await apiClient.get(`/api/PatientDocuments/patient/${id}`);
     patientDocuments.value = response.data;
   } catch (error) {
     console.error(`Failed to fetch patient documents for patient ID ${id}:`, error);
@@ -210,9 +210,9 @@ const saveDocument = async () => {
     payload.UploadedByStaffId = payload.UploadedByStaffId ? parseInt(payload.UploadedByStaffId) : null;
 
     if (editingDocument.value) {
-      await apiClient.put(`/PatientDocuments/${payload.documentId}`, payload);
+      await apiClient.put(`/api/PatientDocuments/${payload.documentId}`, payload);
     } else {
-      await apiClient.post('/PatientDocuments', payload);
+      await apiClient.post('/api/PatientDocuments', payload);
     }
     cancelForm();
     fetchPatientDocuments(patientId.value);
@@ -225,7 +225,7 @@ const saveDocument = async () => {
 const deleteDocument = async (id) => {
   if (confirm('Are you sure you want to delete this document?')) {
     try {
-      await apiClient.delete(`/PatientDocuments/${id}`);
+      await apiClient.delete(`/api/PatientDocuments/${id}`);
       fetchPatientDocuments(patientId.value);
     } catch (error) {
       console.error('Failed to delete document:', error);

@@ -102,7 +102,7 @@ const fetchMedicalRecords = async (id) => {
   recordsError.value = '';
   try {
     // Your backend GetMedicalRecordsByPatient uses /MedicalRecords/patient/{patientId}
-    const response = await apiClient.get(`/MedicalRecords/patient/${id}`);
+    const response = await apiClient.get(`/api/MedicalRecords/patient/${id}`);
     medicalRecords.value = response.data;
   } catch (error) {
     console.error(`Failed to fetch medical records for patient ID ${id}:`, error);

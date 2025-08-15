@@ -176,7 +176,7 @@ const fetchPendingLabOrders = async () => {
     // For now, let's fetch all lab results and filter them by those that don't have a result value,
     // or simulate "pending" by fetching all and just using a subset.
     // Ideally, you'd have a backend endpoint like /api/LabResults/PendingOrders
-    const response = await apiClient.get('/LabResults', {
+    const response = await apiClient.get('/api/LabResults', {
       params: { includeDeleted: false } // Include all non-deleted
     });
 
@@ -201,7 +201,7 @@ const searchPatients = async () => {
   }
   loadingPatientSearch.value = true;
   try {
-    const response = await apiClient.get('/Patients', {
+    const response = await apiClient.get('/api/Patients', {
       params: { searchTerm: patientSearchTerm.value }
     });
     patientSearchResults.value = response.data;
@@ -257,10 +257,10 @@ const saveLabResult = async () => {
 
     if (editingLabResult.value) {
       // Update existing result
-      await apiClient.put(`/LabResults/${payload.labResultId}`, payload);
+      await apiClient.put(`/api/LabResults/${payload.labResultId}`, payload);
     } else {
       // Create new result
-      await apiClient.post('/LabResults', payload);
+      await apiClient.post('/api/LabResults', payload);
     }
     cancelForm();
     await fetchPendingLabOrders(); // Refresh the list
