@@ -92,7 +92,7 @@ const fetchTransactions = async () => {
   loading.value = true;
   errorMessage.value = '';
   try {
-    const response = await apiClient.get('/StockTransactions');
+    const response = await apiClient.get('/api/StockTransactions');
     transactions.value = response.data;
     filteredTransactions.value = response.data;
   } catch (error) {
