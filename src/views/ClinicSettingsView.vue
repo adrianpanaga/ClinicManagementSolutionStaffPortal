@@ -56,8 +56,8 @@
 
 <script setup>
 import { ref, onMounted, computed } from 'vue';
-import apiClient from '../../api/authApi';
-import { authStore } from '../../stores/auth';
+import apiClient from '../api/authApi';
+import { authStore } from '../stores/auth';
 
 const settings = ref({});
 const loading = ref(true);
@@ -121,7 +121,7 @@ onMounted(async () => {
 </script>
 
 <style lang="scss" scoped>
-@import "../../assets/styles/_variables.scss";
+@import "../assets/styles/_variables.scss";
 
 .clinic-settings-view {
   padding: $spacing-lg;

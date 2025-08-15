@@ -525,7 +525,7 @@ watch(() => route.query.filter, (newFilter) => {
   background-color: $color-bg-white;
   padding: $spacing-lg;
   border-radius: $border-radius-md;
-  box-shadow: $box-shadow-lg;
+  box-shadow: $box-shadow-md;
   max-width: 600px;
   width: 90%;
   max-height: 90vh;
