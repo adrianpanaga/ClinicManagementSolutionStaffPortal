@@ -28,7 +28,7 @@ import StockTransactionsLog from '../views/Inventory/StockTransactionsLog.vue'; 
 const routes = [
   {
     path: '/login',
-    name: 'Login',
+  name: 'login', // standardized to lowercase to match existing redirects
     component: LoginView,
   },
   {

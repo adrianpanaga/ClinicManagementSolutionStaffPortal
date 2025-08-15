@@ -31,7 +31,10 @@ apiClient.interceptors.response.use(
     if (error.response && error.response.status === 401) {
       console.warn('API Client: 401 Unauthorized response. Clearing auth and redirecting to login.');
       authStore.clearAuth(); // Clear authentication state
-      router.push({ name: 'login' }); // Redirect to login page
+      // Ensure we navigate using the standardized lowercase name
+      if (router.currentRoute.value.name !== 'login') {
+        router.push({ name: 'login' }); // Redirect to login page
+      }
     }
     return Promise.reject(error);
   }

@@ -128,11 +128,11 @@ const fetchMyTodaysAppointments = async () => {
     }
 
     // Get current doctor's StaffId
-    const staffResponse = await apiClient.get(`/StaffDetails/ByUserId/${currentUserId}`);
+  const staffResponse = await apiClient.get(`/api/StaffDetails/ByUserId/${currentUserId}`);
     currentDoctorStaffId = staffResponse.data.staffId;
 
     if (currentDoctorStaffId) {
-      const response = await apiClient.get('/Appointments/Staff', {
+  const response = await apiClient.get('/api/Appointments/Staff', {
         params: {
           date: todayISO,
           doctorId: currentDoctorStaffId // Filter by the doctor's StaffId

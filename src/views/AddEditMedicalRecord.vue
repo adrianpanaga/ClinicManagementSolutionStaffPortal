@@ -121,7 +121,7 @@ const fetchData = async () => {
     }
 
     const [patientRes, servicesRes, staffRes] = await Promise.all([
-      apiClient.get(`/Patients/${patientId}`),
+  apiClient.get(`/api/Patients/${patientId}`),
       apiClient.get('/Services'),
       apiClient.get('/StaffDetails/ForBooking') // Only fetch doctors for now
     ]);

@@ -120,7 +120,7 @@ const fetchTodaysAppointments = async () => {
   loadingAppointments.value = true;
   try {
     const todayISO = today.value.toISOString().split('T')[0]; // Format to YYYY-MM-DD for API
-    const response = await apiClient.get('/Appointments/Staff', {
+  const response = await apiClient.get('/api/Appointments/Staff', {
       params: { date: todayISO } // Use the enhanced API with date filter
     });
     todaysAppointments.value = response.data;
@@ -140,7 +140,7 @@ const searchPatients = async () => {
   }
   loadingPatientSearch.value = true;
   try {
-    const response = await apiClient.get('/Patients', {
+  const response = await apiClient.get('/api/Patients', {
       params: { searchTerm: patientSearchTerm.value } // Use the enhanced API with search term
     });
     patientSearchResults.value = response.data;
@@ -163,7 +163,7 @@ const updateAppointmentStatus = async (appointmentId, newStatus) => {
     return;
   }
   try {
-    await apiClient.put(`/Appointments/${appointmentId}/status`, null, { // null for body if not needed
+  await apiClient.put(`/api/Appointments/${appointmentId}/status`, null, { // null for body if not needed
       params: { status: newStatus } // Pass status as query parameter as per backend
     });
     // Refresh appointments after successful update

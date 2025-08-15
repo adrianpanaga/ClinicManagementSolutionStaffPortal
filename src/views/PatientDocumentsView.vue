@@ -151,7 +151,7 @@ const fetchPatientData = async (id) => {
   loadingPatient.value = true;
   patientError.value = '';
   try {
-    const response = await apiClient.get(`/Patients/${id}`);
+  const response = await apiClient.get(`/api/Patients/${id}`);
     patient.value = response.data;
   } catch (error) {
     console.error(`Failed to fetch patient with ID ${id}:`, error);

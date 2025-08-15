@@ -90,11 +90,7 @@ const EXPIRED_CRITICAL_THRESHOLD = 5;
 
 const fetchDashboardMetrics = async () => {
   try {
-    const [
-      inventoryRes,
-      batchesRes,
-      transactionsRes
-    ] = await Promise.all([
+    const [inventoryRes, batchesRes, transactionsRes] = await Promise.all([
       apiClient.get('/api/InventoryItems'),
       apiClient.get('/api/ItemBatches'),
       apiClient.get('/api/StockTransactions')

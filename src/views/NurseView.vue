@@ -120,7 +120,7 @@ const fetchTodaysClinicAppointments = async () => { // Function name changed
     const todayISO = today.value.toISOString().split('T')[0];
     // Nurses will now fetch ALL appointments for today from the /Appointments/Staff endpoint
     // The backend's GetAppointmentsForStaff will handle role-based filtering (no filter for Nurses)
-    const response = await apiClient.get('/Appointments/Staff', {
+  const response = await apiClient.get('/api/Appointments/Staff', {
       params: { date: todayISO }
     });
     todaysClinicAppointments.value = response.data; // Assign to new ref name

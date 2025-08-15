@@ -49,7 +49,11 @@ const fetchDashboardData = async () => {
   errorMessage.value = '';
   try {
     // Fetch all appointments (assuming this endpoint is now protected and returns all appts for staff)
-    const appointmentsResponse = await apiClient.get('/Appointments/Staff'); // *** CHANGED ENDPOINT HERE ***
+    // Include /api prefix (adjust if backend differs) and optional date param
+    const todayParam = new Date().toISOString().split('T')[0];
+    const appointmentsResponse = await apiClient.get(`/api/Appointments/Staff`, {
+      params: { date: todayParam }
+    });
     const allAppointments = appointmentsResponse.data;
 
     // Filter appointments for today
@@ -64,7 +68,7 @@ const fetchDashboardData = async () => {
     dashboardData.value.todayAppointmentsCount = todayAppointments.length;
 
     // Fetch total active patients
-    const patientsResponse = await apiClient.get('/Patients'); // Assuming this returns all patients
+  const patientsResponse = await apiClient.get('/api/Patients'); // Assuming this returns all patients
     dashboardData.value.totalPatientsCount = patientsResponse.data.length;
 
   } catch (error) {

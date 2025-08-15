@@ -80,7 +80,7 @@ const fetchAllPatients = async () => {
   loading.value = true;
   errorMessage.value = '';
   try {
-    const response = await apiClient.get('/Patients');
+  const response = await apiClient.get('/api/Patients');
     allPatients.value = response.data;
     filteredPatients.value = response.data;
   } catch (error) {

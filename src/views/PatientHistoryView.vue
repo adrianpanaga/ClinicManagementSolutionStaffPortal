@@ -87,7 +87,7 @@ const fetchPatientData = async (id) => {
   patientError.value = '';
   try {
     // Assuming you have a GET /api/Patients/{id} endpoint that returns a single patient
-    const response = await apiClient.get(`/Patients/${id}`);
+  const response = await apiClient.get(`/api/Patients/${id}`);
     patient.value = response.data;
   } catch (error) {
     console.error(`Failed to fetch patient with ID ${id}:`, error);

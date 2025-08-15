@@ -97,22 +97,22 @@ const fetchAdminDashboardData = async () => {
   errorMessage.value = '';
   try {
     // Fetch total patients
-    const patientsResponse = await apiClient.get('/Patients');
+  const patientsResponse = await apiClient.get('/api/Patients');
     dashboardData.value.totalPatientsCount = patientsResponse.data.length;
 
     // Fetch total staff
-    const staffResponse = await apiClient.get('/StaffDetails'); // Assuming this endpoint returns all staff
+  const staffResponse = await apiClient.get('/api/StaffDetails'); // Assuming this endpoint returns all staff
     dashboardData.value.totalStaffCount = staffResponse.data.length;
 
     // Fetch upcoming appointments (e.g., Scheduled or Confirmed)
-    const upcomingAppointmentsResponse = await apiClient.get('/Appointments/Staff', {
+  const upcomingAppointmentsResponse = await apiClient.get('/api/Appointments/Staff', {
       params: { status: 'Scheduled,Confirmed' } // Assuming your backend can take comma-separated statuses
     });
     dashboardData.value.upcomingAppointmentsCount = upcomingAppointmentsResponse.data.length;
 
     // Fetch open medical records (e.g., those without a "Completed" status or specific flag)
     // For now, let's just count all non-deleted medical records
-    const medicalRecordsResponse = await apiClient.get('/MedicalRecords');
+  const medicalRecordsResponse = await apiClient.get('/api/MedicalRecords');
     dashboardData.value.openMedicalRecordsCount = medicalRecordsResponse.data.length;
 
 
