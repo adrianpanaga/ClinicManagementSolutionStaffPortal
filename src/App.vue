@@ -22,17 +22,17 @@
         <router-link v-if="hasRole(['Doctor'])" to="/doctor">
           <i class="fas fa-stethoscope"></i> Doctor Dashboard
         </router-link>
-        <router-link v-if="hasRole(['LabTechnician'])" to="/lab-tech">
+        <router-link v-if="hasRole(['LabTech'])" to="/lab-tech">
           <i class="fas fa-flask"></i> Lab Technician Dashboard
         </router-link>
-        <router-link v-if="hasRole(['InventoryManager', 'Admin'])" to="/inventory">
+        <router-link v-if="hasRole(['InventoryManager'])" to="/inventory">
           <i class="fas fa-boxes"></i> Inventory Manager Dashboard
         </router-link>
 
-        <hr class="nav-divider" v-if="hasAnyRole(['Admin', 'Receptionist', 'Doctor', 'Nurse', 'LabTechnician', 'InventoryManager'])" />
+        <hr class="nav-divider" v-if="hasAnyRole(['Admin', 'Receptionist', 'Doctor', 'Nurse', 'LabTech', 'InventoryManager'])" />
 
         <!-- General Module Links - accessible by multiple roles -->
-        <router-link v-if="hasRole(['Admin', 'Receptionist', 'Doctor', 'Nurse', 'LabTechnician'])" to="/patients">
+        <router-link v-if="hasRole(['Admin', 'Receptionist', 'Doctor', 'Nurse', 'LabTech'])" to="/patients">
           <i class="fas fa-users"></i> Patients
         </router-link>
         <router-link v-if="hasRole(['Admin', 'Receptionist', 'Doctor', 'Nurse'])" to="/appointments">
@@ -41,7 +41,7 @@
         <router-link v-if="hasRole(['Admin', 'Doctor', 'Nurse'])" to="/medical-records">
           <i class="fas fa-file-medical"></i> Medical Records
         </router-link>
-        <router-link v-if="hasRole(['Admin', 'LabTechnician', 'Doctor'])" to="/lab-results">
+        <router-link v-if="hasRole(['Admin', 'LabTech', 'Doctor'])" to="/lab-results">
           <i class="fas fa-vial"></i> Lab Results
         </router-link>
         <router-link v-if="hasRole(['Admin', 'InventoryManager'])" to="/inventory/items">

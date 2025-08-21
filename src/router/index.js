@@ -18,17 +18,25 @@ import ClinicSettingsView from '../views/ClinicSettingsView.vue';
 import PatientHistoryView from '../views/PatientHistoryView.vue';
 import ClinicVisitHistoryView from '../views/ClinicVisitHistoryView.vue';
 import TriageRecordsView from '../views/TriageRecordsView.vue';
-import LabResultsView from '../views/LabResultsView.vue';
 import PatientDocumentsView from '../views/PatientDocumentsView.vue';
+
+// Lab-related views
+import AllMedicalRecordsView from '../views/AllMedicalRecordsView.vue';
+import AllLabResultsView from '../views/AllLabResultsView.vue';
+import LabResultDetailView from '../views/LabResultDetailView.vue';
+import LabResultsHubView from '../views/LabResultsHubView.vue'; // The new hub view
+import PatientLabResultsView from '../views/PatientLabResultsView.vue'; // The patient-specific list view
 
 // Inventory-related views
 import AddEditInventoryItem from '../views/Inventory/AddEditInventoryItem.vue';
-import StockTransactionsLog from '../views/Inventory/StockTransactionsLog.vue'; // Corrected import name
+import StockTransactionsLog from '../views/Inventory/StockTransactionsLog.vue';
+
+import AppointmentsListView from '../views/AppointmentsListView.vue';
 
 const routes = [
   {
     path: '/login',
-  name: 'login', // standardized to lowercase to match existing redirects
+    name: 'login',
     component: LoginView,
   },
   {
@@ -72,7 +80,7 @@ const routes = [
     path: '/lab-tech',
     name: 'LabTechnicianDashboard',
     component: LabTechView,
-    meta: { requiresAuth: true, roles: ['LabTechnician'] },
+    meta: { requiresAuth: true, roles: ['LabTech'] },
   },
   // Inventory Management routes
   {
@@ -118,7 +126,7 @@ const routes = [
     path: '/patients',
     name: 'PatientsList',
     component: PatientsListView,
-    meta: { requiresAuth: true, roles: ['Admin', 'Receptionist', 'Doctor', 'Nurse', 'LabTechnician'] },
+    meta: { requiresAuth: true, roles: ['Admin', 'Receptionist', 'Doctor', 'Nurse', 'LabTech'] },
   },
   {
     path: '/patients/:patientId/medical-history',
@@ -141,12 +149,34 @@ const routes = [
     props: true,
     meta: { requiresAuth: true, roles: ['Admin', 'Nurse'] },
   },
+  // The new lab results hub page
+  {
+    path: '/lab-results',
+    name: 'lab-results-hub',
+    component: LabResultsHubView,
+    meta: { requiresAuth: true, roles: ['Admin', 'Doctor', 'Nurse', 'LabTech'] },
+  },
+  // The patient-specific list view (now correctly named)
   {
     path: '/patients/:patientId/lab-results',
-    name: 'lab-results',
-    component: LabResultsView,
+    name: 'patient-lab-results',
+    component: PatientLabResultsView,
     props: true,
-    meta: { requiresAuth: true, roles: ['Admin', 'Doctor', 'Nurse', 'LabTechnician'] },
+    meta: { requiresAuth: true, roles: ['Admin', 'Doctor', 'Nurse', 'LabTech'] },
+  },
+  {
+    path: '/lab-results/all',
+    name: 'all-lab-results',
+    component: AllLabResultsView,
+    props: true,
+    meta: { requiresAuth: true, roles: ['Admin', 'Doctor', 'Nurse', 'LabTech'] },
+  },
+  {
+    path: '/lab-results/:id',
+    name: 'lab-result-detail',
+    component: LabResultDetailView,
+    props: true,
+    meta: { requiresAuth: true, roles: ['Admin', 'Doctor', 'Nurse', 'LabTech'] },
   },
   {
     path: '/patients/:patientId/documents',
@@ -154,6 +184,19 @@ const routes = [
     component: PatientDocumentsView,
     props: true,
     meta: { requiresAuth: true, roles: ['Admin', 'Receptionist'] },
+  },
+  {
+    path: '/appointments',
+    name: 'AppointmentsList',
+    component: AppointmentsListView,
+    meta: { requiresAuth: true, roles: ['Admin', 'Receptionist', 'Doctor', 'Nurse'] },
+  },
+  {
+    path: '/medical-records',
+    name: 'patient-medical-records',
+    component: AllMedicalRecordsView,
+    props: true,
+    meta: { requiresAuth: true, roles: ['Admin', 'Doctor', 'Nurse'] },
   },
   // Catch-all route for 404
   {
@@ -183,7 +226,7 @@ function redirectBasedOnRole(roles, next) {
     next('/doctor');
   } else if (roles.includes('Nurse')) {
     next('/nurse');
-  } else if (roles.includes('LabTechnician')) {
+  } else if (roles.includes('LabTech')) {
     next('/lab-tech');
   } else if (roles.includes('InventoryManager')) {
     next('/inventory');

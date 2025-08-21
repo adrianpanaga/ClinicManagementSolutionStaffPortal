@@ -35,7 +35,7 @@
                   <td>{{ appt.appointmentTime }}</td>
                   <td>
                     <router-link :to="{ name: 'patient-history', params: { patientId: appt.patient.patientId } }">
-                      {{ appt.patient.fullName }}
+                      {{ appt.patient.firstName + ' ' + appt.patient.lastName }}
                     </router-link>
                   </td>
                   <td>{{ appt.service.serviceName }}</td>
@@ -71,7 +71,7 @@
             <ul>
               <li v-for="patient in patientSearchResults" :key="patient.patientId">
                 <router-link :to="{ name: 'patient-history', params: { patientId: patient.patientId } }">
-                  {{ patient.fullName }} ({{ patient.contactNumber }})
+                  {{ patient.firstName + ' ' + patient.lastName }} ({{ patient.contactNumber }})
                 </router-link>
               </li>
             </ul>

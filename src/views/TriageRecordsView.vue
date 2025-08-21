@@ -1,7 +1,7 @@
 <template>
   <div class="triage-records-view">
     <div v-if="patient">
-      <h2 class="section-title">Triage Records for {{ patient.fullName }} (ID: {{ patient.patientId }})</h2>
+      <h2 class="section-title">Triage Records for {{ patient.firstName + ' ' + patient.lastName}} (ID: {{ patient.patientId }})</h2>
       <div class="patient-info-card card">
         <p><strong>Date of Birth:</strong> {{ formatDate(patient.dateOfBirth) }}</p>
         <p><strong>Contact:</strong> {{ patient.contactNumber }}</p>
@@ -9,7 +9,7 @@
         <router-link :to="{ name: 'patient-history', params: { patientId: patient.patientId } }" class="btn btn-primary btn-sm mt-3">
           <font-awesome-icon :icon="['fas', 'file-medical']" class="icon" /> View Medical History
         </router-link>
-        <router-link :to="{ name: 'lab-results', params: { patientId: patient.patientId } }" class="btn btn-success btn-sm mt-3 ml-2">
+        <router-link :to="{ name: 'patient-lab-results', params: { patientId: patient.patientId } }" class="btn btn-success btn-sm mt-3 ml-2">
           <font-awesome-icon :icon="['fas', 'vials']" class="icon" /> View Lab Results
         </router-link>
         <router-link :to="{ name: 'patient-documents', params: { patientId: patient.patientId } }" class="btn btn-dark btn-sm mt-3 ml-2">

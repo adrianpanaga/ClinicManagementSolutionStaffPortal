@@ -33,14 +33,14 @@
                 <tr v-for="order in pendingLabOrders" :key="order.labResultId">
                   <td>
                     <router-link :to="{ name: 'patient-history', params: { patientId: order.patient.patientId } }">
-                      {{ order.patient.fullName }}
+                      {{ order.patient.firstName + ' ' + order.patient.lastName }}
                     </router-link>
                   </td>
                   <td>{{ order.testName }}</td>
                   <td>{{ formatDate(order.createdAt) }}</td>
                   <td>
                     <button @click="openEnterResultForm(order)" class="btn btn-sm btn-primary">Enter Result</button>
-                    <router-link :to="{ name: 'lab-results', params: { patientId: order.patient.patientId } }" class="btn btn-sm btn-info ml-1">View All</router-link>
+                    <router-link :to="{ name: 'patient-lab-results', params: { patientId: order.patient.patientId } }" class="btn btn-sm btn-info ml-1">View All</router-link>
                   </td>
                 </tr>
               </tbody>
@@ -65,7 +65,7 @@
             <ul>
               <li v-for="patient in patientSearchResults" :key="patient.patientId">
                 <router-link :to="{ name: 'patient-history', params: { patientId: patient.patientId } }">
-                  {{ patient.fullName }} ({{ patient.contactNumber }})
+                  {{ patient.firstName + ' ' + patient.lastName }} ({{ patient.contactNumber }})
                 </router-link>
               </li>
             </ul>
@@ -80,7 +80,7 @@
         <div class="card-body">
           <button @click="openQuickAddResultForm" class="btn btn-primary btn-block">Add New Lab Result</button>
           <ul class="quick-links mt-3">
-            <li><router-link to="/lab-results"><font-awesome-icon :icon="['fas', 'vials']" class="icon" /> All Lab Results</router-link></li>
+            <li><router-link to="/lab-results/all"><font-awesome-icon :icon="['fas', 'vials']" class="icon" /> All Lab Results</router-link></li>
             <li><router-link to="/inventory"><font-awesome-icon :icon="['fas', 'boxes-stacked']" class="icon" /> Check Lab Supplies</router-link></li>
           </ul>
         </div>

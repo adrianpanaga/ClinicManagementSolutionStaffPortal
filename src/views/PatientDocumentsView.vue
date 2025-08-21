@@ -1,7 +1,7 @@
 <template>
   <div class="patient-documents-view">
     <div v-if="patient">
-      <h2 class="section-title">Documents for {{ patient.fullName }} (ID: {{ patient.patientId }})</h2>
+      <h2 class="section-title">Documents for {{ patient.firstName + ' ' + patient.lastName}} (ID: {{ patient.patientId }})</h2>
       <div class="patient-info-card card">
         <p><strong>Date of Birth:</strong> {{ formatDate(patient.dateOfBirth) }}</p>
         <p><strong>Contact:</strong> {{ patient.contactNumber }}</p>
@@ -15,7 +15,7 @@
         <router-link :to="{ name: 'triage-records', params: { patientId: patient.patientId } }" class="btn btn-info btn-sm mt-3 ml-2">
           <font-awesome-icon :icon="['fas', 'heartbeat']" class="icon" /> View Triage Records
         </router-link>
-        <router-link :to="{ name: 'lab-results', params: { patientId: patient.patientId } }" class="btn btn-success btn-sm mt-3 ml-2">
+        <router-link :to="{ name: 'patient-lab-results', params: { patientId: patient.patientId } }" class="btn btn-success btn-sm mt-3 ml-2">
           <font-awesome-icon :icon="['fas', 'vials']" class="icon" /> View Lab Results
         </router-link>
       </div>
@@ -50,7 +50,7 @@
               <strong>Notes:</strong> {{ document.notes || 'No notes.' }}
             </div>
             <div class="detail-item">
-              <strong>Uploaded By:</strong> {{ document.uploadedByStaff?.fullName || 'N/A' }}
+              <strong>Uploaded By:</strong> {{ document.uploadedByStaff?.firstName + ' ' + document.uploadedByStaff?.lastName || 'N/A' }}
             </div>
           </div>
           <div class="document-actions" v-if="canEditDocument">

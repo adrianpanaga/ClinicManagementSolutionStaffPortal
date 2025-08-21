@@ -9,7 +9,7 @@ import AppointmentsListView from '../views/AppointmentsListView.vue'; // Create 
 import PatientsListView from '../views/PatientsListView.vue'; // Create this simple view
 import TasksView from '../views/TasksView.vue'; // Create this simple view
 import TriageRecordsView from '../views/TriageRecordsView.vue'; // Import the new view
-import LabResultsView from '../views/LabResultsView.vue'; // Import the new view
+import LabResultsView from '../views/PatientLabResultsView.vue'; // Import the new view
 import PatientDocumentsView from '../views/PatientDocumentsView.vue'; // Import the new view for patient documents
 
 import MedicalRecordCreateView from '../views/MedicalRecordCreateView.vue'; // *** NEW IMPORT ***

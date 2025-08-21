@@ -1,7 +1,7 @@
 <template>
   <div class="clinic-visit-history-view">
     <div v-if="patient">
-      <h2 class="section-title">Visit History for {{ patient.fullName }} (ID: {{ patient.patientId }})</h2>
+      <h2 class="section-title">Visit History for {{ patient.firstName }} {{ patient.lastName }} (ID: {{ patient.patientId }})</h2>
       <div class="patient-info-card card">
         <p><strong>Date of Birth:</strong> {{ formatDate(patient.dateOfBirth) }}</p>
         <p><strong>Contact:</strong> {{ patient.contactNumber }}</p>
@@ -14,7 +14,7 @@
           <router-link :to="{ name: 'triage-records', params: { patientId: patient.patientId } }" class="btn btn-info btn-sm ml-2">
             <font-awesome-icon :icon="['fas', 'heartbeat']" class="icon" /> View Triage Records
           </router-link>
-          <router-link :to="{ name: 'lab-results', params: { patientId: patient.patientId } }" class="btn btn-success btn-sm ml-2">
+          <router-link :to="{ name: 'patient-lab-results', params: { patientId: patient.patientId } }" class="btn btn-success btn-sm ml-2">
             <font-awesome-icon :icon="['fas', 'vials']" class="icon" /> View Lab Results
           </router-link>
         </div>
@@ -40,7 +40,7 @@
           </div>
           <div class="appointment-details">
             <p><strong>Service:</strong> {{ appt.service?.serviceName || 'N/A' }}</p>
-            <p><strong>Doctor:</strong> {{ appt.doctor?.fullName || 'Any Available' }}</p>
+            <p><strong>Doctor:</strong> {{ appt.doctor?.firstName + ' ' + appt.doctor?.lastName || 'Any Available' }}</p>
             <p><strong>Reason for Visit:</strong> {{ appt.reasonForVisit || 'N/A' }}</p>
             <p v-if="appt.notes"><strong>Notes:</strong> {{ appt.notes }}</p>
             

@@ -39,8 +39,8 @@
             <td>{{ trans.quantity }}</td>
             <td>{{ formatDate(trans.transactionDate) }}</td>
             <td>{{ trans.notes || 'N/A' }}</td>
-            <td>{{ trans.staff?.fullName || 'N/A' }}</td>
-            <td>{{ trans.patient?.firstName }} {{ trans.patient?.lastName || 'N/A' }}</td>
+            <td>{{ trans.staff?.firstName + ' ' + trans.staff?.lastName || 'N/A' }}</td>
+            <td>{{ trans.patient?.firstName + ' ' + trans.patient?.lastName || 'N/A' }}</td>
           </tr>
         </tbody>
       </table>

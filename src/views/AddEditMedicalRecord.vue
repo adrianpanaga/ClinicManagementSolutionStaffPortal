@@ -5,7 +5,7 @@
         <font-awesome-icon :icon="['fas', isEditMode ? 'edit' : 'plus-circle']" />
         {{ isEditMode ? 'Edit Medical Record' : 'Create New Medical Record' }}
       </h2>
-      <p class="subtitle" v-if="patient">For patient: <strong>{{ patient.fullName }}</strong> (ID: {{ patient.patientId }})</p>
+      <p class="subtitle" v-if="patient">For patient: <strong>{{ patient.firstName }} {{ patient.lastName }}</strong> (ID: {{ patient.patientId }})</p>
 
       <div v-if="loading" class="loading-message">
         <font-awesome-icon :icon="['fas', 'spinner']" spin /> Loading record data...
@@ -31,7 +31,7 @@
               <select id="doctor" v-model.number="record.staffId" class="form-control" required>
                 <option value="">Select Doctor</option>
                 <option v-for="staff in doctors" :key="staff.staffId" :value="staff.staffId">
-                  {{ staff.fullName }}
+                  {{ staff.firstName }} {{ staff.lastName }}
                 </option>
               </select>
             </div>

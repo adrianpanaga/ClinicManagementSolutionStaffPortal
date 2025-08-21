@@ -16,7 +16,7 @@
             <h3><font-awesome-icon :icon="['fas', 'user-injured']" /> Patient Information</h3>
           </div>
           <div class="card-body">
-            <p><strong>Name:</strong> {{ record.patient?.fullName || 'N/A' }}</p>
+            <p><strong>Name:</strong> {{ record.patient?.firstName + ' ' + record.patient?.lastName || 'N/A' }}</p>
             <p><strong>Contact:</strong> {{ record.patient?.contactNumber || 'N/A' }}</p>
             <p><strong>Email:</strong> {{ record.patient?.email || 'N/A' }}</p>
             <router-link :to="{ name: 'patient-history', params: { patientId: record.patient?.patientId } }" class="btn btn-sm btn-info mt-3">
@@ -39,7 +39,7 @@
           </div>
           <div class="card-body">
             <p><strong>Date of Visit:</strong> {{ formatDateTime(record.createdAt) }}</p>
-            <p><strong>Doctor:</strong> {{ record.staff?.fullName || 'N/A' }}</p>
+            <p><strong>Doctor:</strong> {{ record.staff?.firstName + ' ' + record.staff?.lastName || 'N/A' }}</p>
             <p><strong>Service:</strong> {{ record.service?.serviceName || 'N/A' }}</p>
             <p><strong>Appointment ID:</strong> {{ record.appointmentId || 'N/A' }}</p>
             <hr>

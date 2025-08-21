@@ -1,7 +1,7 @@
 <template>
   <div class="patient-history-view">
     <div v-if="patient">
-      <h2 class="section-title">Patient History for {{ patient.fullName }} (ID: {{ patient.patientId }})</h2>
+      <h2 class="section-title">Patient History for {{ patient.firstName + ' ' + patient.lastName}} (ID: {{ patient.patientId }})</h2>
       <div class="patient-info-card card">
         <p><strong>Date of Birth:</strong> {{ formatDate(patient.dateOfBirth) }}</p>
         <p><strong>Contact:</strong> {{ patient.contactNumber }}</p>
@@ -30,7 +30,7 @@
           <div class="record-header">
             <h4><font-awesome-icon :icon="['fas', 'file-medical']" class="icon" /> Record Date: {{ formatDateTime(record.createdAt) }}</h4>
             <span class="record-staff">
-              <font-awesome-icon :icon="['fas', 'user-doctor']" class="icon" /> {{ record.staff?.fullName || 'N/A' }} ({{ record.staff?.jobTitle || 'Staff' }})
+              <font-awesome-icon :icon="['fas', 'user-doctor']" class="icon" /> {{ record.staff?.firstName + ' ' + record.staff?.lastName || 'N/A' }} ({{ record.staff?.jobTitle || 'Staff' }})
             </span>
           </div>
           <div class="record-details-grid">

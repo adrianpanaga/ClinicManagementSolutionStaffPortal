@@ -48,13 +48,13 @@
               <td>{{ trans.quantity }}</td>
               <td>
                 <router-link v-if="trans.staff" :to="{ name: 'staff-profile', params: { staffId: trans.staff.staffId } }">
-                  {{ trans.staff.fullName || 'N/A' }}
+                  {{ trans.staff.firstName + ' ' + trans.staff.lastName || 'N/A' }}
                 </router-link>
                 <span v-else>N/A</span>
               </td>
               <td>
                 <router-link v-if="trans.patient" :to="{ name: 'patient-history', params: { patientId: trans.patient.patientId } }">
-                  {{ trans.patient.fullName || 'N/A' }}
+                  {{ trans.patient.firstName + ' ' + trans.patient.lastName || 'N/A' }}
                 </router-link>
                 <span v-else>N/A</span>
               </td>
@@ -113,7 +113,8 @@ const search = () => {
   filteredTransactions.value = transactions.value.filter(trans => 
     (trans.batch?.inventoryItem?.itemName?.toLowerCase().includes(lowerCaseSearchTerm)) ||
     (trans.batch?.batchNumber?.toLowerCase().includes(lowerCaseSearchTerm)) ||
-    (trans.staff?.fullName?.toLowerCase().includes(lowerCaseSearchTerm))
+    (trans.staff?.firstName?.toLowerCase().includes(lowerCaseSearchTerm)) ||
+    (trans.staff?.lastName?.toLowerCase().includes(lowerCaseSearchTerm))
   );
 };
 const debounceSearch = () => {

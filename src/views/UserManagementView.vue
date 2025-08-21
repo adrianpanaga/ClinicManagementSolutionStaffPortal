@@ -145,7 +145,7 @@ const formError = ref('');
 const selectedRoles = ref([]);
 
 const availableRoles = [
-  'Admin', 'Receptionist', 'Doctor', 'Nurse', 'LabTechnician', 'InventoryManager', 'HR'
+  'Admin', 'Receptionist', 'Doctor', 'Nurse', 'LabTech', 'InventoryManager', 'HR'
 ];
 
 // --- Permission Computeds based on documentation ---

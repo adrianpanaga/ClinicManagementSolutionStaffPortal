@@ -37,7 +37,7 @@
           <tbody>
             <tr v-for="patient in filteredPatients" :key="patient.patientId">
               <td>{{ patient.patientId }}</td>
-              <td>{{ patient.fullName }}</td>
+              <td>{{ patient.firstName }} {{ patient.lastName }}</td>
               <td>{{ patient.contactNumber }}</td>
               <td>{{ patient.email }}</td>
               <td>{{ formatDate(patient.dateOfBirth) }}</td>
@@ -48,7 +48,7 @@
                 <router-link :to="{ name: 'triage-records', params: { patientId: patient.patientId } }" class="btn btn-sm btn-secondary ml-1">
                   <font-awesome-icon :icon="['fas', 'heartbeat']" /> Triage
                 </router-link>
-                <router-link :to="{ name: 'lab-results', params: { patientId: patient.patientId } }" class="btn btn-sm btn-success ml-1">
+                <router-link :to="{ name: 'patient-lab-results', params: { patientId: patient.patientId } }" class="btn btn-sm btn-success ml-1">
                   <font-awesome-icon :icon="['fas', 'vials']" /> Labs
                 </router-link>
               </td>
@@ -101,7 +101,8 @@ const searchPatients = () => {
   
   const lowerCaseSearchTerm = searchTerm.value.toLowerCase();
   filteredPatients.value = allPatients.value.filter(patient =>
-    (patient.fullName && patient.fullName.toLowerCase().includes(lowerCaseSearchTerm)) ||
+    (patient.firstName && patient.firstName.toLowerCase().includes(lowerCaseSearchTerm)) ||
+    (patient.lastName && patient.lastName.toLowerCase().includes(lowerCaseSearchTerm)) ||
     (patient.contactNumber && patient.contactNumber.toLowerCase().includes(lowerCaseSearchTerm)) ||
     (patient.email && patient.email.toLowerCase().includes(lowerCaseSearchTerm))
   );
@@ -122,7 +123,7 @@ const formatDate = (dateString) => {
 };
 
 onMounted(async () => {
-  const allowedRoles = ['Admin', 'Receptionist', 'Doctor', 'Nurse', 'LabTechnician'];
+  const allowedRoles = ['Admin', 'Receptionist', 'Doctor', 'Nurse', 'LabTech'];
   const hasPermission = authStore.userRoles.some(role => allowedRoles.includes(role));
 
   if (!hasPermission) {
