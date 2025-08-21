@@ -33,7 +33,7 @@
       <div v-else class="appointments-list">
         <div v-for="appt in appointments" :key="appt.id" class="appointment-card card">
           <div class="appointment-header">
-            <h4><font-awesome-icon :icon="['fas', 'calendar-alt']" class="icon" /> {{ formatDateTime(appt.appointmentDate) }} {{ appt.appointmentTime }}</h4>
+            <h4><font-awesome-icon :icon="['fas', 'calendar-alt']" class="icon" /> {{ formatDateTime(appt.appointmentDateTime) }}</h4>
             <span :class="['status-badge', `status-${appt.status?.toLowerCase().replace(/\s/g, '-')}`]">
               {{ appt.status || 'Unknown' }}
             </span>
@@ -91,7 +91,7 @@ const formatDateTime = (dateTimeString) => {
   if (!dateTimeString) return 'N/A';
   const date = new Date(dateTimeString);
   if (isNaN(date.getTime())) return 'Invalid Date';
-  const options = { year: 'numeric', month: 'short', day: 'numeric' };
+  const options = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
   return date.toLocaleDateString(undefined, options);
 };
 

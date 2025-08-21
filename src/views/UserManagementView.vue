@@ -38,15 +38,12 @@
           <tbody>
             <tr v-for="user in filteredUsers" :key="user.userId" :class="{ 'deleted-user': user.isDeleted }">
               <td>{{ user.userId }}</td>
-              <td>{{ user.userName }}</td>
+              <td>{{ user.username }}</td>
               <td>{{ user.email }}</td>
               <td>{{ user.staffDetail?.jobTitle || 'N/A' }}</td>
               <td>
-                <span v-for="role in user.roles" :key="role" class="role-badge">
-                  {{ role }}
-                </span>
-                <span v-if="!user.roles || user.roles.length === 0" class="role-badge no-role">
-                  No Role
+                <span class="role-badge">
+                  {{ user.roleName }}
                 </span>
               </td>
               <td class="actions">

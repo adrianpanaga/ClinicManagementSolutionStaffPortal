@@ -27,7 +27,7 @@
           <thead>
             <tr>
               <th>Record ID</th>
-              <th>Date</th>
+              <th>Date and Time</th>
               <th>Patient</th>
               <th>Doctor</th>
               <th>Diagnosis</th>
