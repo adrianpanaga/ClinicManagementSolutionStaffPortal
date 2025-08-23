@@ -1,0 +1,1812 @@
+diff --git a/index.html b/index.html
+index fc20d66..5703ff8 100644
+--- a/index.html
++++ b/index.html
+@@ -9,7 +9,8 @@
+     <link href="https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+ 
+     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+-    <title>Vite + Vue</title>
++    <title>Clinic Management System</title>
++    <link rel="stylesheet" href="/assets/fontawesome/css/all.min.css">
+   </head>
+   <body>
+     <div id="app"></div>
+diff --git a/src/App.vue b/src/App.vue
+index ae97e01..e3528fd 100644
+--- a/src/App.vue
++++ b/src/App.vue
+@@ -171,7 +171,7 @@ onUnmounted(() => {
+ <style lang="scss">
+ @import './assets/styles/_common.scss'; // This now imports _variables.scss, _mixins.scss, and _layout.scss
+ @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap'); /* Added Inter font */
+-@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css');
++@import url('./assets/fontawesome/css/all.min.css');
+ 
+ 
+ html, body {
+diff --git a/src/main.js b/src/main.js
+index c5a7c6c..580e2a2 100644
+--- a/src/main.js
++++ b/src/main.js
+@@ -6,137 +6,137 @@ import router from './router'
+ import { authStore } from './stores/auth.js';
+ 
+ 
+-// Font Awesome Imports
+-import { library } from '@fortawesome/fontawesome-svg-core';
+-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
++// // Font Awesome Imports
++// import { library } from '@fortawesome/fontawesome-svg-core';
++// import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+ 
+-// *** CRITICAL: Import ALL the missing icons here ***
+-import {
+-  faHouse,
+-  faUserDoctor,
+-  faCalendarDays,
+-  faClock,
+-  faUser,
+-  faPhone,
+-  faEnvelope,
+-  faVial,
+-  faFileLines,
+-  faRightToBracket, // For Login button
+-  faRightFromBracket, // For Logout button
+-  faSpinner,          // For Loading indicators
+-  faCalendarCheck,    // For Dashboard - Today's Appointments
+-  faUserInjured,      // For Dashboard - Total Active Patients
+-  faClipboardList,    // For Dashboard - Pending Tasks
+-  faFileMedical,      // For PatientHistoryView - View Medical History button/icon
+-  faCalendarAlt,      // For ClinicVisitHistoryView - View Visit History button/icon
+-  faHeartbeat,        // For TriageRecordsView - Triage icon
+-  faPlus,             // For Add button in TriageRecordsView
+-  faEdit,             // For Edit button in TriageRecordsView
+-  faTrash,            // For Delete button in TriageRecordsView
+-  faSave,             // For Save button in TriageRecordsView
+-  faTimes,             // For Cancel button in TriageRecordsView
+-  faVials, // For LabResultsView - View Lab Results button/icon
+-  faFileMedicalAlt, // For LabResultsView - View Lab Results button/icon
+-  faPlusCircle, // For Add button in LabResultsView
+-  faEdit as faEditSolid, // For Edit button in LabResultsView
+-  faTrashAlt as faTrashSolid, // For Delete button in LabResultsView
+-  faSave as faSaveSolid, // For Save button in LabResultsView
+-  faTimesCircle as faCancelSolid, // For Cancel button in LabResultsView
+-  faFileAlt,          // *** CRITICAL ADDITION for Patient Documents (File icon) ***
+-  faExternalLinkAlt,   // *** CRITICAL ADDITION for Patient Documents (External link icon) ***
+-  faCalendarDay,        // *** NEW: For Receptionist Dashboard - Today's Appointments ***
+-  faMagnifyingGlass, // *** NEW: For Receptionist Dashboard - Patient Lookup ***
+-  faChartLine,           // *** NEW: For Receptionist Dashboard - Daily Summary ***
+-  faSyringe,         // *** NEW: For Nurse Dashboard - Syringe icon ***
+-  faBoxesStacked,    // *** NEW: For Nurse Dashboard - Inventory icon ***
+-  faBell,            // *** NEW: For Nurse Dashboard - Reminders icon ***
+-  faClipboard,        // *** NEW: For Nurse Dashboard - Quick Actions icon ***
+-  faStethoscope,       // *** NEW: For Doctor Dashboard - Quick Access/Stethoscope icon ***
+-  faUsers,             // *** NEW: For Doctor Dashboard - Browse All Patients icon ***
+-  faNotesMedical,      // *** NEW: For Doctor Dashboard - Medical Notes icon ***
+-  faPrescriptionBottleAlt, // *** NEW: For Doctor Dashboard - Prescriptions icon ***
+-  faFilePrescription,  // *** NEW: For Doctor Dashboard - Prescription Files icon ***
+-  faUserNurse,         // *** NEW: For Doctor Dashboard - Nurse Contact icon ***
+-  faUserMd,            // *** NEW: For Doctor Dashboard - Doctor Contact icon ***
+-  faHospitalUser,      // *** NEW: For Doctor Dashboard - Hospital User icon ***
+-  faFlask,          // *** NEW: For Lab Tech Dashboard - Flask icon ***
+-  faTachometerAlt,    // *** NEW: For Admin Dashboard - Overview icon ***
+-  faUsersCog,         // *** NEW: For Admin Dashboard - User/Role Mgmt icon ***
+-  faUserShield,       // *** NEW: For Admin Dashboard - Manage Staff Accounts icon ***
+-  faUserTag,          // *** NEW: For Admin Dashboard - Manage Roles icon ***
+-  faDatabase,         // *** NEW: For Admin Dashboard - Data Access icon ***
+-  faCog,              // *** NEW: For Admin Dashboard - Clinic Settings icon ***
+-  faScroll,            // *** NEW: For Admin Dashboard - System Logs icon ***
+-  faBoxes, 
+-  faTrashAlt,
+-  faExchangeAlt,
+-  faTruckLoading,
+-  faLaptopMedical
+-} from '@fortawesome/free-solid-svg-icons'; // Assuming all are solid icons
++// // *** CRITICAL: Import ALL the missing icons here ***
++// import {
++//   faHouse,
++//   faUserDoctor,
++//   faCalendarDays,
++//   faClock,
++//   faUser,
++//   faPhone,
++//   faEnvelope,
++//   faVial,
++//   faFileLines,
++//   faRightToBracket, // For Login button
++//   faRightFromBracket, // For Logout button
++//   faSpinner,          // For Loading indicators
++//   faCalendarCheck,    // For Dashboard - Today's Appointments
++//   faUserInjured,      // For Dashboard - Total Active Patients
++//   faClipboardList,    // For Dashboard - Pending Tasks
++//   faFileMedical,      // For PatientHistoryView - View Medical History button/icon
++//   faCalendarAlt,      // For ClinicVisitHistoryView - View Visit History button/icon
++//   faHeartbeat,        // For TriageRecordsView - Triage icon
++//   faPlus,             // For Add button in TriageRecordsView
++//   faEdit,             // For Edit button in TriageRecordsView
++//   faTrash,            // For Delete button in TriageRecordsView
++//   faSave,             // For Save button in TriageRecordsView
++//   faTimes,             // For Cancel button in TriageRecordsView
++//   faVials, // For LabResultsView - View Lab Results button/icon
++//   faFileMedicalAlt, // For LabResultsView - View Lab Results button/icon
++//   faPlusCircle, // For Add button in LabResultsView
++//   faEdit as faEditSolid, // For Edit button in LabResultsView
++//   faTrashAlt as faTrashSolid, // For Delete button in LabResultsView
++//   faSave as faSaveSolid, // For Save button in LabResultsView
++//   faTimesCircle as faCancelSolid, // For Cancel button in LabResultsView
++//   faFileAlt,          // *** CRITICAL ADDITION for Patient Documents (File icon) ***
++//   faExternalLinkAlt,   // *** CRITICAL ADDITION for Patient Documents (External link icon) ***
++//   faCalendarDay,        // *** NEW: For Receptionist Dashboard - Today's Appointments ***
++//   faMagnifyingGlass, // *** NEW: For Receptionist Dashboard - Patient Lookup ***
++//   faChartLine,           // *** NEW: For Receptionist Dashboard - Daily Summary ***
++//   faSyringe,         // *** NEW: For Nurse Dashboard - Syringe icon ***
++//   faBoxesStacked,    // *** NEW: For Nurse Dashboard - Inventory icon ***
++//   faBell,            // *** NEW: For Nurse Dashboard - Reminders icon ***
++//   faClipboard,        // *** NEW: For Nurse Dashboard - Quick Actions icon ***
++//   faStethoscope,       // *** NEW: For Doctor Dashboard - Quick Access/Stethoscope icon ***
++//   faUsers,             // *** NEW: For Doctor Dashboard - Browse All Patients icon ***
++//   faNotesMedical,      // *** NEW: For Doctor Dashboard - Medical Notes icon ***
++//   faPrescriptionBottleAlt, // *** NEW: For Doctor Dashboard - Prescriptions icon ***
++//   faFilePrescription,  // *** NEW: For Doctor Dashboard - Prescription Files icon ***
++//   faUserNurse,         // *** NEW: For Doctor Dashboard - Nurse Contact icon ***
++//   faUserMd,            // *** NEW: For Doctor Dashboard - Doctor Contact icon ***
++//   faHospitalUser,      // *** NEW: For Doctor Dashboard - Hospital User icon ***
++//   faFlask,          // *** NEW: For Lab Tech Dashboard - Flask icon ***
++//   faTachometerAlt,    // *** NEW: For Admin Dashboard - Overview icon ***
++//   faUsersCog,         // *** NEW: For Admin Dashboard - User/Role Mgmt icon ***
++//   faUserShield,       // *** NEW: For Admin Dashboard - Manage Staff Accounts icon ***
++//   faUserTag,          // *** NEW: For Admin Dashboard - Manage Roles icon ***
++//   faDatabase,         // *** NEW: For Admin Dashboard - Data Access icon ***
++//   faCog,              // *** NEW: For Admin Dashboard - Clinic Settings icon ***
++//   faScroll,            // *** NEW: For Admin Dashboard - System Logs icon ***
++//   faBoxes, 
++//   faTrashAlt,
++//   faExchangeAlt,
++//   faTruckLoading,
++//   faLaptopMedical
++// } from '@fortawesome/free-solid-svg-icons'; // Assuming all are solid icons
+ 
+-// Add the imported icons to the library
+-library.add(
+-  faHouse,
+-  faUserDoctor,
+-  faCalendarDays,
+-  faClock,
+-  faUser,
+-  faPhone,
+-  faEnvelope,
+-  faVial,
+-  faFileLines,
+-  faRightToBracket,
+-  faRightFromBracket,
+-  faSpinner,
+-  faCalendarCheck,
+-  faUserInjured,
+-  faClipboardList,
+-  faFileMedical,
+-  faCalendarAlt,
+-  faHeartbeat,
+-  faPlus,
+-  faEdit,
+-  faTrash,
+-  faSave,
+-  faTimes,
+-  faVials,
+-  faFileMedicalAlt,
+-  faPlusCircle,
+-  faEditSolid,
+-  faTrashSolid,
+-  faSaveSolid,
+-  faCancelSolid,
+-  faFileAlt,
+-  faExternalLinkAlt,
+-  faCalendarDay,
+-  faMagnifyingGlass,
+-  faChartLine,
+-  faSyringe,
+-  faBoxesStacked,
+-  faBell,
+-  faClipboard,
+-  faStethoscope,
+-  faUsers,
+-  faNotesMedical,
+-  faPrescriptionBottleAlt,
+-  faFilePrescription,
+-  faUserNurse,
+-  faUserMd,
+-  faHospitalUser,
+-  faFlask,
+-  faTachometerAlt,
+-  faUsersCog,
+-  faUserShield,
+-  faUserTag,
+-  faDatabase,
+-  faCog,
+-  faScroll,
+-  faBoxes,
+-  faTrashAlt,
+-  faExchangeAlt,
+-  faTruckLoading,
+-  faLaptopMedical
+-);
++// // Add the imported icons to the library
++// library.add(
++//   faHouse,
++//   faUserDoctor,
++//   faCalendarDays,
++//   faClock,
++//   faUser,
++//   faPhone,
++//   faEnvelope,
++//   faVial,
++//   faFileLines,
++//   faRightToBracket,
++//   faRightFromBracket,
++//   faSpinner,
++//   faCalendarCheck,
++//   faUserInjured,
++//   faClipboardList,
++//   faFileMedical,
++//   faCalendarAlt,
++//   faHeartbeat,
++//   faPlus,
++//   faEdit,
++//   faTrash,
++//   faSave,
++//   faTimes,
++//   faVials,
++//   faFileMedicalAlt,
++//   faPlusCircle,
++//   faEditSolid,
++//   faTrashSolid,
++//   faSaveSolid,
++//   faCancelSolid,
++//   faFileAlt,
++//   faExternalLinkAlt,
++//   faCalendarDay,
++//   faMagnifyingGlass,
++//   faChartLine,
++//   faSyringe,
++//   faBoxesStacked,
++//   faBell,
++//   faClipboard,
++//   faStethoscope,
++//   faUsers,
++//   faNotesMedical,
++//   faPrescriptionBottleAlt,
++//   faFilePrescription,
++//   faUserNurse,
++//   faUserMd,
++//   faHospitalUser,
++//   faFlask,
++//   faTachometerAlt,
++//   faUsersCog,
++//   faUserShield,
++//   faUserTag,
++//   faDatabase,
++//   faCog,
++//   faScroll,
++//   faBoxes,
++//   faTrashAlt,
++//   faExchangeAlt,
++//   faTruckLoading,
++//   faLaptopMedical
++// );
+ 
+ import './assets/styles/_common.scss'; // Import common SCSS file
+ 
+@@ -144,6 +144,6 @@ const app = createApp(App);
+ 
+ app.use(router);
+ 
+-app.component('font-awesome-icon', FontAwesomeIcon); // Register the Font Awesome component globally
++//app.component('font-awesome-icon', FontAwesomeIcon); // Register the Font Awesome component globally
+ 
+ app.mount('#app');
+\ No newline at end of file
+diff --git a/src/router/index.js b/src/router/index.js
+index 5d84258..43fee1e 100644
+--- a/src/router/index.js
++++ b/src/router/index.js
+@@ -12,6 +12,7 @@ import LabTechView from '../views/LabTechView.vue';
+ import InventoryManagerView from '../views/InventoryManagerView.vue';
+ import PatientsListView from '../views/PatientsListView.vue';
+ import UserManagementView from '../views/UserManagementView.vue';
++import UserDetailView from '../views/UserDetailView.vue';
+ import ClinicSettingsView from '../views/ClinicSettingsView.vue';
+ 
+ // Patient-related views
+@@ -115,6 +116,13 @@ const routes = [
+     component: UserManagementView,
+     meta: { requiresAuth: true, roles: ['Admin', 'HR'] },
+   },
++  {
++    path: '/users/:userId',
++    name: 'user-detail',
++    component: UserDetailView,
++    props: true,
++    meta: { requiresAuth: true, roles: ['Admin', 'HR', 'Doctor', 'Nurse', 'LabTech', 'Receptionist', 'InventoryManager'] },
++  },
+   {
+     path: '/clinic-settings',
+     name: 'ClinicSettings',
+diff --git a/src/views/AddEditMedicalRecord.vue b/src/views/AddEditMedicalRecord.vue
+index 73e25fc..c687736 100644
+--- a/src/views/AddEditMedicalRecord.vue
++++ b/src/views/AddEditMedicalRecord.vue
+@@ -2,13 +2,13 @@
+   <div class="add-edit-medical-record-view">
+     <div v-if="hasPermission">
+       <h2 class="section-title">
+-        <font-awesome-icon :icon="['fas', isEditMode ? 'edit' : 'plus-circle']" />
++        <i class="fas" :class="isEditMode ? 'fa-edit' : 'fa-plus-circle'"></i>
+         {{ isEditMode ? 'Edit Medical Record' : 'Create New Medical Record' }}
+       </h2>
+       <p class="subtitle" v-if="patient">For patient: <strong>{{ patient.firstName }} {{ patient.lastName }}</strong> (ID: {{ patient.patientId }})</p>
+ 
+       <div v-if="loading" class="loading-message">
+-        <font-awesome-icon :icon="['fas', 'spinner']" spin /> Loading record data...
++        <i class="fas fa-spinner" spin /> Loading record data...
+       </div>
+       <div v-else-if="errorMessage" class="error-message">
+         {{ errorMessage }}
+@@ -55,10 +55,10 @@
+ 
+           <div class="form-actions">
+             <button type="submit" class="btn btn-success" :disabled="loadingSave">
+-              <font-awesome-icon :icon="['fas', 'save']" /> Save Record
++              <i class="fas fa-save"></i> Save Record
+             </button>
+             <button type="button" @click="cancel" class="btn btn-secondary ml-1" :disabled="loadingSave">
+-              <font-awesome-icon :icon="['fas', 'times']" /> Cancel
++              <i class="fas fa-times"></i> Cancel
+             </button>
+           </div>
+         </form>
+diff --git a/src/views/AdminView.vue b/src/views/AdminView.vue
+index 35633bb..58644ad 100644
+--- a/src/views/AdminView.vue
++++ b/src/views/AdminView.vue
+@@ -3,7 +3,7 @@
+     <h2 class="section-title">Admin Dashboard</h2>
+ 
+     <div v-if="loading" class="loading-message">
+-      <font-awesome-icon :icon="['fas', 'spinner']" spin class="icon" /> Loading dashboard...
++      <i class="fas fa-spinner icon" spin></i> Loading dashboard...
+     </div>
+     <div v-else-if="errorMessage" class="error-message">
+       {{ errorMessage }}
+@@ -12,7 +12,7 @@
+     <div v-else class="admin-grid">
+       <div class="card grid-item grid-item-full-width">
+         <div class="card-header">
+-          <h3><font-awesome-icon :icon="['fas', 'tachometer-alt']" class="icon" /> Clinic Overview</h3>
++          <h3><i class="fas fa-clinic-medical"></i> Clinic Information</h3>
+         </div>
+         <div class="card-body metrics-grid">
+           <div class="metric-box">
+@@ -36,38 +36,38 @@
+ 
+       <div class="card grid-item">
+         <div class="card-header">
+-          <h3><font-awesome-icon :icon="['fas', 'users-cog']" class="icon" /> User & Role Management</h3>
++          <h3><i class="fas fa-users-cog"></i>User & Role Management</h3>
+         </div>
+         <div class="card-body">
+           <ul class="admin-quick-links">
+-            <li><router-link to="/users"><font-awesome-icon :icon="['fas', 'user-shield']" class="icon" /> Manage Staff Accounts</router-link></li>
+-            <li><router-link to="/roles"><font-awesome-icon :icon="['fas', 'user-tag']" class="icon" /> Manage Roles (Future)</router-link></li>
++            <li><router-link to="/users"><i class="fas fa-user-shield"></i> Manage Staff Accounts</router-link></li>
++            <li><router-link to="/roles"><i class="fas fa-user-tag"></i> Manage Roles (Future)</router-link></li>
+           </ul>
+         </div>
+       </div>
+ 
+       <div class="card grid-item">
+         <div class="card-header">
+-          <h3><font-awesome-icon :icon="['fas', 'database']" class="icon" /> Data Access & Reports</h3>
++          <h3><i class="fas fa-database"></i> Data Access & Reports</h3>
+         </div>
+         <div class="card-body">
+           <ul class="admin-quick-links">
+-            <li><router-link to="/patients"><font-awesome-icon :icon="['fas', 'user-injured']" class="icon" /> All Patient Records</router-link></li>
+-            <li><router-link to="/appointments/all"><font-awesome-icon :icon="['fas', 'calendar-check']" class="icon" /> All Appointments</router-link></li>
+-            <li><router-link to="/medical-records/all"><font-awesome-icon :icon="['fas', 'file-medical']" class="icon" /> All Medical Records</router-link></li>
+-            <li><router-link to="/inventory"><font-awesome-icon :icon="['fas', 'boxes-stacked']" class="icon" /> Inventory Management</router-link></li>
++            <li><router-link to="/patients"><i class="fas fa-user-injured"></i> All Patient Records</router-link></li>
++            <li><router-link to="/appointments/all"><i class="fas fa-calendar-check"></i> All Appointments</router-link></li>
++            <li><router-link to="/medical-records/all"><i class="fas fa-file-medical"></i> All Medical Records</router-link></li>
++            <li><router-link to="/inventory"><i class="fas fa-boxes-stacked"></i> Inventory Management</router-link></li>
+           </ul>
+         </div>
+       </div>
+ 
+       <div class="card grid-item">
+         <div class="card-header">
+-          <h3><font-awesome-icon :icon="['fas', 'cog']" class="icon" /> Clinic Settings</h3>
++          <h3><i class="fas fa-cog"></i> Clinic Settings</h3>
+         </div>
+         <div class="card-body">
+           <ul class="admin-quick-links">
+-            <li><router-link to="/clinic-settings"><font-awesome-icon :icon="['fas', 'clock']" class="icon" /> Manage Clinic Hours (Future)</router-link></li>
+-            <li><router-link to="/system-logs"><font-awesome-icon :icon="['fas', 'scroll']" class="icon" /> View System Logs (Future)</router-link></li>
++            <li><router-link to="/clinic-settings"><i class="fas fa-clock"></i> Manage Clinic Hours (Future)</router-link></li>
++            <li><router-link to="/system-logs"><i class="fas fa-scroll"></i> View System Logs (Future)</router-link></li>
+           </ul>
+         </div>
+       </div>
+diff --git a/src/views/AllLabResultsView.vue b/src/views/AllLabResultsView.vue
+index 2763538..84b9ffc 100644
+--- a/src/views/AllLabResultsView.vue
++++ b/src/views/AllLabResultsView.vue
+@@ -7,12 +7,12 @@
+       <div class="search-and-actions">
+         <div class="form-group search-group">
+           <input type="text" v-model="searchTerm" @input="debounceSearch" class="form-control search-input" placeholder="Search by patient name, test name..." />
+-          <font-awesome-icon :icon="['fas', 'search']" class="search-icon" />
++          <i class="fas fa-search" :class="search-icon"></i>
+         </div>
+       </div>
+ 
+       <div v-if="loading" class="loading-message">
+-        <font-awesome-icon :icon="['fas', 'spinner']" spin /> Loading all lab results...
++        <i class="fas fa-spinner" spin /> Loading all lab results...
+       </div>
+       <div v-else-if="errorMessage" class="error-message">
+         {{ errorMessage }}
+@@ -49,7 +49,7 @@
+               </td>
+               <td>
+                 <router-link :to="{ name: 'lab-result-detail', params: { id: result.labResultId } }">
+-                  <font-awesome-icon :icon="['fas', 'vials']" /> View Lab Result
++                  <i class="fas fa-vials"></i> View Lab Result
+                 </router-link>
+               </td>
+             </tr>
+diff --git a/src/views/AllMedicalRecordsView.vue b/src/views/AllMedicalRecordsView.vue
+index 6b23a72..94e5af4 100644
+--- a/src/views/AllMedicalRecordsView.vue
++++ b/src/views/AllMedicalRecordsView.vue
+@@ -7,12 +7,12 @@
+       <div class="search-and-actions">
+         <div class="form-group search-group">
+           <input type="text" v-model="searchTerm" @input="debounceSearch" class="form-control search-input" placeholder="Search by patient, doctor, or diagnosis" />
+-          <font-awesome-icon :icon="['fas', 'search']" class="search-icon" />
++          <i class="fas fa-search search-icon"></i>
+         </div>
+       </div>
+ 
+       <div v-if="loading" class="loading-message">
+-        <font-awesome-icon :icon="['fas', 'spinner']" spin /> Loading medical records...
++        <i class="fas fa-spinner" spin /> Loading medical records...
+       </div>
+       <div v-else-if="errorMessage" class="error-message">
+         {{ errorMessage }}
+@@ -50,7 +50,7 @@
+               <td>{{ record.diagnosis || 'N/A' }}</td>
+               <td>
+                 <router-link :to="{ name: 'patient-history', params: { patientId: record.patient.patientId, medicalRecordId: record.recordId } }" class="btn btn-sm btn-info">
+-                  <font-awesome-icon :icon="['fas', 'eye']" /> View
++                  <i class="fas fa-eye"></i> View
+                 </router-link>
+                 </td>
+             </tr>
+diff --git a/src/views/AppointmentsListView.vue b/src/views/AppointmentsListView.vue
+index 0d994c1..a7a9286 100644
+--- a/src/views/AppointmentsListView.vue
++++ b/src/views/AppointmentsListView.vue
+@@ -5,7 +5,7 @@
+       <p class="subtitle">A list of all scheduled appointments for the clinic today.</p>
+ 
+       <div v-if="loading" class="loading-message">
+-        <font-awesome-icon :icon="['fas', 'spinner']" spin /> Loading appointments...
++        <i class="fas fa-spinner" spin /> Loading appointments...
+       </div>
+       <div v-else-if="errorMessage" class="error-message">
+         {{ errorMessage }}
+@@ -44,10 +44,10 @@
+               </td>
+               <td>
+                 <button @click="viewDetails(appt.appointmentId)" class="btn btn-sm btn-info">
+-                  <font-awesome-icon :icon="['fas', 'eye']" />
++                  <i class="fas fa-eye"></i>
+                 </button>
+                 <button v-if="canEdit" @click="editAppointment(appt.appointmentId)" class="btn btn-sm btn-warning ml-1">
+-                  <font-awesome-icon :icon="['fas', 'edit']" />
++                  <i class="fas fa-edit"></i>
+                 </button>
+               </td>
+             </tr>
+diff --git a/src/views/ClinicSettingsView.vue b/src/views/ClinicSettingsView.vue
+index c353033..e607828 100644
+--- a/src/views/ClinicSettingsView.vue
++++ b/src/views/ClinicSettingsView.vue
+@@ -5,7 +5,7 @@
+       <p class="subtitle">Manage the clinic's operational hours and other global settings.</p>
+ 
+       <div v-if="loading" class="loading-message">
+-        <font-awesome-icon :icon="['fas', 'spinner']" spin /> Loading settings...
++        <i class="fas fa-spinner icon" spin></i> Loading settings...
+       </div>
+       <div v-else-if="errorMessage" class="error-message">
+         {{ errorMessage }}
+@@ -42,7 +42,7 @@
+           
+           <div class="form-actions">
+             <button type="submit" class="btn btn-success" :disabled="loadingSave">
+-              <font-awesome-icon :icon="['fas', 'save']" /> Save Changes
++              <i class="fas fa-save"></i> Save Changes
+             </button>
+           </div>
+         </form>
+diff --git a/src/views/ClinicVisitHistoryView.vue b/src/views/ClinicVisitHistoryView.vue
+index 17bf624..de90b24 100644
+--- a/src/views/ClinicVisitHistoryView.vue
++++ b/src/views/ClinicVisitHistoryView.vue
+@@ -9,20 +9,20 @@
+         
+         <div class="patient-actions mt-3">
+           <router-link :to="{ name: 'patient-history', params: { patientId: patient.patientId } }" class="btn btn-primary btn-sm">
+-            <font-awesome-icon :icon="['fas', 'file-medical']" class="icon" /> View Full Medical History
++            <i class="fas fa-file-medical"></i> View Full Medical History
+           </router-link>
+           <router-link :to="{ name: 'triage-records', params: { patientId: patient.patientId } }" class="btn btn-info btn-sm ml-2">
+-            <font-awesome-icon :icon="['fas', 'heartbeat']" class="icon" /> View Triage Records
++            <i class="fas fa-heartbeat"></i> View Triage Records
+           </router-link>
+           <router-link :to="{ name: 'patient-lab-results', params: { patientId: patient.patientId } }" class="btn btn-success btn-sm ml-2">
+-            <font-awesome-icon :icon="['fas', 'vials']" class="icon" /> View Lab Results
++            <i class="fas fa-vials"></i> View Lab Results
+           </router-link>
+         </div>
+       </div>
+ 
+       <h3 class="subsection-title">Appointments (Visits)</h3>
+       <div v-if="loadingAppointments" class="loading-message">
+-        <font-awesome-icon :icon="['fas', 'spinner']" spin class="icon" /> Loading appointments...
++        <i class="fas fa-spinner icon" spin></i> Loading appointments...
+       </div>
+       <div v-else-if="appointmentsError" class="error-message">
+         {{ appointmentsError }}
+@@ -33,7 +33,7 @@
+       <div v-else class="appointments-list">
+         <div v-for="appt in appointments" :key="appt.id" class="appointment-card card">
+           <div class="appointment-header">
+-            <h4><font-awesome-icon :icon="['fas', 'calendar-alt']" class="icon" /> {{ formatDateTime(appt.appointmentDateTime) }}</h4>
++            <h4><i class="fas fa-calendar-alt icon"></i> {{ formatDateTime(appt.appointmentDateTime) }}</h4>
+             <span :class="['status-badge', `status-${appt.status?.toLowerCase().replace(/\s/g, '-')}`]">
+               {{ appt.status || 'Unknown' }}
+             </span>
+@@ -52,7 +52,7 @@
+       </div>
+     </div>
+     <div v-else-if="loadingPatient" class="loading-message">
+-      <font-awesome-icon :icon="['fas', 'spinner']" spin class="icon" /> Loading patient details...
++      <i class="fas fa-spinner icon" spin></i> Loading patient details...
+     </div>
+     <div v-else-if="patientError" class="error-message">
+       {{ patientError }}
+diff --git a/src/views/DashboardView.vue b/src/views/DashboardView.vue
+index 1b78a3a..ceb5ccf 100644
+--- a/src/views/DashboardView.vue
++++ b/src/views/DashboardView.vue
+@@ -3,7 +3,7 @@
+     <h2 class="section-title">Dashboard Overview <span v-if="authStore.username">for {{ authStore.username }}</span></h2>
+ 
+     <div v-if="loading" class="loading-message">
+-      <font-awesome-icon :icon="['fas', 'spinner']" spin class="icon" /> Loading dashboard data...
++      <i class="fas fa-spinner icon" spin></i> Loading dashboard data...
+     </div>
+ 
+     <div v-if="errorMessage" class="error-message">
+@@ -12,19 +12,19 @@
+ 
+     <div v-if="!loading && !errorMessage" class="dashboard-grid">
+       <div class="card dashboard-card">
+-        <h3><font-awesome-icon :icon="['fas', 'calendar-check']" class="icon" /> Today's Appointments</h3>
++        <h3><i class="fas fa-calendar-check icon"></i> Today's Appointments</h3>
+         <p class="metric-value">{{ dashboardData.todayAppointmentsCount }}</p>
+         <router-link to="/appointments" class="card-link btn btn-primary">View Appointments</router-link>
+       </div>
+ 
+       <div class="card dashboard-card">
+-        <h3><font-awesome-icon :icon="['fas', 'user-injured']" class="icon" /> Total Active Patients</h3>
++        <h3><i class="fas fa-user-injured icon"></i> Total Active Patients</h3>
+         <p class="metric-value">{{ dashboardData.totalPatientsCount }}</p>
+         <router-link to="/patients" class="card-link btn btn-primary">View Patients</router-link>
+       </div>
+ 
+       <div class="card dashboard-card">
+-        <h3><font-awesome-icon :icon="['fas', 'clipboard-list']" class="icon" /> Pending Tasks</h3>
++        <h3><i class="fas fa-clipboard-list icon"></i> Pending Tasks</h3>
+         <p class="metric-value">0</p> <router-link to="/tasks" class="card-link btn btn-secondary">Manage Tasks</router-link>
+       </div>
+     </div>
+diff --git a/src/views/DoctorView.vue b/src/views/DoctorView.vue
+index 71d5ff6..8be0af6 100644
+--- a/src/views/DoctorView.vue
++++ b/src/views/DoctorView.vue
+@@ -3,7 +3,7 @@
+     <h2 class="section-title">Doctor's Dashboard</h2>
+ 
+     <div v-if="loading" class="loading-message">
+-      <font-awesome-icon :icon="['fas', 'spinner']" spin class="icon" /> Loading dashboard...
++      <i class="fas fa-spinner icon" spin></i> Loading dashboard...
+     </div>
+     <div v-else-if="errorMessage" class="error-message">
+       {{ errorMessage }}
+@@ -12,7 +12,7 @@
+     <div v-else class="doctor-grid">
+       <div class="card grid-item grid-item-full-width">
+         <div class="card-header">
+-          <h3><font-awesome-icon :icon="['fas', 'user-doctor']" class="icon" /> My Upcoming Appointments ({{ formatDate(today) }})</h3>
++          <h3><i class="fas fa-calendar-alt"></i> My Upcoming Appointments ({{ formatDate(today) }})</h3>
+         </div>
+         <div class="card-body">
+           <div v-if="loadingAppointments" class="loading-message-small">Loading appointments...</div>
+@@ -57,7 +57,7 @@
+ 
+       <div class="card grid-item">
+         <div class="card-header">
+-          <h3><font-awesome-icon :icon="['fas', 'magnifying-glass']" class="icon" /> Patient Lookup</h3>
++          <h3><i class="fas fa-magnifying-glass"></i> Patient Lookup</h3>
+         </div>
+         <div class="card-body">
+           <div class="form-group">
+@@ -81,12 +81,12 @@
+ 
+       <div class="card grid-item">
+         <div class="card-header">
+-          <h3><font-awesome-icon :icon="['fas', 'stethoscope']" class="icon" /> Quick Access</h3>
++          <h3><i class="fas fa-stethoscope"></i> Quick Access</h3>
+         </div>
+         <div class="card-body">
+           <ul class="quick-links">
+-            <li><router-link to="/patients"><font-awesome-icon :icon="['fas', 'users']" class="icon" /> Browse All Patients</router-link></li>
+-            <li><router-link to="/medical-records"><font-awesome-icon :icon="['fas', 'file-lines']" class="icon" /> All Medical Records</router-link></li>
++            <li><router-link to="/patients"><i class="fas fa-users"></i> Browse All Patients</router-link></li>
++            <li><router-link to="/medical-records"><i class="fas fa-file-lines"></i> All Medical Records</router-link></li>
+             </ul>
+         </div>
+       </div>
+diff --git a/src/views/Inventory/AddEditInventoryItem.vue b/src/views/Inventory/AddEditInventoryItem.vue
+index 9cb7dcb..c678b17 100644
+--- a/src/views/Inventory/AddEditInventoryItem.vue
++++ b/src/views/Inventory/AddEditInventoryItem.vue
+@@ -2,7 +2,7 @@
+   <div class="add-edit-inventory-item">
+     <div v-if="hasPermission">
+       <h2 class="section-title">
+-        <font-awesome-icon :icon="['fas', isEditMode ? 'edit' : 'plus-circle']" />
++        <i class="fas" :class="isEditMode ? 'fa-edit' : 'fa-plus-circle'"></i>
+         {{ isEditMode ? 'Edit Inventory Item' : 'Add New Inventory Item' }}
+       </h2>
+ 
+@@ -50,16 +50,16 @@
+         </div>
+ 
+         <div v-if="loadingForm" class="loading-message mt-3">
+-          <font-awesome-icon :icon="['fas', 'spinner']" spin /> Saving item...
++          <i class="fas fa-spinner icon" spin></i> Saving item...
+         </div>
+         <div v-if="formError" class="error-message mt-3">{{ formError }}</div>
+ 
+         <div class="form-actions">
+           <button type="submit" class="btn btn-success" :disabled="loadingForm">
+-            <font-awesome-icon :icon="['fas', 'save']" /> {{ isEditMode ? 'Update Item' : 'Add Item' }}
++            <i class="fas fa-save"></i> {{ isEditMode ? 'Update Item' : 'Add Item' }}
+           </button>
+           <button type="button" @click="cancel" class="btn btn-secondary ml-1" :disabled="loadingForm">
+-            <font-awesome-icon :icon="['fas', 'times']" /> Cancel
++            <i class="fas fa-times"></i> Cancel
+           </button>
+         </div>
+       </form>
+diff --git a/src/views/Inventory/InventoryItemsList.vue b/src/views/Inventory/InventoryItemsList.vue
+index 2c22d7b..f0a9680 100644
+--- a/src/views/Inventory/InventoryItemsList.vue
++++ b/src/views/Inventory/InventoryItemsList.vue
+@@ -6,21 +6,21 @@
+       <div class="toolbar card">
+         <div class="search-group">
+           <input type="text" v-model="searchQuery" placeholder="Search by item, category..." @input="debouncedFetchItems" class="form-control" />
+-          <font-awesome-icon :icon="['fas', 'search']" class="search-icon" />
++          <i class="fas fa-search search-icon"></i>
+         </div>
+         <div class="filter-group">
+           <input type="text" v-model="filterCategory" placeholder="Filter by Category" @input="debouncedFetchItems" class="form-control" />
+         </div>
+         <button @click="clearFilters" class="btn btn-secondary">
+-          <font-awesome-icon :icon="['fas', 'eraser']" /> Clear Filters
++          <i class="fas fa-eraser"></i> Clear Filters
+         </button>
+         <router-link to="/inventory/items/add" class="btn btn-primary ml-auto">
+-          <font-awesome-icon :icon="['fas', 'plus-circle']" /> Add New Item
++          <i class="fas fa-plus-circle"></i> Add New Item
+         </router-link>
+       </div>
+ 
+       <div v-if="loading" class="loading-message">
+-        <font-awesome-icon :icon="['fas', 'spinner']" spin /> Loading inventory items...
++        <i class="fas fa-spinner icon" spin></i> Loading inventory items...
+       </div>
+       <div v-else-if="items.length === 0" class="no-records-message">
+         No inventory items found.
+@@ -52,16 +52,16 @@
+               <td>{{ item.vendorName || 'N/A' }}</td>
+               <td class="actions">
+                 <button @click="editItem(item.itemId)" class="btn btn-sm btn-info">
+-                  <font-awesome-icon :icon="['fas', 'edit']" />
++                  <i class="fas fa-edit"></i>
+                 </button>
+                 <button @click="confirmDelete(item.itemId)" class="btn btn-sm btn-danger ml-1">
+-                  <font-awesome-icon :icon="['fas', 'trash-alt']" />
++                  <i class="fas fa-trash-alt"></i>
+                 </button>
+                 <button @click="openStockAdjustmentModal(item)" class="btn btn-sm btn-warning ml-1">
+-                  <font-awesome-icon :icon="['fas', 'exchange-alt']" />
++                  <i class="fas fa-exchange-alt"></i>
+                 </button>
+                 <button @click="viewBatches(item.itemId)" class="btn btn-sm btn-success ml-1">
+-                  <font-awesome-icon :icon="['fas', 'boxes']" />
++                  <i class="fas fa-boxes"></i>
+                 </button>
+               </td>
+             </tr>
+diff --git a/src/views/Inventory/StockTransactionsLog.vue b/src/views/Inventory/StockTransactionsLog.vue
+index 15e2d87..f9bc1de 100644
+--- a/src/views/Inventory/StockTransactionsLog.vue
++++ b/src/views/Inventory/StockTransactionsLog.vue
+@@ -7,12 +7,12 @@
+       <div class="search-and-actions">
+         <div class="form-group search-group">
+           <input type="text" v-model="searchTerm" @input="debounceSearch" class="form-control search-input" placeholder="Search by item, batch, or staff" />
+-          <font-awesome-icon :icon="['fas', 'search']" class="search-icon" />
++          <i class="fas fa-search search-icon"></i>
+         </div>
+       </div>
+ 
+       <div v-if="loading" class="loading-message">
+-        <font-awesome-icon :icon="['fas', 'spinner']" spin /> Loading transactions...
++        <i class="fas fa-spinner icon" spin></i> Loading transactions...
+       </div>
+       <div v-else-if="errorMessage" class="error-message">
+         {{ errorMessage }}
+diff --git a/src/views/LabResultDetailView.vue b/src/views/LabResultDetailView.vue
+index 4fcbc9d..8eaf6dc 100644
+--- a/src/views/LabResultDetailView.vue
++++ b/src/views/LabResultDetailView.vue
+@@ -4,7 +4,7 @@
+       <h2 class="section-title">Lab Result Details</h2>
+       
+       <div v-if="loading" class="loading-message">
+-        <font-awesome-icon :icon="['fas', 'spinner']" spin /> Loading lab result...
++        <i class="fas fa-spinner icon" spin></i> Loading lab result...
+       </div>
+       <div v-else-if="errorMessage" class="error-message">
+         {{ errorMessage }}
+@@ -16,7 +16,7 @@
+ 
+       <div v-else class="lab-result-details card">
+         <div class="card-header">
+-          <h3><font-awesome-icon :icon="['fas', 'vials']" /> {{ labResult.testName }}</h3>
++          <h3><i class="fas fa-vials"></i> {{ labResult.testName }}</h3>
+           <p class="result-value">{{ labResult.resultValue }} {{ labResult.unit }}</p>
+         </div>
+         <div class="card-body">
+@@ -50,7 +50,7 @@
+         </div>
+         <div class="card-actions">
+           <button @click="goBack" class="btn btn-secondary">
+-            <font-awesome-icon :icon="['fas', 'arrow-left']" /> Back to Patient Lab Results
++            <i class="fas fa-arrow-left"></i> Back to Patient Lab Results
+           </button>
+         </div>
+       </div>
+diff --git a/src/views/LabResultsHubView.vue b/src/views/LabResultsHubView.vue
+index 69b82c6..9acbfb2 100644
+--- a/src/views/LabResultsHubView.vue
++++ b/src/views/LabResultsHubView.vue
+@@ -5,7 +5,7 @@
+       <p class="subtitle">Select a patient to view their lab results, or view all results across the clinic.</p>
+ 
+       <div v-if="loading" class="loading-message">
+-        <font-awesome-icon :icon="['fas', 'spinner']" spin /> Loading patient data...
++        <i class="fas fa-spinner icon" spin></i> Loading patient data...
+       </div>
+       <div v-else-if="errorMessage" class="error-message">
+         {{ errorMessage }}
+@@ -14,7 +14,7 @@
+       <div v-else class="hub-container card">
+         <div class="action-card">
+           <div class="action-header">
+-            <font-awesome-icon :icon="['fas', 'user']" class="icon" />
++            <i class="fas fa-user"></i>
+             <h3>View Patient Lab Results</h3>
+           </div>
+           <div class="action-body">
+@@ -33,13 +33,13 @@
+                 v-if="selectedPatientId"
+                 :to="{ name: 'patient-lab-results', params: { patientId: selectedPatientId } }"
+                 class="btn btn-primary">
+-                <font-awesome-icon :icon="['fas', 'vials']" class="icon" /> View Results
++                <i class="fas fa-vials"></i> View Results
+               </router-link>
+               <button
+                 v-else
+                 class="btn btn-primary btn-disabled"
+                 disabled>
+-                <font-awesome-icon :icon="['fas', 'vials']" class="icon" /> View Results
++                <i class="fas fa-vials"></i> View Results
+               </button>
+             </div>
+           </div>
+@@ -49,7 +49,7 @@
+ 
+         <div class="action-card">
+           <div class="action-header">
+-            <font-awesome-icon :icon="['fas', 'clipboard-list']" class="icon" />
++            <i class="fas fa-clipboard-list"></i>
+             <h3>View All Lab Results</h3>
+           </div>
+           <div class="action-body">
+@@ -57,7 +57,7 @@
+           </div>
+           <div class="action-footer">
+             <router-link :to="{ name: 'all-lab-results' }" class="btn btn-secondary">
+-              <font-awesome-icon :icon="['fas', 'search']" class="icon" /> Browse All Results
++              <i class="fas fa-search search-icon"></i> Browse All Results
+             </router-link>
+           </div>
+         </div>
+diff --git a/src/views/LabResultsView.vue b/src/views/LabResultsView.vue
+index 5f18174..d731503 100644
+--- a/src/views/LabResultsView.vue
++++ b/src/views/LabResultsView.vue
+@@ -9,20 +9,20 @@
+         
+         <div class="patient-actions mt-3">
+           <router-link :to="{ name: 'patient-history', params: { patientId: patient.patientId } }" class="btn btn-primary btn-sm">
+-            <font-awesome-icon :icon="['fas', 'file-medical']" class="icon" /> View Medical History
++            <i class="fas fa-file-medical"></i> View Medical History
+           </router-link>
+           <router-link :to="{ name: 'clinic-visits', params: { patientId: patient.patientId } }" class="btn btn-secondary btn-sm ml-2">
+-            <font-awesome-icon :icon="['fas', 'calendar-alt']" class="icon" /> View Visit History
++            <i class="fas fa-calendar-alt"></i> View Visit History
+           </router-link>
+           <router-link :to="{ name: 'triage-records', params: { patientId: patient.patientId } }" class="btn btn-info btn-sm ml-2">
+-            <font-awesome-icon :icon="['fas', 'heartbeat']" class="icon" /> View Triage Records
++            <i class="fas fa-heartbeat"></i> View Triage Records
+           </router-link>
+         </div>
+       </div>
+ 
+       <h3 class="subsection-title">Recorded Lab Results</h3>
+       <div v-if="loadingResults" class="loading-message">
+-        <font-awesome-icon :icon="['fas', 'spinner']" spin class="icon" /> Loading lab results...
++        <i class="fas fa-spinner icon" spin></i> Loading lab results...
+       </div>
+       <div v-else-if="resultsError" class="error-message">
+         {{ resultsError }}
+@@ -30,13 +30,13 @@
+       <div v-else-if="labResults.length === 0" class="no-records-message">
+         No lab results found for this patient.
+         <button v-if="canAddLabResult" @click="openAddForm" class="btn btn-primary mt-3">
+-          <font-awesome-icon :icon="['fas', 'plus']" class="icon" /> Add New Lab Result
++          <i class="fas fa-plus"></i> Add New Lab Result
+         </button>
+       </div>
+       <div v-else class="lab-results-list">
+         <div v-for="result in labResults" :key="result.labResultId" class="lab-result-card card">
+           <div class="result-header">
+-            <h4><font-awesome-icon :icon="['fas', 'vials']" class="icon" /> {{ result.testName }} ({{ formatDate(result.resultDate) }})</h4>
++            <h4><i class="fas fa-vials"></i> {{ result.testName }} ({{ formatDate(result.resultDate) }})</h4>
+             <span class="result-value">{{ result.resultValue }} {{ result.unit }}</span>
+           </div>
+           <div class="result-details-grid">
+@@ -54,20 +54,20 @@
+           </div>
+           <div class="result-actions" v-if="canEditLabResult">
+             <button @click="editResult(result)" class="btn btn-info btn-sm">
+-              <font-awesome-icon :icon="['fas', 'edit']" class="icon" /> Edit
++              <i class="fas fa-edit"></i> Edit
+             </button>
+             <button @click="deleteResult(result.labResultId)" class="btn btn-danger btn-sm ml-2">
+-              <font-awesome-icon :icon="['fas', 'trash']" class="icon" /> Delete
++              <i class="fas fa-trash"></i> Delete
+             </button>
+           </div>
+         </div>
+         <button v-if="!showAddForm && canAddLabResult" @click="openAddForm" class="btn btn-primary mt-3">
+-          <font-awesome-icon :icon="['fas', 'plus']" class="icon" /> Add New Lab Result
++          <i class="fas fa-plus"></i> Add New Lab Result
+         </button>
+       </div>
+     </div>
+     <div v-else-if="loadingPatient" class="loading-message">
+-      <font-awesome-icon :icon="['fas', 'spinner']" spin class="icon" /> Loading patient details...
++      <i class="fas fa-spinner icon" spin></i> Loading patient details...
+     </div>
+     <div v-else-if="patientError" class="error-message">
+       {{ patientError }}
+@@ -117,10 +117,10 @@
+           </div>
+           <div class="form-actions">
+             <button type="submit" class="btn btn-success">
+-              <font-awesome-icon :icon="['fas', 'save']" class="icon" /> Save Result
++              <i class="fas fa-save"></i> Save Result
+             </button>
+             <button type="button" @click="cancelForm" class="btn btn-secondary ml-2">
+-              <font-awesome-icon :icon="['fas', 'times']" class="icon" /> Cancel
++              <i class="fas fa-times"></i> Cancel
+             </button>
+           </div>
+           <div v-if="formError" class="error-message mt-3">{{ formError }}</div>
+diff --git a/src/views/LabTechView.vue b/src/views/LabTechView.vue
+index 823908f..36e19d3 100644
+--- a/src/views/LabTechView.vue
++++ b/src/views/LabTechView.vue
+@@ -3,7 +3,7 @@
+     <h2 class="section-title">Lab Technician Dashboard</h2>
+ 
+     <div v-if="loading" class="loading-message">
+-      <font-awesome-icon :icon="['fas', 'spinner']" spin class="icon" /> Loading dashboard...
++      <i class="fas fa-spinner icon" spin></i> Loading dashboard...
+     </div>
+     <div v-else-if="errorMessage" class="error-message">
+       {{ errorMessage }}
+@@ -12,7 +12,7 @@
+     <div v-else class="lab-tech-grid">
+       <div class="card grid-item grid-item-full-width">
+         <div class="card-header">
+-          <h3><font-awesome-icon :icon="['fas', 'flask']" class="icon" /> Pending Lab Orders ({{ formatDate(today) }})</h3>
++          <h3><i class="fas fa-flask"></i> Pending Lab Orders ({{ formatDate(today) }})</h3>
+         </div>
+         <div class="card-body">
+           <div v-if="loadingLabOrders" class="loading-message-small">Loading orders...</div>
+@@ -51,7 +51,7 @@
+ 
+       <div class="card grid-item">
+         <div class="card-header">
+-          <h3><font-awesome-icon :icon="['fas', 'magnifying-glass']" class="icon" /> Patient Lookup</h3>
++          <h3><i class="fas fa-magnifying-glass"></i> Patient Lookup</h3>
+         </div>
+         <div class="card-body">
+           <div class="form-group">
+@@ -75,13 +75,13 @@
+ 
+       <div class="card grid-item">
+         <div class="card-header">
+-          <h3><font-awesome-icon :icon="['fas', 'plus-circle']" class="icon" /> Quick Entry</h3>
++          <h3><i class="fas fa-plus-circle"></i> Quick Entry</h3>
+         </div>
+         <div class="card-body">
+           <button @click="openQuickAddResultForm" class="btn btn-primary btn-block">Add New Lab Result</button>
+           <ul class="quick-links mt-3">
+-            <li><router-link to="/lab-results/all"><font-awesome-icon :icon="['fas', 'vials']" class="icon" /> All Lab Results</router-link></li>
+-            <li><router-link to="/inventory"><font-awesome-icon :icon="['fas', 'boxes-stacked']" class="icon" /> Check Lab Supplies</router-link></li>
++            <li><router-link to="/lab-results/all"><i class="fas fa-vials"></i> All Lab Results</router-link></li>
++            <li><router-link to="/inventory"><i class="fas fa-boxes-stacked"></i> Check Lab Supplies</router-link></li>
+           </ul>
+         </div>
+       </div>
+@@ -122,10 +122,10 @@
+         </div>
+         <div class="form-actions">
+           <button type="submit" class="btn btn-success">
+-            <font-awesome-icon :icon="['fas', 'save']" class="icon" /> Save Result
++            <i class="fas fa-save"></i> Save Result
+           </button>
+           <button type="button" @click="cancelForm" class="btn btn-secondary ml-2">
+-            <font-awesome-icon :icon="['fas', 'times']" class="icon" /> Cancel
++            <i class="fas fa-times"></i> Cancel
+           </button>
+         </div>
+         <div v-if="formError" class="error-message mt-3">{{ formError }}</div>
+diff --git a/src/views/MedicalRecordDetail.vue b/src/views/MedicalRecordDetail.vue
+index 47152dd..6f5eb04 100644
+--- a/src/views/MedicalRecordDetail.vue
++++ b/src/views/MedicalRecordDetail.vue
+@@ -4,7 +4,7 @@
+       <h2 class="section-title">Medical Record #{{ medicalRecordId }}</h2>
+       
+       <div v-if="loading" class="loading-message">
+-        <font-awesome-icon :icon="['fas', 'spinner']" spin /> Loading medical record...
++        <i class="fas fa-spinner icon" spin></i> Loading medical record...
+       </div>
+       <div v-else-if="errorMessage" class="error-message">
+         {{ errorMessage }}
+@@ -13,27 +13,27 @@
+       <div v-else class="record-content">
+         <div class="patient-info-card card">
+           <div class="card-header">
+-            <h3><font-awesome-icon :icon="['fas', 'user-injured']" /> Patient Information</h3>
++            <h3><i class="fas fa-user-injured"></i> Patient Information</h3>
+           </div>
+           <div class="card-body">
+             <p><strong>Name:</strong> {{ record.patient?.firstName + ' ' + record.patient?.lastName || 'N/A' }}</p>
+             <p><strong>Contact:</strong> {{ record.patient?.contactNumber || 'N/A' }}</p>
+             <p><strong>Email:</strong> {{ record.patient?.email || 'N/A' }}</p>
+             <router-link :to="{ name: 'patient-history', params: { patientId: record.patient?.patientId } }" class="btn btn-sm btn-info mt-3">
+-              <font-awesome-icon :icon="['fas', 'history']" /> View Full Patient History
++              <i class="fas fa-history"></i> View Full Patient History
+             </router-link>
+           </div>
+         </div>
+ 
+         <div class="record-details card">
+           <div class="card-header">
+-            <h3><font-awesome-icon :icon="['fas', 'file-medical']" /> Record Details</h3>
++            <h3><i class="fas fa-file-medical"></i> Record Details</h3>
+             <div class="record-actions" v-if="canEditRecord">
+               <button @click="editRecord" class="btn btn-sm btn-warning">
+-                <font-awesome-icon :icon="['fas', 'edit']" /> Edit
++                <i class="fas fa-edit"></i> Edit
+               </button>
+               <button @click="deleteRecord" class="btn btn-sm btn-danger ml-2">
+-                <font-awesome-icon :icon="['fas', 'trash']" /> Delete
++                <i class="fas fa-trash"></i> Delete
+               </button>
+             </div>
+           </div>
+diff --git a/src/views/NurseView.vue b/src/views/NurseView.vue
+index 7cf7aec..dce3f9e 100644
+--- a/src/views/NurseView.vue
++++ b/src/views/NurseView.vue
+@@ -3,7 +3,7 @@
+     <h2 class="section-title">Nurse's Dashboard</h2>
+ 
+     <div v-if="loading" class="loading-message">
+-      <font-awesome-icon :icon="['fas', 'spinner']" spin class="icon" /> Loading dashboard...
++      <i class="fas fa-spinner" spin ></i> Loading dashboard...
+     </div>
+     <div v-else-if="errorMessage" class="error-message">
+       {{ errorMessage }}
+@@ -12,7 +12,7 @@
+     <div v-else class="nurse-grid">
+       <div class="card grid-item grid-item-full-width">
+         <div class="card-header">
+-          <h3><font-awesome-icon :icon="['fas', 'syringe']" class="icon" /> Today's Clinic Appointments ({{ formatDate(today) }})</h3>
++          <h3><i class="fas fa-syringe"></i> Today's Clinic Appointments ({{ formatDate(today) }})</h3>
+         </div>
+         <div class="card-body">
+           <div v-if="loadingAppointments" class="loading-message-small">Loading appointments...</div>
+@@ -57,7 +57,7 @@
+ 
+       <div class="card grid-item">
+         <div class="card-header">
+-          <h3><font-awesome-icon :icon="['fas', 'magnifying-glass']" class="icon" /> Patient Lookup</h3>
++          <h3><i class="fas fa-magnifying-glass"></i> Patient Lookup</h3>
+         </div>
+         <div class="card-body">
+           <div class="form-group">
+@@ -81,12 +81,12 @@
+ 
+       <div class="card grid-item">
+         <div class="card-header">
+-          <h3><font-awesome-icon :icon="['fas', 'clipboard']" class="icon" /> Quick Actions</h3>
++          <h3><i class="fas fa-clipboard"></i> Quick Actions</h3>
+         </div>
+         <div class="card-body">
+           <ul class="quick-links">
+-            <li><router-link to="/inventory"><font-awesome-icon :icon="['fas', 'boxes-stacked']" class="icon" /> Check Inventory</router-link></li>
+-            <li><router-link to="/tasks"><font-awesome-icon :icon="['fas', 'bell']" class="icon" /> View Reminders</router-link></li>
++            <li><router-link to="/inventory"><i class="fas fa-boxes-stacked"></i> Check Inventory</router-link></li>
++            <li><router-link to="/tasks"><i class="fas fa-bell"></i> View Reminders</router-link></li>
+             </ul>
+         </div>
+       </div>
+diff --git a/src/views/PatientDocumentsView.vue b/src/views/PatientDocumentsView.vue
+index d8f0cc1..7fc73b6 100644
+--- a/src/views/PatientDocumentsView.vue
++++ b/src/views/PatientDocumentsView.vue
+@@ -7,22 +7,22 @@
+         <p><strong>Contact:</strong> {{ patient.contactNumber }}</p>
+         <p><strong>Email:</strong> {{ patient.email }}</p>
+         <router-link :to="{ name: 'patient-history', params: { patientId: patient.patientId } }" class="btn btn-primary btn-sm mt-3">
+-          <font-awesome-icon :icon="['fas', 'file-medical']" class="icon" /> View Medical History
++          <i class="fas fa-file-medical"></i> View Medical History
+         </router-link>
+         <router-link :to="{ name: 'clinic-visits', params: { patientId: patient.patientId } }" class="btn btn-secondary btn-sm mt-3 ml-2">
+-          <font-awesome-icon :icon="['fas', 'calendar-alt']" class="icon" /> View Visit History
++          <i class="fas fa-calendar-alt"></i> View Visit History
+         </router-link>
+         <router-link :to="{ name: 'triage-records', params: { patientId: patient.patientId } }" class="btn btn-info btn-sm mt-3 ml-2">
+-          <font-awesome-icon :icon="['fas', 'heartbeat']" class="icon" /> View Triage Records
++          <i class="fas fa-heartbeat"></i> View Triage Records
+         </router-link>
+         <router-link :to="{ name: 'patient-lab-results', params: { patientId: patient.patientId } }" class="btn btn-success btn-sm mt-3 ml-2">
+-          <font-awesome-icon :icon="['fas', 'vials']" class="icon" /> View Lab Results
++          <i class="fas fa-vials"></i> View Lab Results
+         </router-link>
+       </div>
+ 
+       <h3 class="subsection-title">Uploaded Documents</h3>
+       <div v-if="loadingDocuments" class="loading-message">
+-        <font-awesome-icon :icon="['fas', 'spinner']" spin class="icon" /> Loading documents...
++        <i class="fas fa-spinner" spin ></i> Loading documents...
+       </div>
+       <div v-else-if="documentsError" class="error-message">
+         {{ documentsError }}
+@@ -30,20 +30,20 @@
+       <div v-else-if="patientDocuments.length === 0" class="no-records-message">
+         No documents found for this patient.
+         <button v-if="canAddDocument" @click="openAddForm" class="btn btn-primary mt-3">
+-          <font-awesome-icon :icon="['fas', 'plus']" class="icon" /> Add New Document
++          <i class="fas fa-plus"></i> Add New Document
+         </button>
+       </div>
+       <div v-else class="document-list">
+         <div v-for="document in patientDocuments" :key="document.documentId" class="document-card card">
+           <div class="document-header">
+-            <h4><font-awesome-icon :icon="['fas', 'file-alt']" class="icon" /> {{ document.documentName }} ({{ document.documentType || 'Document' }})</h4>
++            <h4><i class="fas fa-file-alt"></i> {{ document.documentName }} ({{ document.documentType || 'Document' }})</h4>
+             <span class="document-date">Uploaded: {{ formatDate(document.uploadDate) }}</span>
+           </div>
+           <div class="document-details-grid">
+             <div class="detail-item full-width">
+               <strong>Path/URL:</strong>
+               <a :href="document.filePathOrUrl" target="_blank" rel="noopener noreferrer" class="document-link">
+-                {{ document.filePathOrUrl }} <font-awesome-icon :icon="['fas', 'external-link-alt']" class="icon-sm" />
++                {{ document.filePathOrUrl }} <i class="fas fa-external-link-alt icon-sm" />
+               </a>
+             </div>
+             <div class="detail-item full-width">
+@@ -55,20 +55,20 @@
+           </div>
+           <div class="document-actions" v-if="canEditDocument">
+             <button @click="editDocument(document)" class="btn btn-info btn-sm">
+-              <font-awesome-icon :icon="['fas', 'edit']" class="icon" /> Edit
++              <i class="fas fa-edit"></i> Edit
+             </button>
+             <button @click="deleteDocument(document.documentId)" class="btn btn-danger btn-sm ml-2">
+-              <font-awesome-icon :icon="['fas', 'trash']" class="icon" /> Delete
++              <i class="fas fa-trash"></i> Delete
+             </button>
+           </div>
+         </div>
+         <button v-if="!showAddForm && canAddDocument" @click="openAddForm" class="btn btn-primary mt-3">
+-          <font-awesome-icon :icon="['fas', 'plus']" class="icon" /> Add New Document
++          <i class="fas fa-plus"></i> Add New Document
+         </button>
+       </div>
+     </div>
+     <div v-else-if="loadingPatient" class="loading-message">
+-      <font-awesome-icon :icon="['fas', 'spinner']" spin class="icon" /> Loading patient details...
++      <i class="fas fa-spinner" spin ></i> Loading patient details...
+     </div>
+     <div v-else-if="patientError" class="error-message">
+       {{ patientError }}
+@@ -101,10 +101,10 @@
+         </div>
+         <div class="form-actions">
+           <button type="submit" class="btn btn-success">
+-            <font-awesome-icon :icon="['fas', 'save']" class="icon" /> Save Document
++            <i class="fas fa-save"></i> Save Document
+           </button>
+           <button type="button" @click="cancelForm" class="btn btn-secondary ml-2">
+-            <font-awesome-icon :icon="['fas', 'times']" class="icon" /> Cancel
++            <i class="fas fa-times"></i> Cancel
+           </button>
+         </div>
+         <div v-if="formError" class="error-message mt-3">{{ formError }}</div>
+diff --git a/src/views/PatientHistoryView.vue b/src/views/PatientHistoryView.vue
+index 6678dd4..e6fa5c7 100644
+--- a/src/views/PatientHistoryView.vue
++++ b/src/views/PatientHistoryView.vue
+@@ -8,16 +8,16 @@
+         <p><strong>Email:</strong> {{ patient.email }}</p>
+         <p v-if="patient.bloodType"><strong>Blood Type:</strong> {{ patient.bloodType }}</p>
+         <router-link :to="{ name: 'clinic-visits', params: { patientId: patient.patientId } }" class="btn btn-secondary btn-sm mt-3">
+-          <font-awesome-icon :icon="['fas', 'calendar-alt']" class="icon" /> View Visit History
++          <i class="fas fa-calendar-alt"></i> View Visit History
+         </router-link>
+         <router-link :to="{ name: 'triage-records', params: { patientId: patient.patientId } }" class="btn btn-info btn-sm mt-3 ml-2">
+-          <font-awesome-icon :icon="['fas', 'heartbeat']" class="icon" /> View Triage Records
++          <i class="fas fa-heartbeat"></i> View Triage Records
+         </router-link>
+         </div>
+ 
+       <h3 class="subsection-title">Medical Records</h3>
+       <div v-if="loadingRecords" class="loading-message">
+-        <font-awesome-icon :icon="['fas', 'spinner']" spin class="icon" /> Loading medical records...
++        <i class="fas fa-spinner" spin ></i> Loading medical records...
+       </div>
+       <div v-else-if="recordsError" class="error-message">
+         {{ recordsError }}
+@@ -28,9 +28,9 @@
+       <div v-else class="medical-records-list">
+         <div v-for="record in medicalRecords" :key="record.recordId" class="medical-record-card card">
+           <div class="record-header">
+-            <h4><font-awesome-icon :icon="['fas', 'file-medical']" class="icon" /> Record Date: {{ formatDateTime(record.createdAt) }}</h4>
++            <h4><i class="fas fa-file-medical"></i> Record Date: {{ formatDateTime(record.createdAt) }}</h4>
+             <span class="record-staff">
+-              <font-awesome-icon :icon="['fas', 'user-doctor']" class="icon" /> {{ record.staff?.firstName + ' ' + record.staff?.lastName || 'N/A' }} ({{ record.staff?.jobTitle || 'Staff' }})
++              <i class="fas fa-user-doctor"></i> {{ record.staff?.firstName + ' ' + record.staff?.lastName || 'N/A' }} ({{ record.staff?.jobTitle || 'Staff' }})
+             </span>
+           </div>
+           <div class="record-details-grid">
+@@ -58,7 +58,7 @@
+       </div>
+     </div>
+     <div v-else-if="loadingPatient" class="loading-message">
+-      <font-awesome-icon :icon="['fas', 'spinner']" spin class="icon" /> Loading patient details...
++      <i class="fas fa-spinner" spin ></i> Loading patient details...
+     </div>
+     <div v-else-if="patientError" class="error-message">
+       {{ patientError }}
+diff --git a/src/views/PatientLabResultsView.vue b/src/views/PatientLabResultsView.vue
+index 5f18174..337f1af 100644
+--- a/src/views/PatientLabResultsView.vue
++++ b/src/views/PatientLabResultsView.vue
+@@ -9,20 +9,20 @@
+         
+         <div class="patient-actions mt-3">
+           <router-link :to="{ name: 'patient-history', params: { patientId: patient.patientId } }" class="btn btn-primary btn-sm">
+-            <font-awesome-icon :icon="['fas', 'file-medical']" class="icon" /> View Medical History
++            <i class="fas fa-file-medical"></i> View Medical History
+           </router-link>
+           <router-link :to="{ name: 'clinic-visits', params: { patientId: patient.patientId } }" class="btn btn-secondary btn-sm ml-2">
+-            <font-awesome-icon :icon="['fas', 'calendar-alt']" class="icon" /> View Visit History
++            <i class="fas fa-calendar-alt"></i> View Visit History
+           </router-link>
+           <router-link :to="{ name: 'triage-records', params: { patientId: patient.patientId } }" class="btn btn-info btn-sm ml-2">
+-            <font-awesome-icon :icon="['fas', 'heartbeat']" class="icon" /> View Triage Records
++            <i class="fas fa-heartbeat"></i> View Triage Records
+           </router-link>
+         </div>
+       </div>
+ 
+       <h3 class="subsection-title">Recorded Lab Results</h3>
+       <div v-if="loadingResults" class="loading-message">
+-        <font-awesome-icon :icon="['fas', 'spinner']" spin class="icon" /> Loading lab results...
++        <i class="fas fa-spinner" spin ></i> Loading lab results...
+       </div>
+       <div v-else-if="resultsError" class="error-message">
+         {{ resultsError }}
+@@ -30,13 +30,13 @@
+       <div v-else-if="labResults.length === 0" class="no-records-message">
+         No lab results found for this patient.
+         <button v-if="canAddLabResult" @click="openAddForm" class="btn btn-primary mt-3">
+-          <font-awesome-icon :icon="['fas', 'plus']" class="icon" /> Add New Lab Result
++          <i class="fas fa-plus"></i> Add New Lab Result
+         </button>
+       </div>
+       <div v-else class="lab-results-list">
+         <div v-for="result in labResults" :key="result.labResultId" class="lab-result-card card">
+           <div class="result-header">
+-            <h4><font-awesome-icon :icon="['fas', 'vials']" class="icon" /> {{ result.testName }} ({{ formatDate(result.resultDate) }})</h4>
++            <h4><i class="fas fa-vials"></i> {{ result.testName }} ({{ formatDate(result.resultDate) }})</h4>
+             <span class="result-value">{{ result.resultValue }} {{ result.unit }}</span>
+           </div>
+           <div class="result-details-grid">
+@@ -54,20 +54,20 @@
+           </div>
+           <div class="result-actions" v-if="canEditLabResult">
+             <button @click="editResult(result)" class="btn btn-info btn-sm">
+-              <font-awesome-icon :icon="['fas', 'edit']" class="icon" /> Edit
++              <i class="fas fa-edit"></i> Edit
+             </button>
+             <button @click="deleteResult(result.labResultId)" class="btn btn-danger btn-sm ml-2">
+-              <font-awesome-icon :icon="['fas', 'trash']" class="icon" /> Delete
++              <i class="fas fa-trash"></i> Delete
+             </button>
+           </div>
+         </div>
+         <button v-if="!showAddForm && canAddLabResult" @click="openAddForm" class="btn btn-primary mt-3">
+-          <font-awesome-icon :icon="['fas', 'plus']" class="icon" /> Add New Lab Result
++          <i class="fas fa-plus"></i> Add New Lab Result
+         </button>
+       </div>
+     </div>
+     <div v-else-if="loadingPatient" class="loading-message">
+-      <font-awesome-icon :icon="['fas', 'spinner']" spin class="icon" /> Loading patient details...
++      <i class="fas fa-spinner" spin ></i> Loading patient details...
+     </div>
+     <div v-else-if="patientError" class="error-message">
+       {{ patientError }}
+@@ -117,10 +117,10 @@
+           </div>
+           <div class="form-actions">
+             <button type="submit" class="btn btn-success">
+-              <font-awesome-icon :icon="['fas', 'save']" class="icon" /> Save Result
++              <i class="fas fa-save"></i> Save Result
+             </button>
+             <button type="button" @click="cancelForm" class="btn btn-secondary ml-2">
+-              <font-awesome-icon :icon="['fas', 'times']" class="icon" /> Cancel
++              <i class="fas fa-times"></i> Cancel
+             </button>
+           </div>
+           <div v-if="formError" class="error-message mt-3">{{ formError }}</div>
+diff --git a/src/views/PatientsListView.vue b/src/views/PatientsListView.vue
+index 57a4140..f5e4bc8 100644
+--- a/src/views/PatientsListView.vue
++++ b/src/views/PatientsListView.vue
+@@ -3,7 +3,7 @@
+     <h2 class="section-title">All Patients</h2>
+ 
+     <div v-if="loading" class="loading-message">
+-      <font-awesome-icon :icon="['fas', 'spinner']" spin class="icon" /> Loading patient data...
++      <i class="fas fa-spinner icon" spin></i> Loading patient data...
+     </div>
+     <div v-else-if="errorMessage" class="error-message">
+       {{ errorMessage }}
+@@ -13,7 +13,7 @@
+       <div class="search-and-actions">
+         <div class="form-group">
+           <input type="text" v-model="searchTerm" @input="debouncePatientSearch" class="form-control search-input" placeholder="Search by name, contact, or email" />
+-          <font-awesome-icon :icon="['fas', 'search']" class="search-icon" />
++          <i class="fas fa-search search-icon"></i>
+         </div>
+         </div>
+ 
+@@ -43,13 +43,13 @@
+               <td>{{ formatDate(patient.dateOfBirth) }}</td>
+               <td>
+                 <router-link :to="{ name: 'patient-history', params: { patientId: patient.patientId } }" class="btn btn-sm btn-info">
+-                  <font-awesome-icon :icon="['fas', 'file-medical']" /> History
++                  <i class="fas fa-file-medical"></i> History
+                 </router-link>
+                 <router-link :to="{ name: 'triage-records', params: { patientId: patient.patientId } }" class="btn btn-sm btn-secondary ml-1">
+-                  <font-awesome-icon :icon="['fas', 'heartbeat']" /> Triage
++                  <i class="fas fa-heartbeat"></i> Triage
+                 </router-link>
+                 <router-link :to="{ name: 'patient-lab-results', params: { patientId: patient.patientId } }" class="btn btn-sm btn-success ml-1">
+-                  <font-awesome-icon :icon="['fas', 'vials']" /> Labs
++                  <i class="fas fa-vials"></i> Labs
+                 </router-link>
+               </td>
+             </tr>
+diff --git a/src/views/ReceptionistView.vue b/src/views/ReceptionistView.vue
+index 1597056..03030ca 100644
+--- a/src/views/ReceptionistView.vue
++++ b/src/views/ReceptionistView.vue
+@@ -3,7 +3,7 @@
+     <h2 class="section-title">Receptionist Dashboard</h2>
+ 
+     <div v-if="loading" class="loading-message">
+-      <font-awesome-icon :icon="['fas', 'spinner']" spin class="icon" /> Loading dashboard...
++      <i class="fas fa-spinner" spin ></i> Loading dashboard...
+     </div>
+     <div v-else-if="errorMessage" class="error-message">
+       {{ errorMessage }}
+@@ -12,7 +12,7 @@
+     <div v-else class="receptionist-grid">
+       <div class="card grid-item grid-item-full-width">
+         <div class="card-header">
+-          <h3><font-awesome-icon :icon="['fas', 'calendar-day']" class="icon" /> Today's Appointments ({{ formatDate(today) }})</h3>
++          <h3><i class="fas fa-calendar-day"></i> Today's Appointments ({{ formatDate(today) }})</h3>
+         </div>
+         <div class="card-body">
+           <div v-if="loadingAppointments" class="loading-message-small">Loading appointments...</div>
+@@ -60,7 +60,7 @@
+ 
+       <div class="card grid-item">
+         <div class="card-header">
+-          <h3><font-awesome-icon :icon="['fas', 'magnifying-glass']" class="icon" /> Patient Lookup</h3>
++          <h3><i class="fas fa-magnifying-glass"></i> Patient Lookup</h3>
+         </div>
+         <div class="card-body">
+           <div class="form-group">
+@@ -84,7 +84,7 @@
+ 
+       <div class="card grid-item">
+         <div class="card-header">
+-          <h3><font-awesome-icon :icon="['fas', 'chart-line']" class="icon" /> Daily Summary</h3>
++          <h3><i class="fas fa-chart-line"></i> Daily Summary</h3>
+         </div>
+         <div class="card-body">
+           <p>Upcoming appointments: {{ todaysAppointments.filter(a => a.status === 'Scheduled' || a.status === 'Confirmed').length }}</p>
+diff --git a/src/views/TriageRecordsView.vue b/src/views/TriageRecordsView.vue
+index 584f327..0acfc11 100644
+--- a/src/views/TriageRecordsView.vue
++++ b/src/views/TriageRecordsView.vue
+@@ -7,19 +7,19 @@
+         <p><strong>Contact:</strong> {{ patient.contactNumber }}</p>
+         <p><strong>Email:</strong> {{ patient.email }}</p>
+         <router-link :to="{ name: 'patient-history', params: { patientId: patient.patientId } }" class="btn btn-primary btn-sm mt-3">
+-          <font-awesome-icon :icon="['fas', 'file-medical']" class="icon" /> View Medical History
++          <i class="fas fa-file-medical"></i> View Medical History
+         </router-link>
+         <router-link :to="{ name: 'patient-lab-results', params: { patientId: patient.patientId } }" class="btn btn-success btn-sm mt-3 ml-2">
+-          <font-awesome-icon :icon="['fas', 'vials']" class="icon" /> View Lab Results
++          <i class="fas fa-vials"></i> View Lab Results
+         </router-link>
+         <router-link :to="{ name: 'patient-documents', params: { patientId: patient.patientId } }" class="btn btn-dark btn-sm mt-3 ml-2">
+-          <font-awesome-icon :icon="['fas', 'file-alt']" class="icon" /> View Documents
++          <i class="fas fa-file-alt"></i> View Documents
+         </router-link>
+       </div>
+ 
+       <h3 class="subsection-title">Triage Entries</h3>
+       <div v-if="loadingTriage" class="loading-message">
+-        <font-awesome-icon :icon="['fas', 'spinner']" spin class="icon" /> Loading triage records...
++        <i class="fas fa-spinner icon" spin></i> Loading triage records...
+       </div>
+       <div v-else-if="triageError" class="error-message">
+         {{ triageError }}
+@@ -27,13 +27,13 @@
+       <div v-else-if="triageRecords.length === 0" class="no-records-message">
+         No triage records found for this patient.
+         <button v-if="canAddTriage" @click="openAddForm" class="btn btn-primary mt-3">
+-          <font-awesome-icon :icon="['fas', 'plus']" class="icon" /> Add New Triage Record
++          <i class="fas fa-plus"></i> Add New Triage Record
+         </button>
+       </div>
+       <div v-else class="triage-records-list">
+         <div v-for="record in triageRecords" :key="record.recordId" class="triage-record-card card">
+           <div class="record-header">
+-            <h4><font-awesome-icon :icon="['fas', 'heartbeat']" class="icon" /> Triage Date: {{ formatDateTime(record.createdAt) }}</h4>
++            <h4><i class="fas fa-heartbeat"></i> Triage Date: {{ formatDateTime(record.createdAt) }}</h4>
+           </div>
+           <div class="record-details-grid">
+             <div class="detail-item">
+@@ -63,20 +63,20 @@
+           </div>
+           <div class="record-actions" v-if="canEditTriage">
+             <button @click="editTriageRecord(record)" class="btn btn-info btn-sm">
+-              <font-awesome-icon :icon="['fas', 'edit']" class="icon" /> Edit
++              <i class="fas fa-edit"></i> Edit
+             </button>
+             <button @click="deleteTriageRecord(record.recordId)" class="btn btn-danger btn-sm ml-2">
+-              <font-awesome-icon :icon="['fas', 'trash']" class="icon" /> Delete
++              <i class="fas fa-trash"></i> Delete
+             </button>
+           </div>
+         </div>
+         <button v-if="!showAddForm && canAddTriage" @click="openAddForm" class="btn btn-primary mt-3">
+-          <font-awesome-icon :icon="['fas', 'plus']" class="icon" /> Add New Triage Record
++          <i class="fas fa-plus"></i> Add New Triage Record
+         </button>
+       </div>
+     </div>
+     <div v-else-if="loadingPatient" class="loading-message">
+-      <font-awesome-icon :icon="['fas', 'spinner']" spin class="icon" /> Loading patient details...
++      <i class="fas fa-spinner icon" spin></i> Loading patient details...
+     </div>
+     <div v-else-if="patientError" class="error-message">
+       {{ patientError }}
+@@ -122,10 +122,10 @@
+           </div>
+           <div class="form-actions">
+             <button type="submit" class="btn btn-success">
+-              <font-awesome-icon :icon="['fas', 'save']" class="icon" /> Save Record
++              <i class="fas fa-save"></i> Save Record
+             </button>
+             <button type="button" @click="cancelForm" class="btn btn-secondary ml-2">
+-              <font-awesome-icon :icon="['fas', 'times']" class="icon" /> Cancel
++              <i class="fas fa-times"></i> Cancel
+             </button>
+           </div>
+           <div v-if="formError" class="error-message mt-3">{{ formError }}</div>
+diff --git a/src/views/UserManagementView.vue b/src/views/UserManagementView.vue
+index 185184b..accf2e9 100644
+--- a/src/views/UserManagementView.vue
++++ b/src/views/UserManagementView.vue
+@@ -3,7 +3,7 @@
+     <h2 class="section-title">User Management</h2>
+ 
+     <div v-if="loading" class="loading-message">
+-      <font-awesome-icon :icon="['fas', 'spinner']" spin class="icon" /> Loading user data...
++      <i class="fas fa-spinner icon" spin></i> Loading user data...
+     </div>
+     <div v-else-if="errorMessage" class="error-message">
+       {{ errorMessage }}
+@@ -13,10 +13,10 @@
+       <div class="header-actions">
+         <div class="form-group search-group">
+           <input type="text" v-model="searchTerm" @input="debounceSearch" class="form-control search-input" placeholder="Search users" />
+-          <font-awesome-icon :icon="['fas', 'search']" class="search-icon" />
++          <i class="fas fa-search search-icon"></i>
+         </div>
+         <button v-if="canCreateUser" @click="openCreateForm" class="btn btn-primary">
+-          <font-awesome-icon :icon="['fas', 'user-plus']" class="icon" /> Add New Staff
++          <i class="fas fa-user-plus icon"></i> Add New Staff
+         </button>
+       </div>
+ 
+@@ -36,29 +36,23 @@
+             </tr>
+           </thead>
+           <tbody>
+-            <tr v-for="user in filteredUsers" :key="user.userId" :class="{ 'deleted-user': user.isDeleted }">
++            <tr v-for="user in filteredUsers" :key="user.userId" :class="{ 'deleted-user': !user.isActive }">
+               <td>{{ user.userId }}</td>
+               <td>{{ user.username }}</td>
+               <td>{{ user.email }}</td>
+-              <td>{{ user.staffDetail?.jobTitle || 'N/A' }}</td>
++              <td>{{ user.jobTitle || 'N/A' }}</td>
+               <td>
+                 <span class="role-badge">
+                   {{ user.roleName }}
+                 </span>
+               </td>
+               <td class="actions">
+-                <button v-if="canEditUser" @click="openEditForm(user)" class="btn btn-sm btn-info">
+-                  <font-awesome-icon :icon="['fas', 'edit']" />
++                <router-link :to="{ name: 'user-detail', params: { userId: user.userId } }" class="btn btn-sm btn-info">
++                  <i class="fas fa-eye"></i>
++                </router-link>
++                <button v-if="canDeleteUser && user.isActive" @click="softDeleteUser(user.userId)" class="btn btn-sm btn-danger ml-1">
++                  <i class="fas fa-trash-alt"></i>
+                 </button>
+-                <button v-if="canManageRoles" @click="openRoleForm(user)" class="btn btn-sm btn-secondary ml-1">
+-                  <font-awesome-icon :icon="['fas', 'user-tag']" />
+-                </button>
+-                <button v-if="canDeleteUser && !user.isDeleted" @click="softDeleteUser(user.userId)" class="btn btn-sm btn-danger ml-1">
+-                  <font-awesome-icon :icon="['fas', 'trash-alt']" />
+-                </button>
+-                <!-- <button v-if="canRestoreUser && user.isDeleted" @click="restoreUser(user.userId)" class="btn btn-sm btn-success ml-1">
+-                  <font-awesome-icon :icon="['fas', 'undo']" />
+-                </button> -->
+               </td>
+             </tr>
+           </tbody>
+@@ -68,53 +62,26 @@
+ 
+     <div v-if="showUserForm" class="modal-overlay">
+       <div class="modal-content card">
+-        <h3>{{ editingUser ? 'Edit User' : 'Create New User' }}</h3>
++        <h3>Create New User</h3>
+         <form @submit.prevent="saveUser">
+           <div class="form-group">
+             <label for="username">Username</label>
+-            <input type="text" id="username" v-model="currentUser.userName" class="form-control" required :disabled="editingUser" />
++            <input type="text" id="username" v-model="currentUser.userName" class="form-control" required />
+           </div>
+           <div class="form-group">
+             <label for="email">Email</label>
+             <input type="email" id="email" v-model="currentUser.email" class="form-control" required />
+           </div>
+-          <div class="form-group" v-if="!editingUser">
++          <div class="form-group">
+             <label for="password">Password</label>
+             <input type="password" id="password" v-model="currentUser.password" class="form-control" required />
+           </div>
+           <div class="form-actions">
+             <button type="submit" class="btn btn-success">
+-              <font-awesome-icon :icon="['fas', 'save']" /> Save User
++              <i class="fas fa-save"></i> Save User
+             </button>
+             <button type="button" @click="closeForm" class="btn btn-secondary ml-1">
+-              <font-awesome-icon :icon="['fas', 'times']" /> Cancel
+-            </button>
+-          </div>
+-          <div v-if="formError" class="error-message mt-2">{{ formError }}</div>
+-        </form>
+-      </div>
+-    </div>
+-
+-    <div v-if="showRoleForm" class="modal-overlay">
+-      <div class="modal-content card">
+-        <h3>Manage Roles for {{ editingUser?.userName }}</h3>
+-        <form @submit.prevent="saveRoles">
+-          <div class="form-group">
+-            <label>Roles</label>
+-            <div class="role-checkboxes">
+-              <label v-for="role in availableRoles" :key="role" class="checkbox-container">
+-                <input type="checkbox" :value="role" v-model="selectedRoles" />
+-                <span class="checkmark"></span>
+-                {{ role }}
+-              </label>
+-            </div>
+-          </div>
+-          <div class="form-actions">
+-            <button type="submit" class="btn btn-success">
+-              <font-awesome-icon :icon="['fas', 'save']" /> Update Roles
+-            </button>
+-            <button type="button" @click="closeForm" class="btn btn-secondary ml-1">
+-              <font-awesome-icon :icon="['fas', 'times']" /> Cancel
++              <i class="fas fa-times"></i> Cancel
+             </button>
+           </div>
+           <div v-if="formError" class="error-message mt-2">{{ formError }}</div>
+@@ -134,47 +101,20 @@ const filteredUsers = ref([]);
+ const loading = ref(true);
+ const errorMessage = ref('');
+ const searchTerm = ref('');
+-const showUserForm = ref(false);
+-const showRoleForm = ref(false);
+-const editingUser = ref(null);
++const showUserForm = ref(false); // Only used for the create form
+ const currentUser = ref({});
+ const formError = ref('');
+-const selectedRoles = ref([]);
+-
+-const availableRoles = [
+-  'Admin', 'Receptionist', 'Doctor', 'Nurse', 'LabTech', 'InventoryManager', 'HR'
+-];
+ 
+-// --- Permission Computeds based on documentation ---
++// Permission Computeds
+ const canCreateUser = computed(() => {
+   return authStore.userRoles.includes('Admin') || authStore.userRoles.includes('HR');
+ });
+ 
+-const canEditUser = computed(() => {
+-  // Documentation states HR can't update existing user info, so only Admin can
+-  // The backend API `PUT /api/Users/{id}` is for updating.
+-  return authStore.userRoles.includes('Admin');
+-});
+-
+-const canManageRoles = computed(() => {
+-  // Documentation states Admin can update all records. Role management is a key part of this.
+-  // The backend API `PUT /api/Users/{id}/role` is for this.
+-  return authStore.userRoles.includes('Admin');
+-});
+-
+ const canDeleteUser = computed(() => {
+-  // HR can't update existing info, so they likely can't delete either. Admin can delete.
+-  // The backend API `DELETE /api/Users/{id}` is for this.
+   return authStore.userRoles.includes('Admin');
+ });
+ 
+-// const canRestoreUser = computed(() => {
+-//   // As with deletion, this is an Admin-only function
+-//   return authStore.userRoles.includes('Admin');
+-// });
+-// --------------------------------------------------
+-
+-// --- Data Fetching Logic ---
++// Data Fetching Logic
+ const fetchUsers = async () => {
+   loading.value = true;
+   errorMessage.value = '';
+@@ -190,7 +130,7 @@ const fetchUsers = async () => {
+   }
+ };
+ 
+-// --- Search Logic ---
++// Search Logic
+ const search = () => {
+   if (!searchTerm.value) {
+     filteredUsers.value = users.value;
+@@ -198,9 +138,10 @@ const search = () => {
+   }
+   const lowerCaseSearchTerm = searchTerm.value.toLowerCase();
+   filteredUsers.value = users.value.filter(user =>
+-    (user.userName && user.userName.toLowerCase().includes(lowerCaseSearchTerm)) ||
++    (user.username && user.username.toLowerCase().includes(lowerCaseSearchTerm)) ||
+     (user.email && user.email.toLowerCase().includes(lowerCaseSearchTerm)) ||
+-    (user.staffDetail?.jobTitle && user.staffDetail.jobTitle.toLowerCase().includes(lowerCaseSearchTerm))
++    (user.jobTitle && user.jobTitle.toLowerCase().includes(lowerCaseSearchTerm)) ||
++    (user.roleName && user.roleName.toLowerCase().includes(lowerCaseSearchTerm))
+   );
+ };
+ let searchTimeout = null;
+@@ -209,71 +150,32 @@ const debounceSearch = () => {
+   searchTimeout = setTimeout(search, 300);
+ };
+ 
+-// --- Form and Modal Logic ---
++// Form and Modal Logic (for new user creation only)
+ const openCreateForm = () => {
+-  editingUser.value = null;
+   currentUser.value = { userName: '', email: '', password: '' };
+   formError.value = '';
+   showUserForm.value = true;
+ };
+ 
+-const openEditForm = (user) => {
+-  editingUser.value = user;
+-  currentUser.value = { ...user };
+-  formError.value = '';
+-  showUserForm.value = true;
+-};
+-
+-const openRoleForm = (user) => {
+-  editingUser.value = user;
+-  selectedRoles.value = user.roles || [];
+-  formError.value = '';
+-  showRoleForm.value = true;
+-};
+-
+ const closeForm = () => {
+   showUserForm.value = false;
+-  showRoleForm.value = false;
+-  editingUser.value = null;
+   currentUser.value = {};
+-  selectedRoles.value = [];
+   formError.value = '';
+ };
+ 
+ const saveUser = async () => {
+   formError.value = '';
+   try {
+-    if (editingUser.value) {
+-      // Update existing user via PUT /api/Users/{id}
+-      await apiClient.put(`/api/Users/${editingUser.value.userId}`, currentUser.value);
+-    } else {
+-      // Create new user via POST /api/Auth/register
+-      await apiClient.post('/api/Auth/register', currentUser.value);
+-    }
++    await apiClient.post('/api/Auth/register', currentUser.value);
+     closeForm();
+-    await fetchUsers(); // Refresh the user list
++    await fetchUsers();
+   } catch (error) {
+     console.error('Failed to save user:', error);
+     formError.value = `Failed to save user: ${error.response?.data?.detail || error.message || error.response?.statusText}`;
+   }
+ };
+ 
+-const saveRoles = async () => {
+-  formError.value = '';
+-  try {
+-    if (editingUser.value) {
+-      // Update roles via PUT /api/Users/{id}/role
+-      await apiClient.put(`/api/Users/${editingUser.value.userId}/role`, { roles: selectedRoles.value });
+-    }
+-    closeForm();
+-    await fetchUsers(); // Refresh the user list
+-  } catch (error) {
+-    console.error('Failed to save roles:', error);
+-    formError.value = `Failed to save roles: ${error.response?.data?.detail || error.message || error.response?.statusText}`;
+-  }
+-};
+-
+-// --- User Deletion/Restoration Logic ---
++// User Deactivation Logic
+ const softDeleteUser = async (userId) => {
+   if (confirm('Are you sure you want to deactivate this user? They will not be able to log in.')) {
+     try {
+@@ -287,23 +189,8 @@ const softDeleteUser = async (userId) => {
+   }
+ };
+ 
+-// const restoreUser = async (userId) => {
+-//   if (confirm('Are you sure you want to restore this user?')) {
+-//     try {
+-//       // The backend API `POST /api/Users/restore/{id}` is for this.
+-//       await apiClient.post(`/api/Users/restore/${userId}`);
+-//       await fetchUsers();
+-//       alert('User restored successfully.');
+-//     } catch (error) {
+-//       console.error('Failed to restore user:', error);
+-//       alert(`Failed to restore user: ${error.response?.data?.detail || error.message || error.response?.statusText}`);
+-//     }
+-//   }
+-// };
+-
+-// --- Lifecycle Hook ---
++// Lifecycle Hook
+ onMounted(async () => {
+-  // Check if current user has 'Admin' or 'HR' role to view this dashboard
+   if (!canCreateUser.value) {
+     errorMessage.value = "Access Denied: You do not have permission to view the User Management page.";
+     loading.value = false;
+@@ -416,11 +303,6 @@ onMounted(async () => {
+     font-weight: bold;
+     margin-right: 5px;
+     margin-bottom: 3px;
+-
+-    &.no-role {
+-      background-color: $color-secondary-grey;
+-      color: white;
+-    }
+   }
+ 
+   .btn-sm {
+@@ -463,21 +345,6 @@ onMounted(async () => {
+ 
+   .form-group {
+     margin-bottom: $spacing-md;
+-    .role-checkboxes {
+-      display: flex;
+-      flex-wrap: wrap;
+-      gap: $spacing-sm;
+-    }
+-    .checkbox-container {
+-      display: flex;
+-      align-items: center;
+-      cursor: pointer;
+-      user-select: none;
+-      
+-      input {
+-        margin-right: 5px;
+-      }
+-    }
+   }
+ 
+   .form-actions {

@@ -8,16 +8,16 @@
         <p><strong>Email:</strong> {{ patient.email }}</p>
         <p v-if="patient.bloodType"><strong>Blood Type:</strong> {{ patient.bloodType }}</p>
         <router-link :to="{ name: 'clinic-visits', params: { patientId: patient.patientId } }" class="btn btn-secondary btn-sm mt-3">
-          <font-awesome-icon :icon="['fas', 'calendar-alt']" class="icon" /> View Visit History
+          <i class="fas fa-calendar-alt"></i> View Visit History
         </router-link>
         <router-link :to="{ name: 'triage-records', params: { patientId: patient.patientId } }" class="btn btn-info btn-sm mt-3 ml-2">
-          <font-awesome-icon :icon="['fas', 'heartbeat']" class="icon" /> View Triage Records
+          <i class="fas fa-heartbeat"></i> View Triage Records
         </router-link>
         </div>
 
       <h3 class="subsection-title">Medical Records</h3>
       <div v-if="loadingRecords" class="loading-message">
-        <font-awesome-icon :icon="['fas', 'spinner']" spin class="icon" /> Loading medical records...
+        <i class="fas fa-spinner" spin ></i> Loading medical records...
       </div>
       <div v-else-if="recordsError" class="error-message">
         {{ recordsError }}
@@ -28,9 +28,9 @@
       <div v-else class="medical-records-list">
         <div v-for="record in medicalRecords" :key="record.recordId" class="medical-record-card card">
           <div class="record-header">
-            <h4><font-awesome-icon :icon="['fas', 'file-medical']" class="icon" /> Record Date: {{ formatDateTime(record.createdAt) }}</h4>
+            <h4><i class="fas fa-file-medical"></i> Record Date: {{ formatDateTime(record.createdAt) }}</h4>
             <span class="record-staff">
-              <font-awesome-icon :icon="['fas', 'user-doctor']" class="icon" /> {{ record.staff?.firstName + ' ' + record.staff?.lastName || 'N/A' }} ({{ record.staff?.jobTitle || 'Staff' }})
+              <i class="fas fa-user-doctor"></i> {{ record.staff?.firstName + ' ' + record.staff?.lastName || 'N/A' }} ({{ record.staff?.jobTitle || 'Staff' }})
             </span>
           </div>
           <div class="record-details-grid">
@@ -58,7 +58,7 @@
       </div>
     </div>
     <div v-else-if="loadingPatient" class="loading-message">
-      <font-awesome-icon :icon="['fas', 'spinner']" spin class="icon" /> Loading patient details...
+      <i class="fas fa-spinner" spin ></i> Loading patient details...
     </div>
     <div v-else-if="patientError" class="error-message">
       {{ patientError }}

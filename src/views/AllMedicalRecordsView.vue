@@ -7,12 +7,12 @@
       <div class="search-and-actions">
         <div class="form-group search-group">
           <input type="text" v-model="searchTerm" @input="debounceSearch" class="form-control search-input" placeholder="Search by patient, doctor, or diagnosis" />
-          <font-awesome-icon :icon="['fas', 'search']" class="search-icon" />
+          <i class="fas fa-search search-icon"></i>
         </div>
       </div>
 
       <div v-if="loading" class="loading-message">
-        <font-awesome-icon :icon="['fas', 'spinner']" spin /> Loading medical records...
+        <i class="fas fa-spinner" spin /> Loading medical records...
       </div>
       <div v-else-if="errorMessage" class="error-message">
         {{ errorMessage }}
@@ -50,7 +50,7 @@
               <td>{{ record.diagnosis || 'N/A' }}</td>
               <td>
                 <router-link :to="{ name: 'patient-history', params: { patientId: record.patient.patientId, medicalRecordId: record.recordId } }" class="btn btn-sm btn-info">
-                  <font-awesome-icon :icon="['fas', 'eye']" /> View
+                  <i class="fas fa-eye"></i> View
                 </router-link>
                 </td>
             </tr>

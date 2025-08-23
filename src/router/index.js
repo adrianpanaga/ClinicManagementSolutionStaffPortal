@@ -12,6 +12,7 @@ import LabTechView from '../views/LabTechView.vue';
 import InventoryManagerView from '../views/InventoryManagerView.vue';
 import PatientsListView from '../views/PatientsListView.vue';
 import UserManagementView from '../views/UserManagementView.vue';
+import UserDetailView from '../views/UserDetailView.vue';
 import ClinicSettingsView from '../views/ClinicSettingsView.vue';
 
 // Patient-related views
@@ -114,6 +115,13 @@ const routes = [
     name: 'UserManagement',
     component: UserManagementView,
     meta: { requiresAuth: true, roles: ['Admin', 'HR'] },
+  },
+  {
+    path: '/users/:userId',
+    name: 'user-detail',
+    component: UserDetailView,
+    props: true,
+    meta: { requiresAuth: true, roles: ['Admin', 'HR', 'Doctor', 'Nurse', 'LabTech', 'Receptionist', 'InventoryManager'] },
   },
   {
     path: '/clinic-settings',

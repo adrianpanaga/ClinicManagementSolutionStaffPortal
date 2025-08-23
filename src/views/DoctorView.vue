@@ -3,7 +3,7 @@
     <h2 class="section-title">Doctor's Dashboard</h2>
 
     <div v-if="loading" class="loading-message">
-      <font-awesome-icon :icon="['fas', 'spinner']" spin class="icon" /> Loading dashboard...
+      <i class="fas fa-spinner icon" spin></i> Loading dashboard...
     </div>
     <div v-else-if="errorMessage" class="error-message">
       {{ errorMessage }}
@@ -12,7 +12,7 @@
     <div v-else class="doctor-grid">
       <div class="card grid-item grid-item-full-width">
         <div class="card-header">
-          <h3><font-awesome-icon :icon="['fas', 'user-doctor']" class="icon" /> My Upcoming Appointments ({{ formatDate(today) }})</h3>
+          <h3><i class="fas fa-calendar-alt"></i> My Upcoming Appointments ({{ formatDate(today) }})</h3>
         </div>
         <div class="card-body">
           <div v-if="loadingAppointments" class="loading-message-small">Loading appointments...</div>
@@ -57,7 +57,7 @@
 
       <div class="card grid-item">
         <div class="card-header">
-          <h3><font-awesome-icon :icon="['fas', 'magnifying-glass']" class="icon" /> Patient Lookup</h3>
+          <h3><i class="fas fa-magnifying-glass"></i> Patient Lookup</h3>
         </div>
         <div class="card-body">
           <div class="form-group">
@@ -81,12 +81,12 @@
 
       <div class="card grid-item">
         <div class="card-header">
-          <h3><font-awesome-icon :icon="['fas', 'stethoscope']" class="icon" /> Quick Access</h3>
+          <h3><i class="fas fa-stethoscope"></i> Quick Access</h3>
         </div>
         <div class="card-body">
           <ul class="quick-links">
-            <li><router-link to="/patients"><font-awesome-icon :icon="['fas', 'users']" class="icon" /> Browse All Patients</router-link></li>
-            <li><router-link to="/medical-records"><font-awesome-icon :icon="['fas', 'file-lines']" class="icon" /> All Medical Records</router-link></li>
+            <li><router-link to="/patients"><i class="fas fa-users"></i> Browse All Patients</router-link></li>
+            <li><router-link to="/medical-records"><i class="fas fa-file-lines"></i> All Medical Records</router-link></li>
             </ul>
         </div>
       </div>

@@ -171,7 +171,7 @@ onUnmounted(() => {
 <style lang="scss">
 @import './assets/styles/_common.scss'; // This now imports _variables.scss, _mixins.scss, and _layout.scss
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap'); /* Added Inter font */
-@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css');
+@import url('./assets/fontawesome/css/all.min.css');
 
 
 html, body {

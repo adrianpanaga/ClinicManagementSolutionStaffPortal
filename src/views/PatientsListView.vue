@@ -3,7 +3,7 @@
     <h2 class="section-title">All Patients</h2>
 
     <div v-if="loading" class="loading-message">
-      <font-awesome-icon :icon="['fas', 'spinner']" spin class="icon" /> Loading patient data...
+      <i class="fas fa-spinner icon" spin></i> Loading patient data...
     </div>
     <div v-else-if="errorMessage" class="error-message">
       {{ errorMessage }}
@@ -13,7 +13,7 @@
       <div class="search-and-actions">
         <div class="form-group">
           <input type="text" v-model="searchTerm" @input="debouncePatientSearch" class="form-control search-input" placeholder="Search by name, contact, or email" />
-          <font-awesome-icon :icon="['fas', 'search']" class="search-icon" />
+          <i class="fas fa-search search-icon"></i>
         </div>
         </div>
 
@@ -43,13 +43,13 @@
               <td>{{ formatDate(patient.dateOfBirth) }}</td>
               <td>
                 <router-link :to="{ name: 'patient-history', params: { patientId: patient.patientId } }" class="btn btn-sm btn-info">
-                  <font-awesome-icon :icon="['fas', 'file-medical']" /> History
+                  <i class="fas fa-file-medical"></i> History
                 </router-link>
                 <router-link :to="{ name: 'triage-records', params: { patientId: patient.patientId } }" class="btn btn-sm btn-secondary ml-1">
-                  <font-awesome-icon :icon="['fas', 'heartbeat']" /> Triage
+                  <i class="fas fa-heartbeat"></i> Triage
                 </router-link>
                 <router-link :to="{ name: 'patient-lab-results', params: { patientId: patient.patientId } }" class="btn btn-sm btn-success ml-1">
-                  <font-awesome-icon :icon="['fas', 'vials']" /> Labs
+                  <i class="fas fa-vials"></i> Labs
                 </router-link>
               </td>
             </tr>

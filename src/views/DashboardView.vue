@@ -3,7 +3,7 @@
     <h2 class="section-title">Dashboard Overview <span v-if="authStore.username">for {{ authStore.username }}</span></h2>
 
     <div v-if="loading" class="loading-message">
-      <font-awesome-icon :icon="['fas', 'spinner']" spin class="icon" /> Loading dashboard data...
+      <i class="fas fa-spinner icon" spin></i> Loading dashboard data...
     </div>
 
     <div v-if="errorMessage" class="error-message">
@@ -12,19 +12,19 @@
 
     <div v-if="!loading && !errorMessage" class="dashboard-grid">
       <div class="card dashboard-card">
-        <h3><font-awesome-icon :icon="['fas', 'calendar-check']" class="icon" /> Today's Appointments</h3>
+        <h3><i class="fas fa-calendar-check icon"></i> Today's Appointments</h3>
         <p class="metric-value">{{ dashboardData.todayAppointmentsCount }}</p>
         <router-link to="/appointments" class="card-link btn btn-primary">View Appointments</router-link>
       </div>
 
       <div class="card dashboard-card">
-        <h3><font-awesome-icon :icon="['fas', 'user-injured']" class="icon" /> Total Active Patients</h3>
+        <h3><i class="fas fa-user-injured icon"></i> Total Active Patients</h3>
         <p class="metric-value">{{ dashboardData.totalPatientsCount }}</p>
         <router-link to="/patients" class="card-link btn btn-primary">View Patients</router-link>
       </div>
 
       <div class="card dashboard-card">
-        <h3><font-awesome-icon :icon="['fas', 'clipboard-list']" class="icon" /> Pending Tasks</h3>
+        <h3><i class="fas fa-clipboard-list icon"></i> Pending Tasks</h3>
         <p class="metric-value">0</p> <router-link to="/tasks" class="card-link btn btn-secondary">Manage Tasks</router-link>
       </div>
     </div>

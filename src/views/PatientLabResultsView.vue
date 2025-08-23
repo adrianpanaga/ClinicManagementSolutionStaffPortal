@@ -9,20 +9,20 @@
         
         <div class="patient-actions mt-3">
           <router-link :to="{ name: 'patient-history', params: { patientId: patient.patientId } }" class="btn btn-primary btn-sm">
-            <font-awesome-icon :icon="['fas', 'file-medical']" class="icon" /> View Medical History
+            <i class="fas fa-file-medical"></i> View Medical History
           </router-link>
           <router-link :to="{ name: 'clinic-visits', params: { patientId: patient.patientId } }" class="btn btn-secondary btn-sm ml-2">
-            <font-awesome-icon :icon="['fas', 'calendar-alt']" class="icon" /> View Visit History
+            <i class="fas fa-calendar-alt"></i> View Visit History
           </router-link>
           <router-link :to="{ name: 'triage-records', params: { patientId: patient.patientId } }" class="btn btn-info btn-sm ml-2">
-            <font-awesome-icon :icon="['fas', 'heartbeat']" class="icon" /> View Triage Records
+            <i class="fas fa-heartbeat"></i> View Triage Records
           </router-link>
         </div>
       </div>
 
       <h3 class="subsection-title">Recorded Lab Results</h3>
       <div v-if="loadingResults" class="loading-message">
-        <font-awesome-icon :icon="['fas', 'spinner']" spin class="icon" /> Loading lab results...
+        <i class="fas fa-spinner" spin ></i> Loading lab results...
       </div>
       <div v-else-if="resultsError" class="error-message">
         {{ resultsError }}
@@ -30,13 +30,13 @@
       <div v-else-if="labResults.length === 0" class="no-records-message">
         No lab results found for this patient.
         <button v-if="canAddLabResult" @click="openAddForm" class="btn btn-primary mt-3">
-          <font-awesome-icon :icon="['fas', 'plus']" class="icon" /> Add New Lab Result
+          <i class="fas fa-plus"></i> Add New Lab Result
         </button>
       </div>
       <div v-else class="lab-results-list">
         <div v-for="result in labResults" :key="result.labResultId" class="lab-result-card card">
           <div class="result-header">
-            <h4><font-awesome-icon :icon="['fas', 'vials']" class="icon" /> {{ result.testName }} ({{ formatDate(result.resultDate) }})</h4>
+            <h4><i class="fas fa-vials"></i> {{ result.testName }} ({{ formatDate(result.resultDate) }})</h4>
             <span class="result-value">{{ result.resultValue }} {{ result.unit }}</span>
           </div>
           <div class="result-details-grid">
@@ -54,20 +54,20 @@
           </div>
           <div class="result-actions" v-if="canEditLabResult">
             <button @click="editResult(result)" class="btn btn-info btn-sm">
-              <font-awesome-icon :icon="['fas', 'edit']" class="icon" /> Edit
+              <i class="fas fa-edit"></i> Edit
             </button>
             <button @click="deleteResult(result.labResultId)" class="btn btn-danger btn-sm ml-2">
-              <font-awesome-icon :icon="['fas', 'trash']" class="icon" /> Delete
+              <i class="fas fa-trash"></i> Delete
             </button>
           </div>
         </div>
         <button v-if="!showAddForm && canAddLabResult" @click="openAddForm" class="btn btn-primary mt-3">
-          <font-awesome-icon :icon="['fas', 'plus']" class="icon" /> Add New Lab Result
+          <i class="fas fa-plus"></i> Add New Lab Result
         </button>
       </div>
     </div>
     <div v-else-if="loadingPatient" class="loading-message">
-      <font-awesome-icon :icon="['fas', 'spinner']" spin class="icon" /> Loading patient details...
+      <i class="fas fa-spinner" spin ></i> Loading patient details...
     </div>
     <div v-else-if="patientError" class="error-message">
       {{ patientError }}
@@ -117,10 +117,10 @@
           </div>
           <div class="form-actions">
             <button type="submit" class="btn btn-success">
-              <font-awesome-icon :icon="['fas', 'save']" class="icon" /> Save Result
+              <i class="fas fa-save"></i> Save Result
             </button>
             <button type="button" @click="cancelForm" class="btn btn-secondary ml-2">
-              <font-awesome-icon :icon="['fas', 'times']" class="icon" /> Cancel
+              <i class="fas fa-times"></i> Cancel
             </button>
           </div>
           <div v-if="formError" class="error-message mt-3">{{ formError }}</div>

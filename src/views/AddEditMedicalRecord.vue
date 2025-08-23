@@ -2,13 +2,13 @@
   <div class="add-edit-medical-record-view">
     <div v-if="hasPermission">
       <h2 class="section-title">
-        <font-awesome-icon :icon="['fas', isEditMode ? 'edit' : 'plus-circle']" />
+        <i class="fas" :class="isEditMode ? 'fa-edit' : 'fa-plus-circle'"></i>
         {{ isEditMode ? 'Edit Medical Record' : 'Create New Medical Record' }}
       </h2>
       <p class="subtitle" v-if="patient">For patient: <strong>{{ patient.firstName }} {{ patient.lastName }}</strong> (ID: {{ patient.patientId }})</p>
 
       <div v-if="loading" class="loading-message">
-        <font-awesome-icon :icon="['fas', 'spinner']" spin /> Loading record data...
+        <i class="fas fa-spinner" spin /> Loading record data...
       </div>
       <div v-else-if="errorMessage" class="error-message">
         {{ errorMessage }}
@@ -55,10 +55,10 @@
 
           <div class="form-actions">
             <button type="submit" class="btn btn-success" :disabled="loadingSave">
-              <font-awesome-icon :icon="['fas', 'save']" /> Save Record
+              <i class="fas fa-save"></i> Save Record
             </button>
             <button type="button" @click="cancel" class="btn btn-secondary ml-1" :disabled="loadingSave">
-              <font-awesome-icon :icon="['fas', 'times']" /> Cancel
+              <i class="fas fa-times"></i> Cancel
             </button>
           </div>
         </form>

@@ -5,7 +5,7 @@
       <p class="subtitle">Manage the clinic's operational hours and other global settings.</p>
 
       <div v-if="loading" class="loading-message">
-        <font-awesome-icon :icon="['fas', 'spinner']" spin /> Loading settings...
+        <i class="fas fa-spinner icon" spin></i> Loading settings...
       </div>
       <div v-else-if="errorMessage" class="error-message">
         {{ errorMessage }}
@@ -42,7 +42,7 @@
           
           <div class="form-actions">
             <button type="submit" class="btn btn-success" :disabled="loadingSave">
-              <font-awesome-icon :icon="['fas', 'save']" /> Save Changes
+              <i class="fas fa-save"></i> Save Changes
             </button>
           </div>
         </form>

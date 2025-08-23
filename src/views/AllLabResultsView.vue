@@ -7,12 +7,12 @@
       <div class="search-and-actions">
         <div class="form-group search-group">
           <input type="text" v-model="searchTerm" @input="debounceSearch" class="form-control search-input" placeholder="Search by patient name, test name..." />
-          <font-awesome-icon :icon="['fas', 'search']" class="search-icon" />
+          <i class="fas fa-search" :class="search-icon"></i>
         </div>
       </div>
 
       <div v-if="loading" class="loading-message">
-        <font-awesome-icon :icon="['fas', 'spinner']" spin /> Loading all lab results...
+        <i class="fas fa-spinner" spin /> Loading all lab results...
       </div>
       <div v-else-if="errorMessage" class="error-message">
         {{ errorMessage }}
@@ -49,7 +49,7 @@
               </td>
               <td>
                 <router-link :to="{ name: 'lab-result-detail', params: { id: result.labResultId } }">
-                  <font-awesome-icon :icon="['fas', 'vials']" /> View Lab Result
+                  <i class="fas fa-vials"></i> View Lab Result
                 </router-link>
               </td>
             </tr>

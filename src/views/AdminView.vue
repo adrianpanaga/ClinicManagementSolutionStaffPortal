@@ -3,7 +3,7 @@
     <h2 class="section-title">Admin Dashboard</h2>
 
     <div v-if="loading" class="loading-message">
-      <font-awesome-icon :icon="['fas', 'spinner']" spin class="icon" /> Loading dashboard...
+      <i class="fas fa-spinner icon" spin></i> Loading dashboard...
     </div>
     <div v-else-if="errorMessage" class="error-message">
       {{ errorMessage }}
@@ -12,7 +12,7 @@
     <div v-else class="admin-grid">
       <div class="card grid-item grid-item-full-width">
         <div class="card-header">
-          <h3><font-awesome-icon :icon="['fas', 'tachometer-alt']" class="icon" /> Clinic Overview</h3>
+          <h3><i class="fas fa-clinic-medical"></i> Clinic Information</h3>
         </div>
         <div class="card-body metrics-grid">
           <div class="metric-box">
@@ -36,38 +36,38 @@
 
       <div class="card grid-item">
         <div class="card-header">
-          <h3><font-awesome-icon :icon="['fas', 'users-cog']" class="icon" /> User & Role Management</h3>
+          <h3><i class="fas fa-users-cog"></i>User & Role Management</h3>
         </div>
         <div class="card-body">
           <ul class="admin-quick-links">
-            <li><router-link to="/users"><font-awesome-icon :icon="['fas', 'user-shield']" class="icon" /> Manage Staff Accounts</router-link></li>
-            <li><router-link to="/roles"><font-awesome-icon :icon="['fas', 'user-tag']" class="icon" /> Manage Roles (Future)</router-link></li>
+            <li><router-link to="/users"><i class="fas fa-user-shield"></i> Manage Staff Accounts</router-link></li>
+            <li><router-link to="/roles"><i class="fas fa-user-tag"></i> Manage Roles (Future)</router-link></li>
           </ul>
         </div>
       </div>
 
       <div class="card grid-item">
         <div class="card-header">
-          <h3><font-awesome-icon :icon="['fas', 'database']" class="icon" /> Data Access & Reports</h3>
+          <h3><i class="fas fa-database"></i> Data Access & Reports</h3>
         </div>
         <div class="card-body">
           <ul class="admin-quick-links">
-            <li><router-link to="/patients"><font-awesome-icon :icon="['fas', 'user-injured']" class="icon" /> All Patient Records</router-link></li>
-            <li><router-link to="/appointments/all"><font-awesome-icon :icon="['fas', 'calendar-check']" class="icon" /> All Appointments</router-link></li>
-            <li><router-link to="/medical-records/all"><font-awesome-icon :icon="['fas', 'file-medical']" class="icon" /> All Medical Records</router-link></li>
-            <li><router-link to="/inventory"><font-awesome-icon :icon="['fas', 'boxes-stacked']" class="icon" /> Inventory Management</router-link></li>
+            <li><router-link to="/patients"><i class="fas fa-user-injured"></i> All Patient Records</router-link></li>
+            <li><router-link to="/appointments/all"><i class="fas fa-calendar-check"></i> All Appointments</router-link></li>
+            <li><router-link to="/medical-records/all"><i class="fas fa-file-medical"></i> All Medical Records</router-link></li>
+            <li><router-link to="/inventory"><i class="fas fa-boxes-stacked"></i> Inventory Management</router-link></li>
           </ul>
         </div>
       </div>
 
       <div class="card grid-item">
         <div class="card-header">
-          <h3><font-awesome-icon :icon="['fas', 'cog']" class="icon" /> Clinic Settings</h3>
+          <h3><i class="fas fa-cog"></i> Clinic Settings</h3>
         </div>
         <div class="card-body">
           <ul class="admin-quick-links">
-            <li><router-link to="/clinic-settings"><font-awesome-icon :icon="['fas', 'clock']" class="icon" /> Manage Clinic Hours (Future)</router-link></li>
-            <li><router-link to="/system-logs"><font-awesome-icon :icon="['fas', 'scroll']" class="icon" /> View System Logs (Future)</router-link></li>
+            <li><router-link to="/clinic-settings"><i class="fas fa-clock"></i> Manage Clinic Hours (Future)</router-link></li>
+            <li><router-link to="/system-logs"><i class="fas fa-scroll"></i> View System Logs (Future)</router-link></li>
           </ul>
         </div>
       </div>

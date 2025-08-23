@@ -9,20 +9,20 @@
         
         <div class="patient-actions mt-3">
           <router-link :to="{ name: 'patient-history', params: { patientId: patient.patientId } }" class="btn btn-primary btn-sm">
-            <font-awesome-icon :icon="['fas', 'file-medical']" class="icon" /> View Full Medical History
+            <i class="fas fa-file-medical"></i> View Full Medical History
           </router-link>
           <router-link :to="{ name: 'triage-records', params: { patientId: patient.patientId } }" class="btn btn-info btn-sm ml-2">
-            <font-awesome-icon :icon="['fas', 'heartbeat']" class="icon" /> View Triage Records
+            <i class="fas fa-heartbeat"></i> View Triage Records
           </router-link>
           <router-link :to="{ name: 'patient-lab-results', params: { patientId: patient.patientId } }" class="btn btn-success btn-sm ml-2">
-            <font-awesome-icon :icon="['fas', 'vials']" class="icon" /> View Lab Results
+            <i class="fas fa-vials"></i> View Lab Results
           </router-link>
         </div>
       </div>
 
       <h3 class="subsection-title">Appointments (Visits)</h3>
       <div v-if="loadingAppointments" class="loading-message">
-        <font-awesome-icon :icon="['fas', 'spinner']" spin class="icon" /> Loading appointments...
+        <i class="fas fa-spinner icon" spin></i> Loading appointments...
       </div>
       <div v-else-if="appointmentsError" class="error-message">
         {{ appointmentsError }}
@@ -33,7 +33,7 @@
       <div v-else class="appointments-list">
         <div v-for="appt in appointments" :key="appt.id" class="appointment-card card">
           <div class="appointment-header">
-            <h4><font-awesome-icon :icon="['fas', 'calendar-alt']" class="icon" /> {{ formatDateTime(appt.appointmentDateTime) }}</h4>
+            <h4><i class="fas fa-calendar-alt icon"></i> {{ formatDateTime(appt.appointmentDateTime) }}</h4>
             <span :class="['status-badge', `status-${appt.status?.toLowerCase().replace(/\s/g, '-')}`]">
               {{ appt.status || 'Unknown' }}
             </span>
@@ -52,7 +52,7 @@
       </div>
     </div>
     <div v-else-if="loadingPatient" class="loading-message">
-      <font-awesome-icon :icon="['fas', 'spinner']" spin class="icon" /> Loading patient details...
+      <i class="fas fa-spinner icon" spin></i> Loading patient details...
     </div>
     <div v-else-if="patientError" class="error-message">
       {{ patientError }}

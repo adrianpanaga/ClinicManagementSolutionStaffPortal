@@ -4,7 +4,7 @@
       <h2 class="section-title">Medical Record #{{ medicalRecordId }}</h2>
       
       <div v-if="loading" class="loading-message">
-        <font-awesome-icon :icon="['fas', 'spinner']" spin /> Loading medical record...
+        <i class="fas fa-spinner icon" spin></i> Loading medical record...
       </div>
       <div v-else-if="errorMessage" class="error-message">
         {{ errorMessage }}
@@ -13,27 +13,27 @@
       <div v-else class="record-content">
         <div class="patient-info-card card">
           <div class="card-header">
-            <h3><font-awesome-icon :icon="['fas', 'user-injured']" /> Patient Information</h3>
+            <h3><i class="fas fa-user-injured"></i> Patient Information</h3>
           </div>
           <div class="card-body">
             <p><strong>Name:</strong> {{ record.patient?.firstName + ' ' + record.patient?.lastName || 'N/A' }}</p>
             <p><strong>Contact:</strong> {{ record.patient?.contactNumber || 'N/A' }}</p>
             <p><strong>Email:</strong> {{ record.patient?.email || 'N/A' }}</p>
             <router-link :to="{ name: 'patient-history', params: { patientId: record.patient?.patientId } }" class="btn btn-sm btn-info mt-3">
-              <font-awesome-icon :icon="['fas', 'history']" /> View Full Patient History
+              <i class="fas fa-history"></i> View Full Patient History
             </router-link>
           </div>
         </div>
 
         <div class="record-details card">
           <div class="card-header">
-            <h3><font-awesome-icon :icon="['fas', 'file-medical']" /> Record Details</h3>
+            <h3><i class="fas fa-file-medical"></i> Record Details</h3>
             <div class="record-actions" v-if="canEditRecord">
               <button @click="editRecord" class="btn btn-sm btn-warning">
-                <font-awesome-icon :icon="['fas', 'edit']" /> Edit
+                <i class="fas fa-edit"></i> Edit
               </button>
               <button @click="deleteRecord" class="btn btn-sm btn-danger ml-2">
-                <font-awesome-icon :icon="['fas', 'trash']" /> Delete
+                <i class="fas fa-trash"></i> Delete
               </button>
             </div>
           </div>

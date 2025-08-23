@@ -4,7 +4,7 @@
       <h2 class="section-title">Lab Result Details</h2>
       
       <div v-if="loading" class="loading-message">
-        <font-awesome-icon :icon="['fas', 'spinner']" spin /> Loading lab result...
+        <i class="fas fa-spinner icon" spin></i> Loading lab result...
       </div>
       <div v-else-if="errorMessage" class="error-message">
         {{ errorMessage }}
@@ -16,7 +16,7 @@
 
       <div v-else class="lab-result-details card">
         <div class="card-header">
-          <h3><font-awesome-icon :icon="['fas', 'vials']" /> {{ labResult.testName }}</h3>
+          <h3><i class="fas fa-vials"></i> {{ labResult.testName }}</h3>
           <p class="result-value">{{ labResult.resultValue }} {{ labResult.unit }}</p>
         </div>
         <div class="card-body">
@@ -50,7 +50,7 @@
         </div>
         <div class="card-actions">
           <button @click="goBack" class="btn btn-secondary">
-            <font-awesome-icon :icon="['fas', 'arrow-left']" /> Back to Patient Lab Results
+            <i class="fas fa-arrow-left"></i> Back to Patient Lab Results
           </button>
         </div>
       </div>

@@ -2,7 +2,7 @@
   <div class="add-edit-inventory-item">
     <div v-if="hasPermission">
       <h2 class="section-title">
-        <font-awesome-icon :icon="['fas', isEditMode ? 'edit' : 'plus-circle']" />
+        <i class="fas" :class="isEditMode ? 'fa-edit' : 'fa-plus-circle'"></i>
         {{ isEditMode ? 'Edit Inventory Item' : 'Add New Inventory Item' }}
       </h2>
 
@@ -50,16 +50,16 @@
         </div>
 
         <div v-if="loadingForm" class="loading-message mt-3">
-          <font-awesome-icon :icon="['fas', 'spinner']" spin /> Saving item...
+          <i class="fas fa-spinner icon" spin></i> Saving item...
         </div>
         <div v-if="formError" class="error-message mt-3">{{ formError }}</div>
 
         <div class="form-actions">
           <button type="submit" class="btn btn-success" :disabled="loadingForm">
-            <font-awesome-icon :icon="['fas', 'save']" /> {{ isEditMode ? 'Update Item' : 'Add Item' }}
+            <i class="fas fa-save"></i> {{ isEditMode ? 'Update Item' : 'Add Item' }}
           </button>
           <button type="button" @click="cancel" class="btn btn-secondary ml-1" :disabled="loadingForm">
-            <font-awesome-icon :icon="['fas', 'times']" /> Cancel
+            <i class="fas fa-times"></i> Cancel
           </button>
         </div>
       </form>

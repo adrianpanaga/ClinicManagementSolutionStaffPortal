@@ -3,7 +3,7 @@
     <h2 class="section-title">User Management</h2>
 
     <div v-if="loading" class="loading-message">
-      <font-awesome-icon :icon="['fas', 'spinner']" spin class="icon" /> Loading user data...
+      <i class="fas fa-spinner icon" spin></i> Loading user data...
     </div>
     <div v-else-if="errorMessage" class="error-message">
       {{ errorMessage }}
@@ -13,10 +13,10 @@
       <div class="header-actions">
         <div class="form-group search-group">
           <input type="text" v-model="searchTerm" @input="debounceSearch" class="form-control search-input" placeholder="Search users" />
-          <font-awesome-icon :icon="['fas', 'search']" class="search-icon" />
+          <i class="fas fa-search search-icon"></i>
         </div>
         <button v-if="canCreateUser" @click="openCreateForm" class="btn btn-primary">
-          <font-awesome-icon :icon="['fas', 'user-plus']" class="icon" /> Add New Staff
+          <i class="fas fa-user-plus icon"></i> Add New Staff
         </button>
       </div>
 
@@ -36,29 +36,23 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="user in filteredUsers" :key="user.userId" :class="{ 'deleted-user': user.isDeleted }">
+            <tr v-for="user in filteredUsers" :key="user.userId" :class="{ 'deleted-user': !user.isActive }">
               <td>{{ user.userId }}</td>
               <td>{{ user.username }}</td>
               <td>{{ user.email }}</td>
-              <td>{{ user.staffDetail?.jobTitle || 'N/A' }}</td>
+              <td>{{ user.jobTitle || 'N/A' }}</td>
               <td>
                 <span class="role-badge">
                   {{ user.roleName }}
                 </span>
               </td>
               <td class="actions">
-                <button v-if="canEditUser" @click="openEditForm(user)" class="btn btn-sm btn-info">
-                  <font-awesome-icon :icon="['fas', 'edit']" />
+                <router-link :to="{ name: 'user-detail', params: { userId: user.userId } }" class="btn btn-sm btn-info">
+                  <i class="fas fa-eye"></i>
+                </router-link>
+                <button v-if="canDeleteUser && user.isActive" @click="softDeleteUser(user.userId)" class="btn btn-sm btn-danger ml-1">
+                  <i class="fas fa-trash-alt"></i>
                 </button>
-                <button v-if="canManageRoles" @click="openRoleForm(user)" class="btn btn-sm btn-secondary ml-1">
-                  <font-awesome-icon :icon="['fas', 'user-tag']" />
-                </button>
-                <button v-if="canDeleteUser && !user.isDeleted" @click="softDeleteUser(user.userId)" class="btn btn-sm btn-danger ml-1">
-                  <font-awesome-icon :icon="['fas', 'trash-alt']" />
-                </button>
-                <!-- <button v-if="canRestoreUser && user.isDeleted" @click="restoreUser(user.userId)" class="btn btn-sm btn-success ml-1">
-                  <font-awesome-icon :icon="['fas', 'undo']" />
-                </button> -->
               </td>
             </tr>
           </tbody>
@@ -68,53 +62,26 @@
 
     <div v-if="showUserForm" class="modal-overlay">
       <div class="modal-content card">
-        <h3>{{ editingUser ? 'Edit User' : 'Create New User' }}</h3>
+        <h3>Create New User</h3>
         <form @submit.prevent="saveUser">
           <div class="form-group">
             <label for="username">Username</label>
-            <input type="text" id="username" v-model="currentUser.userName" class="form-control" required :disabled="editingUser" />
+            <input type="text" id="username" v-model="currentUser.userName" class="form-control" required />
           </div>
           <div class="form-group">
             <label for="email">Email</label>
             <input type="email" id="email" v-model="currentUser.email" class="form-control" required />
           </div>
-          <div class="form-group" v-if="!editingUser">
+          <div class="form-group">
             <label for="password">Password</label>
             <input type="password" id="password" v-model="currentUser.password" class="form-control" required />
           </div>
           <div class="form-actions">
             <button type="submit" class="btn btn-success">
-              <font-awesome-icon :icon="['fas', 'save']" /> Save User
+              <i class="fas fa-save"></i> Save User
             </button>
             <button type="button" @click="closeForm" class="btn btn-secondary ml-1">
-              <font-awesome-icon :icon="['fas', 'times']" /> Cancel
-            </button>
-          </div>
-          <div v-if="formError" class="error-message mt-2">{{ formError }}</div>
-        </form>
-      </div>
-    </div>
-
-    <div v-if="showRoleForm" class="modal-overlay">
-      <div class="modal-content card">
-        <h3>Manage Roles for {{ editingUser?.userName }}</h3>
-        <form @submit.prevent="saveRoles">
-          <div class="form-group">
-            <label>Roles</label>
-            <div class="role-checkboxes">
-              <label v-for="role in availableRoles" :key="role" class="checkbox-container">
-                <input type="checkbox" :value="role" v-model="selectedRoles" />
-                <span class="checkmark"></span>
-                {{ role }}
-              </label>
-            </div>
-          </div>
-          <div class="form-actions">
-            <button type="submit" class="btn btn-success">
-              <font-awesome-icon :icon="['fas', 'save']" /> Update Roles
-            </button>
-            <button type="button" @click="closeForm" class="btn btn-secondary ml-1">
-              <font-awesome-icon :icon="['fas', 'times']" /> Cancel
+              <i class="fas fa-times"></i> Cancel
             </button>
           </div>
           <div v-if="formError" class="error-message mt-2">{{ formError }}</div>
@@ -134,47 +101,20 @@ const filteredUsers = ref([]);
 const loading = ref(true);
 const errorMessage = ref('');
 const searchTerm = ref('');
-const showUserForm = ref(false);
-const showRoleForm = ref(false);
-const editingUser = ref(null);
+const showUserForm = ref(false); // Only used for the create form
 const currentUser = ref({});
 const formError = ref('');
-const selectedRoles = ref([]);
 
-const availableRoles = [
-  'Admin', 'Receptionist', 'Doctor', 'Nurse', 'LabTech', 'InventoryManager', 'HR'
-];
-
-// --- Permission Computeds based on documentation ---
+// Permission Computeds
 const canCreateUser = computed(() => {
   return authStore.userRoles.includes('Admin') || authStore.userRoles.includes('HR');
 });
 
-const canEditUser = computed(() => {
-  // Documentation states HR can't update existing user info, so only Admin can
-  // The backend API `PUT /api/Users/{id}` is for updating.
-  return authStore.userRoles.includes('Admin');
-});
-
-const canManageRoles = computed(() => {
-  // Documentation states Admin can update all records. Role management is a key part of this.
-  // The backend API `PUT /api/Users/{id}/role` is for this.
-  return authStore.userRoles.includes('Admin');
-});
-
 const canDeleteUser = computed(() => {
-  // HR can't update existing info, so they likely can't delete either. Admin can delete.
-  // The backend API `DELETE /api/Users/{id}` is for this.
   return authStore.userRoles.includes('Admin');
 });
 
-// const canRestoreUser = computed(() => {
-//   // As with deletion, this is an Admin-only function
-//   return authStore.userRoles.includes('Admin');
-// });
-// --------------------------------------------------
-
-// --- Data Fetching Logic ---
+// Data Fetching Logic
 const fetchUsers = async () => {
   loading.value = true;
   errorMessage.value = '';
@@ -190,7 +130,7 @@ const fetchUsers = async () => {
   }
 };
 
-// --- Search Logic ---
+// Search Logic
 const search = () => {
   if (!searchTerm.value) {
     filteredUsers.value = users.value;
@@ -198,9 +138,10 @@ const search = () => {
   }
   const lowerCaseSearchTerm = searchTerm.value.toLowerCase();
   filteredUsers.value = users.value.filter(user =>
-    (user.userName && user.userName.toLowerCase().includes(lowerCaseSearchTerm)) ||
+    (user.username && user.username.toLowerCase().includes(lowerCaseSearchTerm)) ||
     (user.email && user.email.toLowerCase().includes(lowerCaseSearchTerm)) ||
-    (user.staffDetail?.jobTitle && user.staffDetail.jobTitle.toLowerCase().includes(lowerCaseSearchTerm))
+    (user.jobTitle && user.jobTitle.toLowerCase().includes(lowerCaseSearchTerm)) ||
+    (user.roleName && user.roleName.toLowerCase().includes(lowerCaseSearchTerm))
   );
 };
 let searchTimeout = null;
@@ -209,71 +150,32 @@ const debounceSearch = () => {
   searchTimeout = setTimeout(search, 300);
 };
 
-// --- Form and Modal Logic ---
+// Form and Modal Logic (for new user creation only)
 const openCreateForm = () => {
-  editingUser.value = null;
   currentUser.value = { userName: '', email: '', password: '' };
   formError.value = '';
   showUserForm.value = true;
 };
 
-const openEditForm = (user) => {
-  editingUser.value = user;
-  currentUser.value = { ...user };
-  formError.value = '';
-  showUserForm.value = true;
-};
-
-const openRoleForm = (user) => {
-  editingUser.value = user;
-  selectedRoles.value = user.roles || [];
-  formError.value = '';
-  showRoleForm.value = true;
-};
-
 const closeForm = () => {
   showUserForm.value = false;
-  showRoleForm.value = false;
-  editingUser.value = null;
   currentUser.value = {};
-  selectedRoles.value = [];
   formError.value = '';
 };
 
 const saveUser = async () => {
   formError.value = '';
   try {
-    if (editingUser.value) {
-      // Update existing user via PUT /api/Users/{id}
-      await apiClient.put(`/api/Users/${editingUser.value.userId}`, currentUser.value);
-    } else {
-      // Create new user via POST /api/Auth/register
-      await apiClient.post('/api/Auth/register', currentUser.value);
-    }
+    await apiClient.post('/api/Auth/register', currentUser.value);
     closeForm();
-    await fetchUsers(); // Refresh the user list
+    await fetchUsers();
   } catch (error) {
     console.error('Failed to save user:', error);
     formError.value = `Failed to save user: ${error.response?.data?.detail || error.message || error.response?.statusText}`;
   }
 };
 
-const saveRoles = async () => {
-  formError.value = '';
-  try {
-    if (editingUser.value) {
-      // Update roles via PUT /api/Users/{id}/role
-      await apiClient.put(`/api/Users/${editingUser.value.userId}/role`, { roles: selectedRoles.value });
-    }
-    closeForm();
-    await fetchUsers(); // Refresh the user list
-  } catch (error) {
-    console.error('Failed to save roles:', error);
-    formError.value = `Failed to save roles: ${error.response?.data?.detail || error.message || error.response?.statusText}`;
-  }
-};
-
-// --- User Deletion/Restoration Logic ---
+// User Deactivation Logic
 const softDeleteUser = async (userId) => {
   if (confirm('Are you sure you want to deactivate this user? They will not be able to log in.')) {
     try {
@@ -287,23 +189,8 @@ const softDeleteUser = async (userId) => {
   }
 };
 
-// const restoreUser = async (userId) => {
-//   if (confirm('Are you sure you want to restore this user?')) {
-//     try {
-//       // The backend API `POST /api/Users/restore/{id}` is for this.
-//       await apiClient.post(`/api/Users/restore/${userId}`);
-//       await fetchUsers();
-//       alert('User restored successfully.');
-//     } catch (error) {
-//       console.error('Failed to restore user:', error);
-//       alert(`Failed to restore user: ${error.response?.data?.detail || error.message || error.response?.statusText}`);
-//     }
-//   }
-// };
-
-// --- Lifecycle Hook ---
+// Lifecycle Hook
 onMounted(async () => {
-  // Check if current user has 'Admin' or 'HR' role to view this dashboard
   if (!canCreateUser.value) {
     errorMessage.value = "Access Denied: You do not have permission to view the User Management page.";
     loading.value = false;
@@ -416,11 +303,6 @@ onMounted(async () => {
     font-weight: bold;
     margin-right: 5px;
     margin-bottom: 3px;
-
-    &.no-role {
-      background-color: $color-secondary-grey;
-      color: white;
-    }
   }
 
   .btn-sm {
@@ -463,21 +345,6 @@ onMounted(async () => {
 
   .form-group {
     margin-bottom: $spacing-md;
-    .role-checkboxes {
-      display: flex;
-      flex-wrap: wrap;
-      gap: $spacing-sm;
-    }
-    .checkbox-container {
-      display: flex;
-      align-items: center;
-      cursor: pointer;
-      user-select: none;
-      
-      input {
-        margin-right: 5px;
-      }
-    }
   }
 
   .form-actions {

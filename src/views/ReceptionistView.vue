@@ -3,7 +3,7 @@
     <h2 class="section-title">Receptionist Dashboard</h2>
 
     <div v-if="loading" class="loading-message">
-      <font-awesome-icon :icon="['fas', 'spinner']" spin class="icon" /> Loading dashboard...
+      <i class="fas fa-spinner" spin ></i> Loading dashboard...
     </div>
     <div v-else-if="errorMessage" class="error-message">
       {{ errorMessage }}
@@ -12,7 +12,7 @@
     <div v-else class="receptionist-grid">
       <div class="card grid-item grid-item-full-width">
         <div class="card-header">
-          <h3><font-awesome-icon :icon="['fas', 'calendar-day']" class="icon" /> Today's Appointments ({{ formatDate(today) }})</h3>
+          <h3><i class="fas fa-calendar-day"></i> Today's Appointments ({{ formatDate(today) }})</h3>
         </div>
         <div class="card-body">
           <div v-if="loadingAppointments" class="loading-message-small">Loading appointments...</div>
@@ -60,7 +60,7 @@
 
       <div class="card grid-item">
         <div class="card-header">
-          <h3><font-awesome-icon :icon="['fas', 'magnifying-glass']" class="icon" /> Patient Lookup</h3>
+          <h3><i class="fas fa-magnifying-glass"></i> Patient Lookup</h3>
         </div>
         <div class="card-body">
           <div class="form-group">
@@ -84,7 +84,7 @@
 
       <div class="card grid-item">
         <div class="card-header">
-          <h3><font-awesome-icon :icon="['fas', 'chart-line']" class="icon" /> Daily Summary</h3>
+          <h3><i class="fas fa-chart-line"></i> Daily Summary</h3>
         </div>
         <div class="card-body">
           <p>Upcoming appointments: {{ todaysAppointments.filter(a => a.status === 'Scheduled' || a.status === 'Confirmed').length }}</p>

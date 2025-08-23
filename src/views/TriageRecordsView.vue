@@ -7,19 +7,19 @@
         <p><strong>Contact:</strong> {{ patient.contactNumber }}</p>
         <p><strong>Email:</strong> {{ patient.email }}</p>
         <router-link :to="{ name: 'patient-history', params: { patientId: patient.patientId } }" class="btn btn-primary btn-sm mt-3">
-          <font-awesome-icon :icon="['fas', 'file-medical']" class="icon" /> View Medical History
+          <i class="fas fa-file-medical"></i> View Medical History
         </router-link>
         <router-link :to="{ name: 'patient-lab-results', params: { patientId: patient.patientId } }" class="btn btn-success btn-sm mt-3 ml-2">
-          <font-awesome-icon :icon="['fas', 'vials']" class="icon" /> View Lab Results
+          <i class="fas fa-vials"></i> View Lab Results
         </router-link>
         <router-link :to="{ name: 'patient-documents', params: { patientId: patient.patientId } }" class="btn btn-dark btn-sm mt-3 ml-2">
-          <font-awesome-icon :icon="['fas', 'file-alt']" class="icon" /> View Documents
+          <i class="fas fa-file-alt"></i> View Documents
         </router-link>
       </div>
 
       <h3 class="subsection-title">Triage Entries</h3>
       <div v-if="loadingTriage" class="loading-message">
-        <font-awesome-icon :icon="['fas', 'spinner']" spin class="icon" /> Loading triage records...
+        <i class="fas fa-spinner icon" spin></i> Loading triage records...
       </div>
       <div v-else-if="triageError" class="error-message">
         {{ triageError }}
@@ -27,13 +27,13 @@
       <div v-else-if="triageRecords.length === 0" class="no-records-message">
         No triage records found for this patient.
         <button v-if="canAddTriage" @click="openAddForm" class="btn btn-primary mt-3">
-          <font-awesome-icon :icon="['fas', 'plus']" class="icon" /> Add New Triage Record
+          <i class="fas fa-plus"></i> Add New Triage Record
         </button>
       </div>
       <div v-else class="triage-records-list">
         <div v-for="record in triageRecords" :key="record.recordId" class="triage-record-card card">
           <div class="record-header">
-            <h4><font-awesome-icon :icon="['fas', 'heartbeat']" class="icon" /> Triage Date: {{ formatDateTime(record.createdAt) }}</h4>
+            <h4><i class="fas fa-heartbeat"></i> Triage Date: {{ formatDateTime(record.createdAt) }}</h4>
           </div>
           <div class="record-details-grid">
             <div class="detail-item">
@@ -63,20 +63,20 @@
           </div>
           <div class="record-actions" v-if="canEditTriage">
             <button @click="editTriageRecord(record)" class="btn btn-info btn-sm">
-              <font-awesome-icon :icon="['fas', 'edit']" class="icon" /> Edit
+              <i class="fas fa-edit"></i> Edit
             </button>
             <button @click="deleteTriageRecord(record.recordId)" class="btn btn-danger btn-sm ml-2">
-              <font-awesome-icon :icon="['fas', 'trash']" class="icon" /> Delete
+              <i class="fas fa-trash"></i> Delete
             </button>
           </div>
         </div>
         <button v-if="!showAddForm && canAddTriage" @click="openAddForm" class="btn btn-primary mt-3">
-          <font-awesome-icon :icon="['fas', 'plus']" class="icon" /> Add New Triage Record
+          <i class="fas fa-plus"></i> Add New Triage Record
         </button>
       </div>
     </div>
     <div v-else-if="loadingPatient" class="loading-message">
-      <font-awesome-icon :icon="['fas', 'spinner']" spin class="icon" /> Loading patient details...
+      <i class="fas fa-spinner icon" spin></i> Loading patient details...
     </div>
     <div v-else-if="patientError" class="error-message">
       {{ patientError }}
@@ -122,10 +122,10 @@
           </div>
           <div class="form-actions">
             <button type="submit" class="btn btn-success">
-              <font-awesome-icon :icon="['fas', 'save']" class="icon" /> Save Record
+              <i class="fas fa-save"></i> Save Record
             </button>
             <button type="button" @click="cancelForm" class="btn btn-secondary ml-2">
-              <font-awesome-icon :icon="['fas', 'times']" class="icon" /> Cancel
+              <i class="fas fa-times"></i> Cancel
             </button>
           </div>
           <div v-if="formError" class="error-message mt-3">{{ formError }}</div>

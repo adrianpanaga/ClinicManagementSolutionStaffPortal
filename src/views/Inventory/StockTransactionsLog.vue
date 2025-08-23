@@ -7,12 +7,12 @@
       <div class="search-and-actions">
         <div class="form-group search-group">
           <input type="text" v-model="searchTerm" @input="debounceSearch" class="form-control search-input" placeholder="Search by item, batch, or staff" />
-          <font-awesome-icon :icon="['fas', 'search']" class="search-icon" />
+          <i class="fas fa-search search-icon"></i>
         </div>
       </div>
 
       <div v-if="loading" class="loading-message">
-        <font-awesome-icon :icon="['fas', 'spinner']" spin /> Loading transactions...
+        <i class="fas fa-spinner icon" spin></i> Loading transactions...
       </div>
       <div v-else-if="errorMessage" class="error-message">
         {{ errorMessage }}

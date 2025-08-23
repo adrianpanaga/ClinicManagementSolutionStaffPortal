@@ -5,7 +5,7 @@
       <p class="subtitle">Select a patient to view their lab results, or view all results across the clinic.</p>
 
       <div v-if="loading" class="loading-message">
-        <font-awesome-icon :icon="['fas', 'spinner']" spin /> Loading patient data...
+        <i class="fas fa-spinner icon" spin></i> Loading patient data...
       </div>
       <div v-else-if="errorMessage" class="error-message">
         {{ errorMessage }}
@@ -14,7 +14,7 @@
       <div v-else class="hub-container card">
         <div class="action-card">
           <div class="action-header">
-            <font-awesome-icon :icon="['fas', 'user']" class="icon" />
+            <i class="fas fa-user"></i>
             <h3>View Patient Lab Results</h3>
           </div>
           <div class="action-body">
@@ -33,13 +33,13 @@
                 v-if="selectedPatientId"
                 :to="{ name: 'patient-lab-results', params: { patientId: selectedPatientId } }"
                 class="btn btn-primary">
-                <font-awesome-icon :icon="['fas', 'vials']" class="icon" /> View Results
+                <i class="fas fa-vials"></i> View Results
               </router-link>
               <button
                 v-else
                 class="btn btn-primary btn-disabled"
                 disabled>
-                <font-awesome-icon :icon="['fas', 'vials']" class="icon" /> View Results
+                <i class="fas fa-vials"></i> View Results
               </button>
             </div>
           </div>
@@ -49,7 +49,7 @@
 
         <div class="action-card">
           <div class="action-header">
-            <font-awesome-icon :icon="['fas', 'clipboard-list']" class="icon" />
+            <i class="fas fa-clipboard-list"></i>
             <h3>View All Lab Results</h3>
           </div>
           <div class="action-body">
@@ -57,7 +57,7 @@
           </div>
           <div class="action-footer">
             <router-link :to="{ name: 'all-lab-results' }" class="btn btn-secondary">
-              <font-awesome-icon :icon="['fas', 'search']" class="icon" /> Browse All Results
+              <i class="fas fa-search search-icon"></i> Browse All Results
             </router-link>
           </div>
         </div>

@@ -5,7 +5,7 @@
       <p class="subtitle">A list of all scheduled appointments for the clinic today.</p>
 
       <div v-if="loading" class="loading-message">
-        <font-awesome-icon :icon="['fas', 'spinner']" spin /> Loading appointments...
+        <i class="fas fa-spinner" spin /> Loading appointments...
       </div>
       <div v-else-if="errorMessage" class="error-message">
         {{ errorMessage }}
@@ -44,10 +44,10 @@
               </td>
               <td>
                 <button @click="viewDetails(appt.appointmentId)" class="btn btn-sm btn-info">
-                  <font-awesome-icon :icon="['fas', 'eye']" />
+                  <i class="fas fa-eye"></i>
                 </button>
                 <button v-if="canEdit" @click="editAppointment(appt.appointmentId)" class="btn btn-sm btn-warning ml-1">
-                  <font-awesome-icon :icon="['fas', 'edit']" />
+                  <i class="fas fa-edit"></i>
                 </button>
               </td>
             </tr>

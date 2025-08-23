@@ -3,7 +3,7 @@
     <h2 class="section-title">Nurse's Dashboard</h2>
 
     <div v-if="loading" class="loading-message">
-      <font-awesome-icon :icon="['fas', 'spinner']" spin class="icon" /> Loading dashboard...
+      <i class="fas fa-spinner" spin ></i> Loading dashboard...
     </div>
     <div v-else-if="errorMessage" class="error-message">
       {{ errorMessage }}
@@ -12,7 +12,7 @@
     <div v-else class="nurse-grid">
       <div class="card grid-item grid-item-full-width">
         <div class="card-header">
-          <h3><font-awesome-icon :icon="['fas', 'syringe']" class="icon" /> Today's Clinic Appointments ({{ formatDate(today) }})</h3>
+          <h3><i class="fas fa-syringe"></i> Today's Clinic Appointments ({{ formatDate(today) }})</h3>
         </div>
         <div class="card-body">
           <div v-if="loadingAppointments" class="loading-message-small">Loading appointments...</div>
@@ -57,7 +57,7 @@
 
       <div class="card grid-item">
         <div class="card-header">
-          <h3><font-awesome-icon :icon="['fas', 'magnifying-glass']" class="icon" /> Patient Lookup</h3>
+          <h3><i class="fas fa-magnifying-glass"></i> Patient Lookup</h3>
         </div>
         <div class="card-body">
           <div class="form-group">
@@ -81,12 +81,12 @@
 
       <div class="card grid-item">
         <div class="card-header">
-          <h3><font-awesome-icon :icon="['fas', 'clipboard']" class="icon" /> Quick Actions</h3>
+          <h3><i class="fas fa-clipboard"></i> Quick Actions</h3>
         </div>
         <div class="card-body">
           <ul class="quick-links">
-            <li><router-link to="/inventory"><font-awesome-icon :icon="['fas', 'boxes-stacked']" class="icon" /> Check Inventory</router-link></li>
-            <li><router-link to="/tasks"><font-awesome-icon :icon="['fas', 'bell']" class="icon" /> View Reminders</router-link></li>
+            <li><router-link to="/inventory"><i class="fas fa-boxes-stacked"></i> Check Inventory</router-link></li>
+            <li><router-link to="/tasks"><i class="fas fa-bell"></i> View Reminders</router-link></li>
             </ul>
         </div>
       </div>

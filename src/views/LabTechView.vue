@@ -3,7 +3,7 @@
     <h2 class="section-title">Lab Technician Dashboard</h2>
 
     <div v-if="loading" class="loading-message">
-      <font-awesome-icon :icon="['fas', 'spinner']" spin class="icon" /> Loading dashboard...
+      <i class="fas fa-spinner icon" spin></i> Loading dashboard...
     </div>
     <div v-else-if="errorMessage" class="error-message">
       {{ errorMessage }}
@@ -12,7 +12,7 @@
     <div v-else class="lab-tech-grid">
       <div class="card grid-item grid-item-full-width">
         <div class="card-header">
-          <h3><font-awesome-icon :icon="['fas', 'flask']" class="icon" /> Pending Lab Orders ({{ formatDate(today) }})</h3>
+          <h3><i class="fas fa-flask"></i> Pending Lab Orders ({{ formatDate(today) }})</h3>
         </div>
         <div class="card-body">
           <div v-if="loadingLabOrders" class="loading-message-small">Loading orders...</div>
@@ -51,7 +51,7 @@
 
       <div class="card grid-item">
         <div class="card-header">
-          <h3><font-awesome-icon :icon="['fas', 'magnifying-glass']" class="icon" /> Patient Lookup</h3>
+          <h3><i class="fas fa-magnifying-glass"></i> Patient Lookup</h3>
         </div>
         <div class="card-body">
           <div class="form-group">
@@ -75,13 +75,13 @@
 
       <div class="card grid-item">
         <div class="card-header">
-          <h3><font-awesome-icon :icon="['fas', 'plus-circle']" class="icon" /> Quick Entry</h3>
+          <h3><i class="fas fa-plus-circle"></i> Quick Entry</h3>
         </div>
         <div class="card-body">
           <button @click="openQuickAddResultForm" class="btn btn-primary btn-block">Add New Lab Result</button>
           <ul class="quick-links mt-3">
-            <li><router-link to="/lab-results/all"><font-awesome-icon :icon="['fas', 'vials']" class="icon" /> All Lab Results</router-link></li>
-            <li><router-link to="/inventory"><font-awesome-icon :icon="['fas', 'boxes-stacked']" class="icon" /> Check Lab Supplies</router-link></li>
+            <li><router-link to="/lab-results/all"><i class="fas fa-vials"></i> All Lab Results</router-link></li>
+            <li><router-link to="/inventory"><i class="fas fa-boxes-stacked"></i> Check Lab Supplies</router-link></li>
           </ul>
         </div>
       </div>
@@ -122,10 +122,10 @@
         </div>
         <div class="form-actions">
           <button type="submit" class="btn btn-success">
-            <font-awesome-icon :icon="['fas', 'save']" class="icon" /> Save Result
+            <i class="fas fa-save"></i> Save Result
           </button>
           <button type="button" @click="cancelForm" class="btn btn-secondary ml-2">
-            <font-awesome-icon :icon="['fas', 'times']" class="icon" /> Cancel
+            <i class="fas fa-times"></i> Cancel
           </button>
         </div>
         <div v-if="formError" class="error-message mt-3">{{ formError }}</div>

@@ -6,21 +6,21 @@
       <div class="toolbar card">
         <div class="search-group">
           <input type="text" v-model="searchQuery" placeholder="Search by item, category..." @input="debouncedFetchItems" class="form-control" />
-          <font-awesome-icon :icon="['fas', 'search']" class="search-icon" />
+          <i class="fas fa-search search-icon"></i>
         </div>
         <div class="filter-group">
           <input type="text" v-model="filterCategory" placeholder="Filter by Category" @input="debouncedFetchItems" class="form-control" />
         </div>
         <button @click="clearFilters" class="btn btn-secondary">
-          <font-awesome-icon :icon="['fas', 'eraser']" /> Clear Filters
+          <i class="fas fa-eraser"></i> Clear Filters
         </button>
         <router-link to="/inventory/items/add" class="btn btn-primary ml-auto">
-          <font-awesome-icon :icon="['fas', 'plus-circle']" /> Add New Item
+          <i class="fas fa-plus-circle"></i> Add New Item
         </router-link>
       </div>
 
       <div v-if="loading" class="loading-message">
-        <font-awesome-icon :icon="['fas', 'spinner']" spin /> Loading inventory items...
+        <i class="fas fa-spinner icon" spin></i> Loading inventory items...
       </div>
       <div v-else-if="items.length === 0" class="no-records-message">
         No inventory items found.
@@ -52,16 +52,16 @@
               <td>{{ item.vendorName || 'N/A' }}</td>
               <td class="actions">
                 <button @click="editItem(item.itemId)" class="btn btn-sm btn-info">
-                  <font-awesome-icon :icon="['fas', 'edit']" />
+                  <i class="fas fa-edit"></i>
                 </button>
                 <button @click="confirmDelete(item.itemId)" class="btn btn-sm btn-danger ml-1">
-                  <font-awesome-icon :icon="['fas', 'trash-alt']" />
+                  <i class="fas fa-trash-alt"></i>
                 </button>
                 <button @click="openStockAdjustmentModal(item)" class="btn btn-sm btn-warning ml-1">
-                  <font-awesome-icon :icon="['fas', 'exchange-alt']" />
+                  <i class="fas fa-exchange-alt"></i>
                 </button>
                 <button @click="viewBatches(item.itemId)" class="btn btn-sm btn-success ml-1">
-                  <font-awesome-icon :icon="['fas', 'boxes']" />
+                  <i class="fas fa-boxes"></i>
                 </button>
               </td>
             </tr>
